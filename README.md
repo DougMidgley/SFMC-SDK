@@ -15,6 +15,7 @@ This library attempts to overcomes some of the complexity/shortcomings of the or
 -   Allows for both REST and SOAP methods
 -   Is opinionated about how Auth should be managed (only accepts a standard Auth method)
 -   Only uses Promises/Async-Await, no callbacks
+-   Maintainers of the semi-official lib from Salesforce are not responsive
 
 ## Usage
 
