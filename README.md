@@ -24,7 +24,7 @@ This library attempts to overcomes some of the complexity/shortcomings of the or
 
 Initializes the Auth Object in the SDK.
 The SDK will automatically request a new token if none is valid.
-the second parameter in the constructor is to persist the information about the initializaiton across requests. This reduces the number of requests for token therefore increasing speed between executions
+the second parameter in the constructor is to persist the information about the initializaiton across requests. This reduces the number of requests for token therefore increasing speed between executions (when testing was 2.5 seconds down to 1.5 seconds for one rest and one soap request)
 
 ```javascript
 const SDK = require('sfmc-sdk');
