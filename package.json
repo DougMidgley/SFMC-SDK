@@ -1,0 +1,26 @@
+{
+    "name": "sfmc-sdk",
+    "version": "0.0.1",
+    "description": "Libarary to simplify SFMC requests with updated dependencies and less overhead",
+    "main": "./lib/index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Doug Midgley <douglasmidgley@gmail.com>",
+    "license": "BSD-3-Clause",
+    "dependencies": {
+        "axios": "^0.21.1",
+        "xml2js": "^0.4.23"
+    },
+    "keywords": [
+        "fuel",
+        "exacttarget",
+        "salesforce",
+        "marketing",
+        "cloud",
+        "soap",
+        "rest",
+        "auth",
+        "sdk"
+    ]
+}
