@@ -6,6 +6,10 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DougMidgley/SFMC-SDK.git"
+    },
     "author": "Doug Midgley <douglasmidgley@gmail.com>",
     "license": "BSD-3-Clause",
     "dependencies": {
