@@ -16,22 +16,27 @@ This library attempts to overcomes some of the complexity/shortcomings of the or
 -   Is opinionated about how Auth should be managed (only accepts a standard Auth method)
 -   Only uses Promises/Async-Await, no callbacks
 -   Maintainers of the semi-official lib from Salesforce are not responsive
+-   Allows for persisting tokens between request using Conf Library
 
 ## Usage
 
 ### Initialization
 
 Initializes the Auth Object in the SDK.
-The SDK will automatically request a new token if none is valid
+The SDK will automatically request a new token if none is valid.
+the second parameter in the constructor is to persist the information about the initializaiton across requests. This reduces the number of requests for token therefore increasing speed between executions
 
 ```javascript
 const SDK = require('sfmc-sdk');
-const sfmc = new SDK({
-    client_id: 'XXXXX',
-    client_secret: 'YYYYYY',
-    auth_url: 'https://ZZZZZZZ.auth.marketingcloudapis.com/',
-    account_id: 7281698,
-});
+const sfmc = new SDK(
+    {
+        client_id: 'XXXXX',
+        client_secret: 'YYYYYY',
+        auth_url: 'https://ZZZZZZZ.auth.marketingcloudapis.com/',
+        account_id: 7281698,
+    },
+    true
+);
 ```
 
 ### SOAP
