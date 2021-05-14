@@ -15,22 +15,28 @@ This library attempts to overcomes some of the complexity/shortcomings of the or
 -   Allows for both REST and SOAP methods
 -   Is opinionated about how Auth should be managed (only accepts a standard Auth method)
 -   Only uses Promises/Async-Await, no callbacks
+-   Maintainers of the semi-official lib from Salesforce are not responsive
+-   Allows for using a persisting credentials in an external app, then passing
 
 ## Usage
 
 ### Initialization
 
 Initializes the Auth Object in the SDK.
-The SDK will automatically request a new token if none is valid
+The SDK will automatically request a new token if none is valid.
+the second parameter in the constructor is to allow for specific events to execute a function. Currently onRefresh and onLoop are supported. This reduces the number of requests for token therefore increasing speed between executions (when testing was 2.5 seconds down to 1.5 seconds for one rest and one soap request)
 
 ```javascript
 const SDK = require('sfmc-sdk');
-const sfmc = new SDK({
-    client_id: 'XXXXX',
-    client_secret: 'YYYYYY',
-    auth_url: 'https://ZZZZZZZ.auth.marketingcloudapis.com/',
-    account_id: 7281698,
-});
+const sfmc = new SDK(
+    {
+        client_id: 'XXXXX',
+        client_secret: 'YYYYYY',
+        auth_url: 'https://ZZZZZZZ.auth.marketingcloudapis.com/',
+        account_id: 7281698,
+    },
+    true
+);
 ```
 
 ### SOAP
