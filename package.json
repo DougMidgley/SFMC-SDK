@@ -13,9 +13,9 @@
     "author": "Doug Midgley <douglasmidgley@gmail.com>",
     "license": "BSD-3-Clause",
     "dependencies": {
-        "axios": "^0.21.1",
+        "axios": "^0.21.4",
         "fast-xml-parser": "3.19.0",
-        "p-limit": "3.1.0"
+        "p-limit": "4.0.0"
     },
     "keywords": [
         "fuel",
