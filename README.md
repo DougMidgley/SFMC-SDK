@@ -41,10 +41,29 @@ const sfmc = new SDK(
 
 ### SOAP
 
-SOAP currently only supports retrieve, will be updating soon for other types.
+SOAP currently only supports retrieve, create, and update. Will be updating soon for other types.
 
 ```javascript
+const soapJSONPayload = {
+    "Name": "Data Extension from sfmc-sdk API",
+    "Description": "Data Extension from sfmc-sdk API",
+    "CustomerKey": "Data Extension from sfmc-sdk API",
+    "Fields": {
+        "Field": [{
+                "Name": "SubscriberKey",
+                "FieldType": "Text"
+            },
+            {
+                "Name": "EmailAddress",
+                "FieldType": "EmailAddress"
+            }
+        ]
+    }
+}
+
 const soapResponse = await sfmc.soap.retrieve('DataExtension', ['ObjectID'], {});
+const soapResponse = await sfmc.soap.create('DataExtension', soapJSONPayload, {})
+const soapResponse = await sfmc.soap.update('DataExtension', soapJSONPayload, {})
 ```
 
 ### REST
