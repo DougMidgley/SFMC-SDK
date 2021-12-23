@@ -2,6 +2,9 @@
 
 ## SFMC SDK follows [semantic versioning](https://semver.org/).
 
+## 0.0.7 - 2021-12-23
+- Revert P-Limit Dependency Bump
+
 ## 0.0.6 - 2021-12-23
 
 - Bump dependency versions
