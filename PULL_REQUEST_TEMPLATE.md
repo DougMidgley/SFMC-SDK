@@ -4,10 +4,7 @@
 
 - [ ] Documentation update
 - [ ] Bug fix
-- [ ] New metadata support
-- [ ] Enhanced metadata
-- [ ] Add a CLI option
-- [ ] Add something to the core
+- [ ] Extend features
 - [ ] Other, please explain:
 
 ## What changes did you make? (Give an overview)
