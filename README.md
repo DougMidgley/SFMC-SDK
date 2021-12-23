@@ -17,6 +17,7 @@ This library attempts to overcomes some of the complexity/shortcomings of the or
 -   Only uses Promises/Async-Await, no callbacks
 -   Maintainers of the semi-official lib from Salesforce are not responsive
 -   Allows for using a persisting credentials in an external app, then passing
+-   We expect parsing of SOAP to
 
 ## Usage
 
@@ -41,10 +42,31 @@ const sfmc = new SDK(
 
 ### SOAP
 
-SOAP currently only supports retrieve, will be updating soon for other types.
+SOAP currently only supports all the standard SOAP action types. Some examples below
 
 ```javascript
-const soapResponse = await sfmc.soap.retrieve('DataExtension', ['ObjectID'], {});
+const soapRetrieve = await sfmc.soap.retrieve('DataExtension', ['ObjectID'], {});
+const soapRetrieveBulk = await sfmc.soap.retrieveBulk('DataExtension', ['ObjectID'], filter: {
+                leftOperand: 'ExternalKey',
+                operator: 'equals',
+                rightOperand: 'SOMEKEYHERE',
+            }); // when you want to auto paginate
+const soapCreate = await sfmc.soap.create('Subscriber', {
+    "SubscriberKey": "12345123",
+    "EmailAddress": "example@example.com"
+    }, {
+        "options": {
+            "SaveOptions": { "SaveAction" : "UpdateAdd" }
+        }
+    }});
+const soapUpdate = await sfmc.soap.update('Role', {
+    "CustomerKey": "12345123",
+    "Name": "UpdatedName"
+    }, {});
+const soapExecute = await sfmc.soap.execute('LogUnsubEvent', [{
+    "SubscriberKey": "12345123",
+    "EmailAddress": "example@example.com"
+    }], {});
 ```
 
 ### REST
@@ -56,6 +78,8 @@ const restResponse = await sfmc.rest.get('/interaction/v1/interactions');
 const restResponse = await sfmc.rest.post('/interaction/v1/interactions', jsonPayload);
 const restResponse = await sfmc.rest.patch('/interaction/v1/interactions/IDHERE', jsonPayload); // PUT ALSO
 const restResponse = await sfmc.rest.delete('/interaction/v1/interactions/IDHERE');
+const restResponse = await sfmc.rest.getBulk('/interaction/v1/interactions'); // auto-paginate based on $pageSize
+const restResponse = await sfmc.rest.getCollection(['/interaction/v1/interactions/213', '/interaction/v1/interactions/123'], 3); // parallel requests
 ```
 
 ## Contributing
@@ -67,7 +91,6 @@ Please make sure to update tests as appropriate.
 ## To Do
 
 -   No tests are in place
--   Improve handling for other SOAP Actions than Retrieve
 -   Look at persisting access tokens across sessions as an option
 -   Validation improvement
 -   Support Scopes in API Requests

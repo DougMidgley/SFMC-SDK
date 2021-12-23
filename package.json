@@ -1,6 +1,6 @@
 {
     "name": "sfmc-sdk",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "description": "Libarary to simplify SFMC requests with updated dependencies and less overhead",
     "main": "./lib/index.js",
     "scripts": {
@@ -13,9 +13,9 @@
     "author": "Doug Midgley <douglasmidgley@gmail.com>",
     "license": "BSD-3-Clause",
     "dependencies": {
-        "axios": "^0.21.4",
-        "fast-xml-parser": "3.19.0",
-        "p-limit": "3.1.0"
+        "axios": "^0.24.0",
+        "fast-xml-parser": "3.21.1",
+        "p-limit": "4.0.0"
     },
     "keywords": [
         "fuel",
