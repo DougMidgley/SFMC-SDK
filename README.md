@@ -16,8 +16,8 @@ This library attempts to overcomes some of the complexity/shortcomings of the or
 -   Is opinionated about how Auth should be managed (only accepts a standard Auth method)
 -   Only uses Promises/Async-Await, no callbacks
 -   Maintainers of the semi-official lib from Salesforce are not responsive
--   Allows for using a persisting credentials in an external app, then passing
--   We expect parsing of SOAP to
+-   Allows for using a persisting credentials in an external app, then passing in
+-   We expect parsing of SOAP payloads to be done outside of the SDK (not helper methods)
 
 ## Usage
 
