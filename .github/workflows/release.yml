@@ -34,7 +34,7 @@ jobs:
           git add package.json
           git add package-lock.json
           git commit -m "Release ${{ steps.create_release.outputs.tag_name }}"
-          git push origin master
+          git push origin main
       - uses: eregon/publish-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
