@@ -36,7 +36,12 @@ const sfmc = new SDK(
         auth_url: 'https://ZZZZZZZ.auth.marketingcloudapis.com/',
         account_id: 7281698,
     },
-    true
+    {
+        onLoop: (type, accumulator) => console.log("Looping", type, accumlator.length),
+        onRefresh: (options) => console.log("RefreshingToken.", Options),
+        logRequest: (req) => console.log(req),
+        logResponse: (res) => console.log(res)
+    }
 );
 ```
 
@@ -46,19 +51,25 @@ SOAP currently only supports all the standard SOAP action types. Some examples b
 
 ```javascript
 const soapRetrieve = await sfmc.soap.retrieve('DataExtension', ['ObjectID'], {});
-const soapRetrieveBulk = await sfmc.soap.retrieveBulk('DataExtension', ['ObjectID'], filter: {
-                leftOperand: 'ExternalKey',
-                operator: 'equals',
-                rightOperand: 'SOMEKEYHERE',
-            }); // when you want to auto paginate
-const soapCreate = await sfmc.soap.create('Subscriber', {
-    "SubscriberKey": "12345123",
-    "EmailAddress": "example@example.com"
-    }, {
-        "options": {
-            "SaveOptions": { "SaveAction" : "UpdateAdd" }
-        }
-    }});
+const soapRetrieveBulk = await sfmc.soap.retrieveBulk('DataExtension', ['ObjectID'], {
+    filter: {
+        leftOperand: 'CustomerKey',
+        operator: 'equals',
+        rightOperand: 'SOMEKEYHERE',
+    },
+}); // when you want to auto paginate
+const soapCreate = await sfmc.soap.create(
+            'Subscriber',
+            {
+                SubscriberKey: '12345123',
+                EmailAddress: 'example@example.com',
+            },
+            {
+                options: {
+                    SaveOptions: { SaveAction: 'UpdateAdd' },
+                },
+            }
+        );
 const soapUpdate = await sfmc.soap.update('Role', {
     "CustomerKey": "12345123",
     "Name": "UpdatedName"
@@ -90,7 +101,6 @@ Please make sure to update tests as appropriate.
 
 ## To Do
 
--   No tests are in place
 -   Look at persisting access tokens across sessions as an option
 -   Validation improvement
 -   Support Scopes in API Requests
