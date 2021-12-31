@@ -38,7 +38,9 @@ const sfmc = new SDK(
     },
     {
         onLoop: (type, accumulator) => console.log("Looping", type, accumlator.length),
-        onRefresh: (options) => console.log("RefreshingToken.", Options);
+        onRefresh: (options) => console.log("RefreshingToken.", Options),
+        logRequest: (req) => console.log(req),
+        logResponse: (res) => console.log(res)
     }
 );
 ```
@@ -99,7 +101,6 @@ Please make sure to update tests as appropriate.
 
 ## To Do
 
--   No tests are in place
 -   Look at persisting access tokens across sessions as an option
 -   Validation improvement
 -   Support Scopes in API Requests
