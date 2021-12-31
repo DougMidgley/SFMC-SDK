@@ -4,8 +4,15 @@
         "node": true,
         "mocha": true
     },
-    "extends": ["eslint:recommended", "prettier", "ssjs"],
-    "plugins": ["mocha", "prettier"],
+    "extends": [
+        "eslint:recommended",
+        "prettier",
+        "plugin:mocha/recommended"
+    ],
+    "plugins": [
+        "mocha",
+        "prettier"
+    ],
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
@@ -15,7 +22,10 @@
         "sourceType": "module"
     },
     "rules": {
-        "arrow-body-style": ["error", "as-needed"],
+        "arrow-body-style": [
+            "error",
+            "as-needed"
+        ],
         "curly": "error",
         "mocha/no-exclusive-tests": "error",
         "no-console": "off",
@@ -32,11 +42,24 @@
             }
         ],
         "valid-jsdoc": "error",
-        "spaced-comment": ["warn", "always", { "block": { "exceptions": ["*"], "balanced": true } }]
+        "spaced-comment": [
+            "warn",
+            "always",
+            {
+                "block": {
+                    "exceptions": [
+                        "*"
+                    ],
+                    "balanced": true
+                }
+            }
+        ]
     },
     "overrides": [
         {
-            "files": ["*.js"],
+            "files": [
+                "*.js"
+            ],
             "rules": {
                 "no-var": "error",
                 "prefer-const": "error",

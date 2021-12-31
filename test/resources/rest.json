@@ -1,0 +1,373 @@
+{
+    "journeysPage1": {
+        "url": "https://mct0l7nxfq2r988t1kxfy8sc47ma.rest.marketingcloudapis.com/interaction/v1/interactions?$pageSize=5&$page=1",
+        "response": {
+            "count": 6,
+            "page": 1,
+            "pageSize": 5,
+            "links": {},
+            "items": [
+                {
+                    "id": "13387fa6-7b22-4df3-a883-cff40cb4c9e3",
+                    "key": "184982e3-9e90-8bbb-413e-4c49f9f58bdc",
+                    "name": "CCE Satisfaction Score Survey",
+                    "lastPublishedDate": "0001-01-01T00:00:00",
+                    "description": "",
+                    "version": 4,
+                    "workflowApiVersion": 1.0,
+                    "createdDate": "2016-08-31T15:53:44.617",
+                    "modifiedDate": "2016-08-31T15:53:45.82",
+                    "goals": [],
+                    "exits": [],
+                    "notifiers": [],
+                    "stats": {
+                        "currentPopulation": 0,
+                        "cumulativePopulation": 0,
+                        "metGoal": 0,
+                        "metExitCriteria": 0,
+                        "goalPerformance": 0.0
+                    },
+                    "entryMode": "SingleEntryAcrossAllVersions",
+                    "definitionType": "Multistep",
+                    "channel": "",
+                    "defaults": {
+                        "email": ["{{Contact.Default.Email}}"],
+                        "properties": {}
+                    },
+                    "metaData": {},
+                    "executionMode": "Production",
+                    "categoryId": 193860,
+                    "status": "Draft",
+                    "definitionId": "2d5f37b8-7acf-4ac4-b76a-74690255600c",
+                    "scheduledStatus": "Draft"
+                },
+                {
+                    "id": "40bb49ce-e066-4561-8941-22a9f7bbe5e1",
+                    "key": "c624f6c6-81e2-a63c-e192-88e43a7916da",
+                    "name": "New Journey - 5 February 2020 14.31",
+                    "lastPublishedDate": "0001-01-01T00:00:00",
+                    "description": "",
+                    "version": 1,
+                    "workflowApiVersion": 1.0,
+                    "createdDate": "2020-02-05T07:48:12.083",
+                    "modifiedDate": "2020-02-05T07:48:12.083",
+                    "goals": [],
+                    "exits": [],
+                    "notifiers": [],
+                    "stats": {
+                        "currentPopulation": 0,
+                        "cumulativePopulation": 0,
+                        "metGoal": 0,
+                        "metExitCriteria": 0,
+                        "goalPerformance": 0.0
+                    },
+                    "entryMode": "NotSet",
+                    "definitionType": "Multistep",
+                    "channel": "",
+                    "defaults": {
+                        "properties": {
+                            "analyticsTracking": {
+                                "enabled": false,
+                                "analyticsType": "google",
+                                "urlDomainsToTrack": []
+                            }
+                        }
+                    },
+                    "metaData": {},
+                    "executionMode": "Production",
+                    "categoryId": 193860,
+                    "status": "Draft",
+                    "definitionId": "40bb49ce-e066-4561-8941-22a9f7bbe5e1",
+                    "scheduledStatus": "Draft"
+                },
+                {
+                    "id": "1e4c365c-1737-4d6b-bcf6-f8f10d1f7403",
+                    "key": "d76da6db-c272-4ebe-f31f-ad4b5cab6374",
+                    "name": "New Journey - 6 March 2020 14.50",
+                    "lastPublishedDate": "2020-03-06T08:03:54",
+                    "description": "",
+                    "version": 1,
+                    "workflowApiVersion": 1.0,
+                    "createdDate": "2020-03-06T07:52:53.553",
+                    "modifiedDate": "2020-03-06T08:03:54.21",
+                    "goals": [],
+                    "exits": [],
+                    "notifiers": [],
+                    "stats": {
+                        "currentPopulation": 0,
+                        "cumulativePopulation": 0,
+                        "metGoal": 0,
+                        "metExitCriteria": 0,
+                        "goalPerformance": 0.0
+                    },
+                    "entryMode": "OnceAndDone",
+                    "definitionType": "Multistep",
+                    "channel": "",
+                    "defaults": {
+                        "email": [
+                            "{{Event.DEAudience-f41170c3-bed3-c73f-79cd-63f6c540b679.\"EmailAddress\"}}"
+                        ],
+                        "properties": {
+                            "analyticsTracking": {
+                                "enabled": false,
+                                "analyticsType": "google",
+                                "urlDomainsToTrack": []
+                            }
+                        }
+                    },
+                    "metaData": {
+                        "simulation.id": 1307,
+                        "simulation.isClone": false,
+                        "simulation.isSource": true,
+                        "simulation.config": {
+                            "SelectedCustomObjectKeys": [2],
+                            "DoSends": false,
+                            "SimulationOverrideEmail": null
+                        }
+                    },
+                    "executionMode": "Production",
+                    "categoryId": 193860,
+                    "status": "Published",
+                    "definitionId": "1e4c365c-1737-4d6b-bcf6-f8f10d1f7403",
+                    "scheduledStatus": "Draft"
+                },
+                {
+                    "id": "46e26606-1cca-4876-9ccc-8c199e62594f",
+                    "key": "cf41a8ee-f1d5-01c3-9c53-781065abbbc6",
+                    "name": "CCE Onboarding Journey",
+                    "lastPublishedDate": "2016-09-07T15:20:03",
+                    "description": "",
+                    "version": 11,
+                    "workflowApiVersion": 1.0,
+                    "createdDate": "2016-09-07T14:33:05.723",
+                    "modifiedDate": "2020-04-15T01:49:14.24",
+                    "goals": [],
+                    "exits": [],
+                    "notifiers": [],
+                    "stats": {
+                        "currentPopulation": 0,
+                        "cumulativePopulation": 0,
+                        "metGoal": 0,
+                        "metExitCriteria": 0,
+                        "goalPerformance": 0.0
+                    },
+                    "entryMode": "MultipleEntries",
+                    "definitionType": "Multistep",
+                    "channel": "",
+                    "defaults": {
+                        "email": [
+                            "{{Event.SalesforceObjc90f8a4e73cc36d5e511153845d9f272.\"Opportunity:Contact__r:Email\"}}",
+                            "{{Contact.Default.Email}}"
+                        ],
+                        "properties": {}
+                    },
+                    "metaData": {},
+                    "executionMode": "Production",
+                    "categoryId": 193860,
+                    "status": "Stopped",
+                    "definitionId": "34302295-2a8b-409d-b922-0484739af375",
+                    "scheduledStatus": "Draft"
+                },
+                {
+                    "id": "c95113c8-047a-4b62-b080-4693c55f1101",
+                    "key": "906c8de1-002d-d80c-1b5b-270139ebafe9",
+                    "name": "Hester Journey",
+                    "lastPublishedDate": "0001-01-01T00:00:00",
+                    "description": "",
+                    "version": 1,
+                    "workflowApiVersion": 1.0,
+                    "createdDate": "2020-07-15T05:17:58.737",
+                    "modifiedDate": "2020-07-20T00:45:46.353",
+                    "goals": [],
+                    "exits": [],
+                    "notifiers": [],
+                    "stats": {
+                        "currentPopulation": 0,
+                        "cumulativePopulation": 0,
+                        "metGoal": 0,
+                        "metExitCriteria": 0,
+                        "goalPerformance": 0.0
+                    },
+                    "entryMode": "NotSet",
+                    "definitionType": "Multistep",
+                    "channel": "",
+                    "defaults": {
+                        "email": [
+                            "{{Event.DEAudience-69cc7c5c-4322-6126-4a21-71cf58326814.\"emailadress\"}}"
+                        ],
+                        "properties": {
+                            "analyticsTracking": {
+                                "enabled": false,
+                                "analyticsType": "google",
+                                "urlDomainsToTrack": []
+                            }
+                        }
+                    },
+                    "metaData": {},
+                    "executionMode": "Production",
+                    "categoryId": 193860,
+                    "status": "Draft",
+                    "definitionId": "c95113c8-047a-4b62-b080-4693c55f1101",
+                    "scheduledStatus": "Draft"
+                }
+            ]
+        },
+        "status": 200
+    },
+    "journeysPage2": {
+        "url": "https://mct0l7nxfq2r988t1kxfy8sc47ma.rest.marketingcloudapis.com/interaction/v1/interactions?$pageSize=5&$page=2",
+        "response": {
+            "count": 6,
+            "page": 2,
+            "pageSize": 1,
+            "links": {},
+            "items": [
+                {
+                    "id": "13387fa6-7b22-4df3-a883-cff40cb4c9e3",
+                    "key": "184982e3-9e90-8bbb-413e-4c49f9f58bdc",
+                    "name": "CCE Satisfaction Score Survey",
+                    "lastPublishedDate": "0001-01-01T00:00:00",
+                    "description": "",
+                    "version": 4,
+                    "workflowApiVersion": 1.0,
+                    "createdDate": "2016-08-31T15:53:44.617",
+                    "modifiedDate": "2016-08-31T15:53:45.82",
+                    "goals": [],
+                    "exits": [],
+                    "notifiers": [],
+                    "stats": {
+                        "currentPopulation": 0,
+                        "cumulativePopulation": 0,
+                        "metGoal": 0,
+                        "metExitCriteria": 0,
+                        "goalPerformance": 0.0
+                    },
+                    "entryMode": "SingleEntryAcrossAllVersions",
+                    "definitionType": "Multistep",
+                    "channel": "",
+                    "defaults": {
+                        "email": ["{{Contact.Default.Email}}"],
+                        "properties": {}
+                    },
+                    "metaData": {},
+                    "executionMode": "Production",
+                    "categoryId": 193860,
+                    "status": "Draft",
+                    "definitionId": "2d5f37b8-7acf-4ac4-b76a-74690255600c",
+                    "scheduledStatus": "Draft"
+                }
+            ]
+        },
+        "status": 200
+    },
+    "eventcreate": {
+        "status": 200,
+        "url": "https://mct0l7nxfq2r988t1kxfy8sc47ma.rest.marketingcloudapis.com/interaction/v1/EventDefinitions",
+        "response": {
+            "id": "6cb5ae19-8f0a-4f50-ad6e-0f9c9a32d5a5",
+            "type": "APIEvent",
+            "name": "ExampleEventToDelete",
+            "description": "",
+            "createdDate": "0001-01-01T00:00:00",
+            "createdBy": 0,
+            "modifiedDate": "0001-01-01T00:00:00",
+            "modifiedBy": 0,
+            "mode": "Production",
+            "eventDefinitionKey": "ExampleEventToDelete",
+            "dataExtensionId": "78b78ad3-c567-ec11-b839-48df37b40abf",
+            "dataExtensionName": "ExampleEventToDelete - 2021-12-28T040635769",
+            "schema": {
+                "id": "78b78ad3-c567-ec11-b839-48df37b40abf",
+                "name": "ExampleEventToDelete - 2021-12-28T040635769",
+                "fields": [
+                    {
+                        "name": "ContactId",
+                        "dataType": "Text",
+                        "maxLength": "18",
+                        "isNullable": false,
+                        "isPrimaryKey": true,
+                        "isDevicePreference": false
+                    }
+                ],
+                "sendableCustomObjectField": "ContactId",
+                "sendableSubscriberField": "_SubscriberKey"
+            },
+            "sourceApplicationExtensionId": "7db1f972-f8b7-49b6-91b5-fa218e13953d",
+            "filterDefinitionId": "00000000-0000-0000-0000-000000000000",
+            "arguments": {
+                "serializedObjectType": "ApiEvent",
+                "eventDefinitionId": "6cb5ae19-8f0a-4f50-ad6e-0f9c9a32d5a5",
+                "eventDefinitionKey": "ExampleEventToDelete",
+                "dataExtensionId": "00000000-0000-0000-0000-000000000000"
+            },
+            "metaData": {},
+            "interactionCount": 0,
+            "isVisibleInPicker": true,
+            "category": "Event",
+            "publishedInteractionCount": 0,
+            "automationId": "00000000-0000-0000-0000-000000000000"
+        }
+    },
+    "eventupdate": {
+        "status": 200,
+        "url": "https://mct0l7nxfq2r988t1kxfy8sc47ma.rest.marketingcloudapis.com/interaction/v1/eventdefinitions/6cb5ae19-8f0a-4f50-ad6e-0f9c9a32d5a5",
+        "response": {
+            "id": "6cb5ae19-8f0a-4f50-ad6e-0f9c9a32d5a5",
+            "type": "APIEvent",
+            "name": "ExampleEventToDelete",
+            "description": "",
+            "createdDate": "0001-01-01T00:00:00",
+            "createdBy": 0,
+            "modifiedDate": "0001-01-01T00:00:00",
+            "modifiedBy": 0,
+            "mode": "Production",
+            "eventDefinitionKey": "ExampleEventToDelete",
+            "dataExtensionId": "00000000-0000-0000-0000-000000000000",
+            "sourceApplicationExtensionId": "7db1f972-f8b7-49b6-91b5-fa218e13953d",
+            "filterDefinitionId": "00000000-0000-0000-0000-000000000000",
+            "arguments": {
+                "serializedObjectType": "ApiEvent",
+                "eventDefinitionId": "6cb5ae19-8f0a-4f50-ad6e-0f9c9a32d5a5",
+                "eventDefinitionKey": "ExampleEventToDelete",
+                "dataExtensionId": "00000000-0000-0000-0000-000000000000"
+            },
+            "metaData": {},
+            "interactionCount": 0,
+            "isVisibleInPicker": true,
+            "category": "Event",
+            "publishedInteractionCount": 0,
+            "automationId": "00000000-0000-0000-0000-000000000000"
+        }
+    },
+    "contactPatch": {
+        "status": 200,
+        "url": "https://mct0l7nxfq2r988t1kxfy8sc47ma.rest.marketingcloudapis.com/contacts/v1/contacts",
+        "response": {
+            "operationStatus": "OK",
+            "rowsAffected": 1,
+            "contactKey": "0039E00000DcvwjQAB",
+            "contactID": 36270040,
+            "contactTypeID": 0,
+            "isNewContactKey": false,
+            "requestServiceMessageID": "13d1b1b4-3f42-42cd-8775-4bc066528de0",
+            "responseDateTime": "2021-12-28T04:50:11.8146417-06:00",
+            "hasErrors": false,
+            "resultMessages": [],
+            "serviceMessageID": "36f9ab27-aaee-46d5-b41f-4b7a61fc645a"
+        }
+    },
+    "campaignDelete": {
+        "status": 200,
+        "url": "https://mct0l7nxfq2r988t1kxfy8sc47ma.rest.marketingcloudapis.com/hub/v1/campaigns/12656",
+        "response": null
+    },
+    "campaignFailed": {
+        "status": 400,
+        "url": "https://mct0l7nxfq2r988t1kxfy8sc47ma.rest.marketingcloudapis.com/hub/v1/campaigns/abc",
+        "response": {
+            "message": "Campaign ID is invalid",
+            "errorcode": 10000,
+            "documentation": ""
+        }
+    }
+}
