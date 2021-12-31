@@ -6,13 +6,12 @@
     },
     "extends": [
         "eslint:recommended",
-        "prettier",
         "plugin:mocha/recommended",
-        "plugin:jsdoc/recommended"
+        "plugin:jsdoc/recommended",
+        "plugin:prettier/recommended"
     ],
     "plugins": [
         "mocha",
-        "prettier",
         "jsdoc"
     ],
     "globals": {
@@ -22,37 +21,5 @@
     "parserOptions": {
         "ecmaVersion": 2020,
         "sourceType": "module"
-    },
-    "rules": {
-        "arrow-body-style": [
-            "error",
-            "as-needed"
-        ],
-        "curly": "error",
-        "mocha/no-exclusive-tests": "error",
-        "spaced-comment": [
-            "warn",
-            "always",
-            {
-                "block": {
-                    "exceptions": [
-                        "*"
-                    ],
-                    "balanced": true
-                }
-            }
-        ]
-    },
-    "overrides": [
-        {
-            "files": [
-                "*.js"
-            ],
-            "rules": {
-                "no-var": "error",
-                "prefer-const": "error",
-                "prettier/prettier": "warn"
-            }
-        }
-    ]
+    }
 }
