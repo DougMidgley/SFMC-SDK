@@ -37,10 +37,10 @@ const sfmc = new SDK(
         account_id: 7281698,
     },
     {
-        onLoop: (type, accumulator) => console.log("Looping", type, accumlator.length),
-        onRefresh: (options) => console.log("RefreshingToken.", Options),
+        onLoop: (type, accumulator) => console.log('Looping', type, accumlator.length),
+        onRefresh: (options) => console.log('RefreshingToken.', Options),
         logRequest: (req) => console.log(req),
-        logResponse: (res) => console.log(res)
+        logResponse: (res) => console.log(res),
     }
 );
 ```
@@ -59,25 +59,35 @@ const soapRetrieveBulk = await sfmc.soap.retrieveBulk('DataExtension', ['ObjectI
     },
 }); // when you want to auto paginate
 const soapCreate = await sfmc.soap.create(
-            'Subscriber',
-            {
-                SubscriberKey: '12345123',
-                EmailAddress: 'example@example.com',
-            },
-            {
-                options: {
-                    SaveOptions: { SaveAction: 'UpdateAdd' },
-                },
-            }
-        );
-const soapUpdate = await sfmc.soap.update('Role', {
-    "CustomerKey": "12345123",
-    "Name": "UpdatedName"
-    }, {});
-const soapExecute = await sfmc.soap.execute('LogUnsubEvent', [{
-    "SubscriberKey": "12345123",
-    "EmailAddress": "example@example.com"
-    }], {});
+    'Subscriber',
+    {
+        SubscriberKey: '12345123',
+        EmailAddress: 'example@example.com',
+    },
+    {
+        options: {
+            SaveOptions: { SaveAction: 'UpdateAdd' },
+        },
+    }
+);
+const soapUpdate = await sfmc.soap.update(
+    'Role',
+    {
+        CustomerKey: '12345123',
+        Name: 'UpdatedName',
+    },
+    {}
+);
+const soapExecute = await sfmc.soap.execute(
+    'LogUnsubEvent',
+    [
+        {
+            SubscriberKey: '12345123',
+            EmailAddress: 'example@example.com',
+        },
+    ],
+    {}
+);
 ```
 
 ### REST
@@ -90,7 +100,10 @@ const restResponse = await sfmc.rest.post('/interaction/v1/interactions', jsonPa
 const restResponse = await sfmc.rest.patch('/interaction/v1/interactions/IDHERE', jsonPayload); // PUT ALSO
 const restResponse = await sfmc.rest.delete('/interaction/v1/interactions/IDHERE');
 const restResponse = await sfmc.rest.getBulk('/interaction/v1/interactions'); // auto-paginate based on $pageSize
-const restResponse = await sfmc.rest.getCollection(['/interaction/v1/interactions/213', '/interaction/v1/interactions/123'], 3); // parallel requests
+const restResponse = await sfmc.rest.getCollection(
+    ['/interaction/v1/interactions/213', '/interaction/v1/interactions/123'],
+    3
+); // parallel requests
 ```
 
 ## Contributing
