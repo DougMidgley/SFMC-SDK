@@ -1,31 +1,31 @@
 name-template: '$RESOLVED_VERSION'
 tag-template: '$RESOLVED_VERSION'
 exclude-labels:
-  - 'release'
+    - 'release'
 categories:
-  - title: '🚀 Features'
-    labels:
-      - 'enhancement'
-  - title: '🐛 Bug Fixes'
-    labels:
-      - 'bug'
-  - title: '🧰 Maintenance'
-    label: 'chore'
+    - title: '🚀 Features'
+      labels:
+          - 'enhancement'
+    - title: '🐛 Bug Fixes'
+      labels:
+          - 'bug'
+    - title: '🧰 Maintenance'
+      label: 'chore'
 version-resolver:
-  major:
-    labels:
-      - 'major'
-  minor:
-    labels:
-      - 'minor'
-      - 'enhancement'
-  patch:
-    labels:
-      - 'patch'
-      - 'bug'
-      - 'chore'
-  default: patch
+    major:
+        labels:
+            - 'major'
+    minor:
+        labels:
+            - 'minor'
+            - 'enhancement'
+    patch:
+        labels:
+            - 'patch'
+            - 'bug'
+            - 'chore'
+    default: patch
 template: |
-  ## Release Notes
+    ## Release Notes
 
-  $CHANGES
+    $CHANGES

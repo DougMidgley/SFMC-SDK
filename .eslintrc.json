@@ -10,10 +10,7 @@
         "plugin:jsdoc/recommended",
         "plugin:prettier/recommended"
     ],
-    "plugins": [
-        "mocha",
-        "jsdoc"
-    ],
+    "plugins": ["mocha", "jsdoc"],
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
