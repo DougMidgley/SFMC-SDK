@@ -2,13 +2,13 @@ const assert = require('chai').assert;
 const { defaultSdk, mock } = require('./utils.js');
 const resources = require('./resources/soap.json');
 const authResources = require('./resources/auth.json');
-const parser = require('fast-xml-parser');
+const { XMLValidator } = require('fast-xml-parser');
 
 const addHandler = (metadata) => {
     mock.onPost(
         '/Service.asmx',
         {
-            asymmetricMatch: parser.validate,
+            asymmetricMatch: XMLValidator.validate,
         },
         {
             Accept: 'application/json, text/plain, */*',
@@ -60,7 +60,7 @@ describe('soap', () => {
         mock.onPost(
             '/Service.asmx',
             {
-                asymmetricMatch: parser.validate,
+                asymmetricMatch: XMLValidator.validate,
             },
             {
                 Accept: 'application/json, text/plain, */*',
@@ -75,7 +75,7 @@ describe('soap', () => {
             .onPost(
                 '/Service.asmx',
                 {
-                    asymmetricMatch: parser.validate,
+                    asymmetricMatch: XMLValidator.validate,
                 },
                 {
                     Accept: 'application/json, text/plain, */*',
