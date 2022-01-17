@@ -47,7 +47,14 @@ const sfmc = new SDK(
 
 ### SOAP
 
-SOAP currently only supports all the standard SOAP action types. Some examples below
+SOAP currently only supports all the standard SOAP action types.
+General format is
+
+-   Object Name
+-   Parameters/Object
+-   Request Options
+
+Some examples below
 
 ```javascript
 const soapRetrieve = await sfmc.soap.retrieve('DataExtension', ['ObjectID'], {});

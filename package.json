@@ -5,7 +5,8 @@
     "main": "./lib/index.js",
     "scripts": {
         "test": "nyc --reporter=text mocha",
-        "lint": "eslint ./lib --fix"
+        "lint": "eslint ./lib",
+        "lint:fix": "eslint ./lib --fix"
     },
     "repository": {
         "type": "git",
