@@ -3,6 +3,7 @@ const { defaultSdk, mock } = require('./utils.js');
 const resources = require('./resources/soap.json');
 const authResources = require('./resources/auth.json');
 const { XMLValidator } = require('fast-xml-parser');
+const { isConnectionError } = require('../lib/util');
 
 const addHandler = (metadata) => {
     mock.onPost(
@@ -276,6 +277,79 @@ describe('soap', () => {
         // then
         assert.deepEqual(resources.automationSchedule.parsed, response);
         assert.lengthOf(mock.history.post, 2);
+        return;
+    });
+    it('RETRY: should return 1 data extension, after a connection error', async () => {
+        //given
+
+        mock.onPost('/Service.asmx')
+            .timeoutOnce()
+            .onPost(
+                '/Service.asmx',
+                {
+                    asymmetricMatch: XMLValidator.validate,
+                },
+                {
+                    Accept: 'application/json, text/plain, */*',
+                    'Content-Type': 'text/xml',
+                    SOAPAction: resources.retrieveDataExtension.action,
+                }
+            )
+            .reply(
+                resources.retrieveDataExtension.status,
+                resources.retrieveDataExtension.response
+            );
+        // when
+        const payload = await defaultSdk().soap.retrieve('DataExtension', ['CustomerKey'], {
+            filter: {
+                leftOperand: {
+                    leftOperand: 'CustomerKey',
+                    operator: 'equals',
+                    rightOperand: 'DC91A414-6240-48BC-BB89-7F3910D41580',
+                },
+                operator: 'AND',
+                rightOperand: {
+                    leftOperand: 'CustomerKey',
+                    operator: 'notEquals',
+                    rightOperand: '123',
+                },
+            },
+            QueryAllAccounts: true,
+        });
+        // then
+        assert.lengthOf(payload.Results, 1);
+        assert.deepEqual(payload, resources.retrieveDataExtension.parsed);
+        assert.lengthOf(mock.history.post, 3);
+        return;
+    });
+    it('FAILED RETRY: should return error, after multiple connection error', async () => {
+        //given
+
+        mock.onPost('/Service.asmx').timeout();
+        // when
+        try {
+            await defaultSdk().soap.retrieve('DataExtension', ['CustomerKey'], {
+                filter: {
+                    leftOperand: {
+                        leftOperand: 'CustomerKey',
+                        operator: 'equals',
+                        rightOperand: 'DC91A414-6240-48BC-BB89-7F3910D41580',
+                    },
+                    operator: 'AND',
+                    rightOperand: {
+                        leftOperand: 'CustomerKey',
+                        operator: 'notEquals',
+                        rightOperand: '123',
+                    },
+                },
+                QueryAllAccounts: true,
+            });
+            assert.fail();
+        } catch (ex) {
+            // then
+            assert.isTrue(isConnectionError(ex.code));
+        }
+        assert.lengthOf(mock.history.post, 3);
         return;
     });
 });

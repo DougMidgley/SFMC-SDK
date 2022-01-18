@@ -19,6 +19,12 @@ exports.defaultSdk = () => {
                 logResponse: () => {
                     return;
                 },
+                onConnectionError: () => {
+                    return;
+                },
+                onRefresh: () => {
+                    return;
+                },
             },
             retryOnConnectionError: true,
             requestAttempts: 1,
