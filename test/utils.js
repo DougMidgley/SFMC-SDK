@@ -25,6 +25,9 @@ exports.defaultSdk = () => {
                 onRefresh: () => {
                     return;
                 },
+                onLoop: () => {
+                    return;
+                },
             },
             retryOnConnectionError: true,
             requestAttempts: 1,
