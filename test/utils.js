@@ -11,13 +11,26 @@ exports.defaultSdk = () => {
             account_id: 1111111,
         },
         {
-            logRequest: () => {
-                return;
-            },
+            eventHandlers: {
+                logRequest: () => {
+                    return;
+                },
 
-            logResponse: () => {
-                return;
+                logResponse: () => {
+                    return;
+                },
+                onConnectionError: () => {
+                    return;
+                },
+                onRefresh: () => {
+                    return;
+                },
+                onLoop: () => {
+                    return;
+                },
             },
+            retryOnConnectionError: true,
+            requestAttempts: 1,
         }
     );
 };

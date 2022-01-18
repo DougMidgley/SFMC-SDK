@@ -2,6 +2,7 @@ const assert = require('chai').assert;
 const SDK = require('../lib');
 const { defaultSdk, mock } = require('./utils.js');
 const resources = require('./resources/auth.json');
+const { isConnectionError } = require('../lib/util');
 
 describe('auth', () => {
     afterEach(() => {
@@ -116,6 +117,38 @@ describe('auth', () => {
         } catch (ex) {
             assert.equal(ex.message, 'client_id or client_secret is missing or invalid');
         }
+        return;
+    });
+    it('RETRY: should return an success, after a connection issues', async () => {
+        //given
+        const { success } = resources;
+
+        //when
+        mock.onPost(success.url)
+            .timeoutOnce()
+            .onPost(success.url)
+            .reply(success.status, success.response);
+        const auth = await defaultSdk().auth.getAccessToken();
+        // then
+        assert.equal(auth.access_token, success.response.access_token);
+        assert.lengthOf(mock.history.post, 2);
+        return;
+    });
+    it('FAILED RETRY: should return an error, after multiple connection issues', async () => {
+        //given
+        const { success } = resources;
+
+        //when
+        mock.onPost(success.url).timeout();
+        // when
+        try {
+            await defaultSdk().auth.getAccessToken();
+            //then
+            assert.fail();
+        } catch (ex) {
+            assert.isTrue(isConnectionError(ex.code));
+        }
+        assert.lengthOf(mock.history.post, 2);
         return;
     });
 });
