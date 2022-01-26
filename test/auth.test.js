@@ -119,6 +119,41 @@ describe('auth', () => {
         }
         return;
     });
+    it('should return an invalid scope error', async () => {
+        try {
+            //given
+            sfmc = new SDK({
+                client_id: 'XXXXX',
+                client_secret: 'YYYYYY',
+                auth_url: 'https://mct0l7nxfq2r988t1kxfy8sc47ma.auth.marketingcloudapis.com/',
+                account_id: '1111111',
+                scope: ['somethingwrong'],
+            });
+            //then
+            assert.fail();
+        } catch (ex) {
+            assert.equal(ex.message, '"somethingwrong" is/are invalid scope(s)');
+        }
+        return;
+    });
+    it('should return an invalid scope type error', async () => {
+        try {
+            //given
+            sfmc = new SDK({
+                client_id: 'XXXXX',
+                client_secret: 'YYYYYY',
+                auth_url: 'https://mct0l7nxfq2r988t1kxfy8sc47ma.auth.marketingcloudapis.com/',
+                account_id: '1111111',
+                scope: 'something',
+            });
+            //then
+            assert.fail();
+        } catch (ex) {
+            assert.equal(ex.message, 'Scope must be in array format');
+        }
+        return;
+    });
+
     it('RETRY: should return an success, after a connection issues', async () => {
         //given
         const { success } = resources;
