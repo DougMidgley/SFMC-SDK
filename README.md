@@ -129,7 +129,6 @@ Please make sure to update tests as appropriate.
 
 -   Look at persisting access tokens across sessions as an option
 -   Validation improvement
--   Support Scopes in API Requests
 
 ## License
 
