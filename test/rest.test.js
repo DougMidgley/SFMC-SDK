@@ -2,6 +2,7 @@ const assert = require('chai').assert;
 const { defaultSdk, mock } = require('./utils.js');
 const resources = require('./resources/rest.json');
 const authResources = require('./resources/auth.json');
+const { isConnectionError } = require('../lib/util');
 
 describe('rest', () => {
     beforeEach(() => {
@@ -230,6 +231,40 @@ describe('rest', () => {
 
         assert.lengthOf(mock.history.post, 1);
         assert.lengthOf(mock.history.delete, 1);
+        return;
+    });
+    it('RETRY: should return 5 journey items, after a connection error', async () => {
+        //given
+        const { journeysPage1 } = resources;
+        mock.onGet(journeysPage1.url)
+            .timeoutOnce()
+            .onGet(journeysPage1.url)
+            .reply(journeysPage1.status, journeysPage1.response);
+        // when
+        const payload = await defaultSdk().rest.get(
+            'interaction/v1/interactions?$pageSize=5&$page=1'
+        );
+        // then
+        assert.lengthOf(payload.items, 5);
+        assert.lengthOf(mock.history.post, 1);
+        assert.lengthOf(mock.history.get, 2);
+        return;
+    });
+    it('FAILED RETRY: should return error, after 2 connection errors', async () => {
+        //given
+        const { journeysPage1 } = resources;
+        mock.onGet(journeysPage1.url).timeout();
+        // when
+        try {
+            await defaultSdk().rest.get('interaction/v1/interactions?$pageSize=5&$page=1');
+            assert.fail();
+        } catch (ex) {
+            // then
+            assert.isTrue(isConnectionError(ex.code));
+        }
+        assert.lengthOf(mock.history.post, 1);
+        assert.lengthOf(mock.history.get, 2);
+
         return;
     });
 });

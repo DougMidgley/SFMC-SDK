@@ -2,6 +2,7 @@ const assert = require('chai').assert;
 const SDK = require('../lib');
 const { defaultSdk, mock } = require('./utils.js');
 const resources = require('./resources/auth.json');
+const { isConnectionError } = require('../lib/util');
 
 describe('auth', () => {
     afterEach(() => {
@@ -116,6 +117,73 @@ describe('auth', () => {
         } catch (ex) {
             assert.equal(ex.message, 'client_id or client_secret is missing or invalid');
         }
+        return;
+    });
+    it('should return an invalid scope error', async () => {
+        try {
+            //given
+            sfmc = new SDK({
+                client_id: 'XXXXX',
+                client_secret: 'YYYYYY',
+                auth_url: 'https://mct0l7nxfq2r988t1kxfy8sc47ma.auth.marketingcloudapis.com/',
+                account_id: '1111111',
+                scope: ['somethingwrong'],
+            });
+            //then
+            assert.fail();
+        } catch (ex) {
+            assert.equal(ex.message, '"somethingwrong" is/are invalid scope(s)');
+        }
+        return;
+    });
+    it('should return an invalid scope type error', async () => {
+        try {
+            //given
+            sfmc = new SDK({
+                client_id: 'XXXXX',
+                client_secret: 'YYYYYY',
+                auth_url: 'https://mct0l7nxfq2r988t1kxfy8sc47ma.auth.marketingcloudapis.com/',
+                account_id: '1111111',
+                scope: 'something',
+            });
+            //then
+            assert.fail();
+        } catch (ex) {
+            assert.equal(ex.message, 'Scope must be in array format');
+        }
+        return;
+    });
+
+    it('RETRY: should return an success, after a connection issues', async () => {
+        //given
+        const { success } = resources;
+
+        //when
+        mock.onPost(success.url)
+            .timeoutOnce()
+            .onPost(success.url)
+            .reply(success.status, success.response);
+        const auth = await defaultSdk().auth.getAccessToken();
+        // then
+        assert.equal(auth.access_token, success.response.access_token);
+        assert.lengthOf(mock.history.post, 2);
+        return;
+    });
+    it('FAILED RETRY: should return an error, after multiple connection issues', async () => {
+        //given
+        const { success } = resources;
+
+        //when
+        mock.onPost(success.url).timeout();
+        // when
+        try {
+            await defaultSdk().auth.getAccessToken();
+            //then
+            assert.fail();
+        } catch (ex) {
+            assert.isTrue(isConnectionError(ex.code));
+        }
+        assert.lengthOf(mock.history.post, 2);
         return;
     });
 });
