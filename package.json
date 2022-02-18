@@ -1,12 +1,11 @@
 {
     "name": "sfmc-sdk",
-    "version": "0.2.1",
+    "version": "0.3.1",
     "description": "Libarary to simplify SFMC requests with updated dependencies and less overhead",
     "main": "./lib/index.js",
     "scripts": {
         "test": "nyc --reporter=text mocha",
-        "lint": "eslint ./lib",
-        "lint:fix": "eslint ./lib --fix"
+        "lint": "eslint ./lib --fix"
     },
     "repository": {
         "type": "git",
