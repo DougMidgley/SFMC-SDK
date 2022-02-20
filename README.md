@@ -21,7 +21,7 @@ This library attempts to overcomes some of the complexity/shortcomings of the or
 
 ## Usage
 
-### Initialization
+### Authorization
 
 Initializes the Auth Object in the SDK.
 The SDK will automatically request a new token if none is valid.
@@ -49,6 +49,12 @@ const sfmc = new SDK(
         retryOnConnectionError: true
     }
 );
+```
+
+Additionally, a list of supported scopes can be retrieved by using the auth.getSupportedScopes method.
+
+```javascript
+const scopes = sfmc.auth.getSupportedScopes();
 ```
 
 ### SOAP
