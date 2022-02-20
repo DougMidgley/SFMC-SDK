@@ -1,46 +1,46 @@
 {
-  "name": "sfmc-sdk",
-  "version": "0.3.2",
-  "description": "Libarary to simplify SFMC requests with updated dependencies and less overhead",
-  "main": "./lib/index.js",
-  "scripts": {
-    "test": "nyc --reporter=text mocha",
-    "lint": "eslint ./lib",
-    "lint:fix": "eslint ./lib --fix"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/DougMidgley/SFMC-SDK.git"
-  },
-  "author": "Doug Midgley <douglasmidgley@gmail.com>",
-  "license": "BSD-3-Clause",
-  "dependencies": {
-    "axios": "^0.26.0",
-    "fast-xml-parser": "4.0.3",
-    "p-limit": "3.1.0"
-  },
-  "keywords": [
-    "fuel",
-    "exacttarget",
-    "salesforce",
-    "marketing",
-    "cloud",
-    "soap",
-    "rest",
-    "auth",
-    "sdk"
-  ],
-  "devDependencies": {
-    "assert": "2.0.0",
-    "axios-mock-adapter": "1.20.0",
-    "chai": "4.3.6",
-    "eslint-config-prettier": "8.3.0",
-    "eslint-plugin-jsdoc": "37.9.4",
-    "eslint-plugin-mocha": "10.0.3",
-    "eslint-plugin-prettier": "4.0.0",
-    "mocha": "9.2.0",
-    "nyc": "15.1.0",
-    "prettier-eslint": "13.0.0",
-    "sinon": "13.0.1"
-  }
+    "name": "sfmc-sdk",
+    "version": "0.4.0",
+    "description": "Libarary to simplify SFMC requests with updated dependencies and less overhead",
+    "main": "./lib/index.js",
+    "scripts": {
+        "test": "nyc --reporter=text mocha",
+        "lint": "eslint ./lib",
+        "lint:fix": "eslint ./lib --fix"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DougMidgley/SFMC-SDK.git"
+    },
+    "author": "Doug Midgley <douglasmidgley@gmail.com>",
+    "license": "BSD-3-Clause",
+    "dependencies": {
+        "axios": "^0.26.0",
+        "fast-xml-parser": "4.0.3",
+        "p-limit": "3.1.0"
+    },
+    "keywords": [
+        "fuel",
+        "exacttarget",
+        "salesforce",
+        "marketing",
+        "cloud",
+        "soap",
+        "rest",
+        "auth",
+        "sdk"
+    ],
+    "devDependencies": {
+        "assert": "2.0.0",
+        "axios-mock-adapter": "1.20.0",
+        "chai": "4.3.6",
+        "eslint-config-prettier": "8.4.0",
+        "eslint-plugin-jsdoc": "37.9.4",
+        "eslint-plugin-mocha": "10.0.3",
+        "eslint-plugin-prettier": "4.0.0",
+        "mocha": "9.2.1",
+        "nyc": "15.1.0",
+        "prettier-eslint": "13.0.0",
+        "sinon": "13.0.1"
+    }
 }
