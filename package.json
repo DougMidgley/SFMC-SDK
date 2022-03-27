@@ -15,8 +15,8 @@
     "author": "Doug Midgley <douglasmidgley@gmail.com>",
     "license": "BSD-3-Clause",
     "dependencies": {
-        "axios": "^0.26.0",
-        "fast-xml-parser": "4.0.3",
+        "axios": "^0.26.1",
+        "fast-xml-parser": "4.0.7",
         "p-limit": "3.1.0"
     },
     "keywords": [
@@ -34,11 +34,11 @@
         "assert": "2.0.0",
         "axios-mock-adapter": "1.20.0",
         "chai": "4.3.6",
-        "eslint-config-prettier": "8.4.0",
-        "eslint-plugin-jsdoc": "37.9.4",
+        "eslint-config-prettier": "8.5.0",
+        "eslint-plugin-jsdoc": "38.0.8",
         "eslint-plugin-mocha": "10.0.3",
         "eslint-plugin-prettier": "4.0.0",
-        "mocha": "9.2.1",
+        "mocha": "9.2.2",
         "nyc": "15.1.0",
         "prettier-eslint": "13.0.0",
         "sinon": "13.0.1"

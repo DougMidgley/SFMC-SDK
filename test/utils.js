@@ -113,7 +113,7 @@ exports.defaultSdk = () => {
                 },
             },
             retryOnConnectionError: true,
-            requestAttempts: 1,
+            requestAttempts: 2,
         }
     );
 };
