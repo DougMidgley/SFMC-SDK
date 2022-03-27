@@ -250,10 +250,32 @@ describe('rest', () => {
         assert.lengthOf(mock.history.get, 2);
         return;
     });
-    it('FAILED RETRY: should return error, after 2 connection errors', async () => {
+    it('FAILED RETRY: should return error, after 2 connection timeout errors', async () => {
         //given
         const { journeysPage1 } = resources;
         mock.onGet(journeysPage1.url).timeout();
+        // when
+        try {
+            await defaultSdk().rest.get('interaction/v1/interactions?$pageSize=5&$page=1');
+            assert.fail();
+        } catch (ex) {
+            // then
+            assert.isTrue(isConnectionError(ex.code));
+        }
+        assert.lengthOf(mock.history.post, 1);
+        assert.lengthOf(mock.history.get, 2);
+
+        return;
+    });
+    it('FAILED RETRY: should return error, after 2 ECONNRESET errors', async () => {
+        //given
+        const { journeysPage1 } = resources;
+
+        mock.onGet(journeysPage1.url).reply((res) => {
+            const connectionError = new Error();
+            connectionError.code = 'ECONNRESET';
+            throw connectionError;
+        });
         // when
         try {
             await defaultSdk().rest.get('interaction/v1/interactions?$pageSize=5&$page=1');
