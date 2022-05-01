@@ -1,5 +1,6 @@
 const assert = require('chai').assert;
 const { defaultSdk, mock } = require('./utils.js');
+const SDK = require('../lib');
 const resources = require('./resources/rest.json');
 const authResources = require('./resources/auth.json');
 const { isConnectionError } = require('../lib/util');
@@ -14,7 +15,6 @@ describe('rest', () => {
     afterEach(() => {
         mock.reset();
     });
-
     it('GET Bulk: should return 6 journey items', async () => {
         //given
         const { journeysPage1, journeysPage2 } = resources;
@@ -287,6 +287,55 @@ describe('rest', () => {
         assert.lengthOf(mock.history.post, 1);
         assert.lengthOf(mock.history.get, 2);
 
+        return;
+    });
+    it('LogRequest & Response: should run middleware for logging ', async () => {
+        //given
+        const { journeysPage1 } = resources;
+        mock.onGet(journeysPage1.url).reply(journeysPage1.status, journeysPage1.response);
+        // when
+        let expectedRequest;
+        let expectedResponse;
+        const sdk = new SDK(
+            {
+                client_id: 'XXXXX',
+                client_secret: 'YYYYYY',
+                auth_url: 'https://mct0l7nxfq2r988t1kxfy8sc47ma.auth.marketingcloudapis.com/',
+                account_id: 1111111,
+            },
+            {
+                eventHandlers: {
+                    logRequest: (reqObj) => {
+                        expectedRequest = reqObj;
+                    },
+
+                    logResponse: (resObj) => {
+                        expectedResponse = resObj;
+                    },
+                    onConnectionError: () => {
+                        return;
+                    },
+                },
+                retryOnConnectionError: true,
+                requestAttempts: 2,
+            }
+        );
+        // when
+        await sdk.rest.get('interaction/v1/interactions?$pageSize=5&$page=1');
+        // then
+        assert.deepEqual(
+            {
+                method: 'GET',
+                url: 'interaction/v1/interactions?$pageSize=5&$page=1',
+                baseURL: 'https://mct0l7nxfq2r988t1kxfy8sc47ma.rest.marketingcloudapis.com/',
+                headers: {
+                    Authorization: 'Bearer TESTTOKEN',
+                },
+            },
+            expectedRequest
+        );
+        assert.equal(200, expectedResponse.status);
+        assert.equal(5, expectedResponse.data.items.length);
         return;
     });
 });
