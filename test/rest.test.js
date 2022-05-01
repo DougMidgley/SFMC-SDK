@@ -329,8 +329,7 @@ describe('rest', () => {
                 url: 'interaction/v1/interactions?$pageSize=5&$page=1',
                 baseURL: 'https://mct0l7nxfq2r988t1kxfy8sc47ma.rest.marketingcloudapis.com/',
                 headers: {
-                    Authorization:
-                        'Bearer eyJhbGciOiJIUzI1NiIsImtpZCI6IjQiLCJ2ZXIiOiIxIiwidHlwIjoiSldUIn0.eyJhY2Nlc3NfdG9rZW4iOiI3UU9IYmJTd3JFOXRTYkdlTTQ4ZktXTXgiLCJjbGllbnRfaWQiOiIwbTBoZXQ2bXFrbnp2MHVlYnFsdm9vNDEiLCJlaWQiOjcyODE2OTgsInN0YWNrX2tleSI6IlM3IiwicGxhdGZvcm1fdmVyc2lvbiI6MiwiY2xpZW50X3R5cGUiOiJTZXJ2ZXJUb1NlcnZlciJ9.5TciRkgyCXpV232vUowRvGCR03-zT5d1NRBcZrIn1Z8.8_hnocm2nm2WkEu4KHNpyFrG60_TQ52XAVYmYSU8yyd452YL3Mzb6k_ieT9B2CWRI3dSvDARFK9bz59yjz1HWsUjP0ENXeyO6wEA8MpeVSkxlD6u6Q73ZtK2sAwsaFoSmx96HpjjhMWKxNEuESTl_Hp2Qfv_mXC2LNluVq3fYYKn7VSr4zaRTRB',
+                    Authorization: 'Bearer TESTTOKEN',
                 },
             },
             expectedRequest
