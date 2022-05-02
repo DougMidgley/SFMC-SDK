@@ -356,6 +356,11 @@
             "serviceMessageID": "36f9ab27-aaee-46d5-b41f-4b7a61fc645a"
         }
     },
+    "dataExtensionUpsert": {
+        "status": 200,
+        "url": "https://mct0l7nxfq2r988t1kxfy8sc47ma.rest.marketingcloudapis.com/hub/v1/dataevents/key:key/rowset",
+        "response": [{ "keys": { "primaryKey": 1 }, "values": { "name": "test" } }]
+    },
     "campaignDelete": {
         "status": 200,
         "url": "https://mct0l7nxfq2r988t1kxfy8sc47ma.rest.marketingcloudapis.com/hub/v1/campaigns/12656",
