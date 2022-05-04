@@ -91,6 +91,22 @@ describe('rest', () => {
         assert.lengthOf(mock.history.post, 2);
         return;
     });
+    it('POST: should add an entry to a Data Extension', async () => {
+        //given
+        const { dataExtensionUpsert } = resources;
+        mock.onPost(dataExtensionUpsert.url).reply(
+            dataExtensionUpsert.status,
+            dataExtensionUpsert.response
+        );
+        // when
+        const payload = await defaultSdk().rest.post('hub/v1/dataevents/key:key/rowset', [
+            { keys: { primaryKey: 1 }, values: { name: 'test' } },
+        ]);
+        // then
+        assert.deepEqual(payload, dataExtensionUpsert.response);
+        assert.lengthOf(mock.history.post, 2);
+        return;
+    });
     it('PUT: should update Event Definition', async () => {
         //given
         const { eventupdate } = resources;
