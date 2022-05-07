@@ -4,11 +4,11 @@ const { defaultSdk, mock } = require('./utils.js');
 const resources = require('./resources/auth.json');
 const { isConnectionError } = require('../lib/util');
 
-describe('auth', () => {
-    afterEach(() => {
+describe('auth', function () {
+    afterEach(function () {
         mock.reset();
     });
-    it('should return an auth payload with token', async () => {
+    it('should return an auth payload with token', async function () {
         //given
         const { success } = resources;
 
@@ -20,7 +20,7 @@ describe('auth', () => {
         assert.lengthOf(mock.history.post, 1);
         return;
     });
-    it('should return an auth payload with previous token and one request', async () => {
+    it('should return an auth payload with previous token and one request', async function () {
         //given
         const { success } = resources;
         mock.onPost(success.url).reply(success.status, success.response);
@@ -33,7 +33,7 @@ describe('auth', () => {
         assert.lengthOf(mock.history.post, 1);
         return;
     });
-    it('should return an unauthorized error', async () => {
+    it('should return an unauthorized error', async function () {
         //given
         const { unauthorized } = resources;
         mock.onPost(unauthorized.url).reply(unauthorized.status, unauthorized.response);
@@ -49,10 +49,10 @@ describe('auth', () => {
 
         return;
     });
-    it('should return an incorrect account_id error', async () => {
+    it('should return an incorrect account_id error', async function () {
         try {
             //given
-            sfmc = new SDK({
+            new SDK({
                 client_id: 'XXXXX',
                 client_secret: 'YYYYYY',
                 auth_url: 'https://mct0l7nxfq2r988t1kxfy8sc47ma.auth.marketingcloudapis.com/',
@@ -68,10 +68,10 @@ describe('auth', () => {
         }
         return;
     });
-    it('should return an incorrect auth_url error', async () => {
+    it('should return an incorrect auth_url error', async function () {
         try {
             //given
-            sfmc = new SDK({
+            new SDK({
                 client_id: 'XXXXX',
                 client_secret: 'YYYYYY',
                 auth_url: 'https://x.auth.marketingcloudapis.com/',
@@ -87,10 +87,10 @@ describe('auth', () => {
         }
         return;
     });
-    it('should return an incorrect client_id error', async () => {
+    it('should return an incorrect client_id error', async function () {
         try {
             //given
-            sfmc = new SDK({
+            new SDK({
                 client_id: '',
                 client_secret: 'YYYYYY',
                 auth_url: 'https://mct0l7nxfq2r988t1kxfy8sc47ma.auth.marketingcloudapis.com/',
@@ -103,10 +103,10 @@ describe('auth', () => {
         }
         return;
     });
-    it('should return an incorrect client_key error', async () => {
+    it('should return an incorrect client_key error', async function () {
         try {
             //given
-            sfmc = new SDK({
+            new SDK({
                 client_id: 'XXXXX',
                 client_secret: '',
                 auth_url: 'https://mct0l7nxfq2r988t1kxfy8sc47ma.auth.marketingcloudapis.com/',
@@ -119,10 +119,10 @@ describe('auth', () => {
         }
         return;
     });
-    it('should return an invalid scope error', async () => {
+    it('should return an invalid scope error', async function () {
         try {
             //given
-            sfmc = new SDK({
+            new SDK({
                 client_id: 'XXXXX',
                 client_secret: 'YYYYYY',
                 auth_url: 'https://mct0l7nxfq2r988t1kxfy8sc47ma.auth.marketingcloudapis.com/',
@@ -136,10 +136,10 @@ describe('auth', () => {
         }
         return;
     });
-    it('should return an invalid scope type error', async () => {
+    it('should return an invalid scope type error', async function () {
         try {
             //given
-            sfmc = new SDK({
+            new SDK({
                 client_id: 'XXXXX',
                 client_secret: 'YYYYYY',
                 auth_url: 'https://mct0l7nxfq2r988t1kxfy8sc47ma.auth.marketingcloudapis.com/',
@@ -154,7 +154,7 @@ describe('auth', () => {
         return;
     });
 
-    it('RETRY: should return an success, after a connection issues', async () => {
+    it('RETRY: should return an success, after a connection issues', async function () {
         //given
         const { success } = resources;
 
@@ -169,7 +169,7 @@ describe('auth', () => {
         assert.lengthOf(mock.history.post, 2);
         return;
     });
-    it('FAILED RETRY: should return an error, after multiple connection issues', async () => {
+    it('FAILED RETRY: should return an error, after multiple connection issues', async function () {
         //given
         const { success } = resources;
 
