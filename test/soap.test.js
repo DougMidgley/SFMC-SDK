@@ -122,7 +122,7 @@ describe('soap', function () {
             // then
             assert.fail();
         } catch (ex) {
-            assert.deepEqual(ex.JSON, resources.subscriberFailed.parsed);
+            assert.deepEqual(ex.json, resources.subscriberFailed.parsed);
             assert.lengthOf(mock.history.post, 2);
         }
 
