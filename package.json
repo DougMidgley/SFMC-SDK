@@ -1,6 +1,6 @@
 {
     "name": "sfmc-sdk",
-    "version": "0.4.0",
+    "version": "0.5.1",
     "description": "Libarary to simplify SFMC requests with updated dependencies and less overhead",
     "main": "./lib/index.js",
     "scripts": {
@@ -40,8 +40,8 @@
         "eslint-plugin-prettier": "4.0.0",
         "mocha": "10.0.0",
         "nyc": "15.1.0",
-        "prettier-eslint": "14.0.2",
-        "sinon": "13.0.2"
+        "prettier-eslint": "14.0.3",
+        "sinon": "14.0.0"
     },
     "engines": {
         "npm": ">=6.14.4",
