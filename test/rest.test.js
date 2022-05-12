@@ -1,21 +1,21 @@
 const assert = require('chai').assert;
 const { defaultSdk, mock } = require('./utils.js');
+const SDK = require('../lib');
 const resources = require('./resources/rest.json');
 const authResources = require('./resources/auth.json');
 const { isConnectionError } = require('../lib/util');
 
-describe('rest', () => {
-    beforeEach(() => {
+describe('rest', function () {
+    beforeEach(function () {
         mock.onPost(authResources.success.url).reply(
             authResources.success.status,
             authResources.success.response
         );
     });
-    afterEach(() => {
+    afterEach(function () {
         mock.reset();
     });
-
-    it('GET Bulk: should return 6 journey items', async () => {
+    it('GET Bulk: should return 6 journey items', async function () {
         //given
         const { journeysPage1, journeysPage2 } = resources;
         mock.onGet(journeysPage1.url).reply(journeysPage1.status, journeysPage1.response);
@@ -28,7 +28,7 @@ describe('rest', () => {
         assert.lengthOf(mock.history.get, 2);
         return;
     });
-    it('GET: should return 5 journey items', async () => {
+    it('GET: should return 5 journey items', async function () {
         //given
         const { journeysPage1 } = resources;
         mock.onGet(journeysPage1.url).reply(journeysPage1.status, journeysPage1.response);
@@ -42,7 +42,7 @@ describe('rest', () => {
         assert.lengthOf(mock.history.get, 1);
         return;
     });
-    it('GETCOLLECTION: should return 2 identical payloads', async () => {
+    it('GETCOLLECTION: should return 2 identical payloads', async function () {
         //given
         const { journeysPage1 } = resources;
         mock.onGet(journeysPage1.url).reply(journeysPage1.status, journeysPage1.response);
@@ -58,7 +58,7 @@ describe('rest', () => {
         assert.lengthOf(mock.history.get, 2);
         return;
     });
-    it('POST: should create Event Definition', async () => {
+    it('POST: should create Event Definition', async function () {
         //given
         const { eventcreate } = resources;
         mock.onPost(eventcreate.url).reply(eventcreate.status, eventcreate.response);
@@ -91,7 +91,23 @@ describe('rest', () => {
         assert.lengthOf(mock.history.post, 2);
         return;
     });
-    it('PUT: should update Event Definition', async () => {
+    it('POST: should add an entry to a Data Extension', async function () {
+        //given
+        const { dataExtensionUpsert } = resources;
+        mock.onPost(dataExtensionUpsert.url).reply(
+            dataExtensionUpsert.status,
+            dataExtensionUpsert.response
+        );
+        // when
+        const payload = await defaultSdk().rest.post('hub/v1/dataevents/key:key/rowset', [
+            { keys: { primaryKey: 1 }, values: { name: 'test' } },
+        ]);
+        // then
+        assert.deepEqual(payload, dataExtensionUpsert.response);
+        assert.lengthOf(mock.history.post, 2);
+        return;
+    });
+    it('PUT: should update Event Definition', async function () {
         //given
         const { eventupdate } = resources;
         mock.onPut(eventupdate.url).reply(eventupdate.status, eventupdate.response);
@@ -114,7 +130,7 @@ describe('rest', () => {
         assert.lengthOf(mock.history.put, 1);
         return;
     });
-    it('PATCH: should update Contact', async () => {
+    it('PATCH: should update Contact', async function () {
         //given
         const { contactPatch } = resources;
         mock.onPatch(contactPatch.url).reply(contactPatch.status, contactPatch.response);
@@ -164,7 +180,7 @@ describe('rest', () => {
         assert.lengthOf(mock.history.patch, 1);
         return;
     });
-    it('DELETE: should delete Campaign', async () => {
+    it('DELETE: should delete Campaign', async function () {
         //given
         const { campaignDelete } = resources;
         mock.onDelete(campaignDelete.url).reply(campaignDelete.status, campaignDelete.response);
@@ -176,7 +192,7 @@ describe('rest', () => {
         assert.lengthOf(mock.history.delete, 1);
         return;
     });
-    it('should retry auth one time on first failure then work', async () => {
+    it('should retry auth one time on first failure then work', async function () {
         //given
         mock.reset(); // needed to avoid before hook being used
         const { expired, success } = authResources;
@@ -195,7 +211,7 @@ describe('rest', () => {
         assert.lengthOf(mock.history.delete, 1);
         return;
     });
-    it('should retry auth one time on first failure then fail', async () => {
+    it('should retry auth one time on first failure then fail', async function () {
         //given
         mock.reset(); // needed to avoid before hook being used
         const { unauthorized } = authResources;
@@ -214,7 +230,7 @@ describe('rest', () => {
         }
         return;
     });
-    it('should fail to delete campaign', async () => {
+    it('should fail to delete campaign', async function () {
         //given
         const { campaignFailed } = resources;
         mock.onDelete(campaignFailed.url).reply(campaignFailed.status, campaignFailed.response);
@@ -233,7 +249,7 @@ describe('rest', () => {
         assert.lengthOf(mock.history.delete, 1);
         return;
     });
-    it('RETRY: should return 5 journey items, after a connection error', async () => {
+    it('RETRY: should return 5 journey items, after a connection error', async function () {
         //given
         const { journeysPage1 } = resources;
         mock.onGet(journeysPage1.url)
@@ -250,7 +266,7 @@ describe('rest', () => {
         assert.lengthOf(mock.history.get, 2);
         return;
     });
-    it('FAILED RETRY: should return error, after 2 connection timeout errors', async () => {
+    it('FAILED RETRY: should return error, after 2 connection timeout errors', async function () {
         //given
         const { journeysPage1 } = resources;
         mock.onGet(journeysPage1.url).timeout();
@@ -267,11 +283,11 @@ describe('rest', () => {
 
         return;
     });
-    it('FAILED RETRY: should return error, after 2 ECONNRESET errors', async () => {
+    it('FAILED RETRY: should return error, after 2 ECONNRESET errors', async function () {
         //given
         const { journeysPage1 } = resources;
 
-        mock.onGet(journeysPage1.url).reply((res) => {
+        mock.onGet(journeysPage1.url).reply(() => {
             const connectionError = new Error();
             connectionError.code = 'ECONNRESET';
             throw connectionError;
@@ -287,6 +303,55 @@ describe('rest', () => {
         assert.lengthOf(mock.history.post, 1);
         assert.lengthOf(mock.history.get, 2);
 
+        return;
+    });
+    it('LogRequest & Response: should run middleware for logging ', async function () {
+        //given
+        const { journeysPage1 } = resources;
+        mock.onGet(journeysPage1.url).reply(journeysPage1.status, journeysPage1.response);
+        // when
+        let expectedRequest;
+        let expectedResponse;
+        const sdk = new SDK(
+            {
+                client_id: 'XXXXX',
+                client_secret: 'YYYYYY',
+                auth_url: 'https://mct0l7nxfq2r988t1kxfy8sc47ma.auth.marketingcloudapis.com/',
+                account_id: 1111111,
+            },
+            {
+                eventHandlers: {
+                    logRequest: (reqObj) => {
+                        expectedRequest = reqObj;
+                    },
+
+                    logResponse: (resObj) => {
+                        expectedResponse = resObj;
+                    },
+                    onConnectionError: () => {
+                        return;
+                    },
+                },
+                retryOnConnectionError: true,
+                requestAttempts: 2,
+            }
+        );
+        // when
+        await sdk.rest.get('interaction/v1/interactions?$pageSize=5&$page=1');
+        // then
+        assert.deepEqual(
+            {
+                method: 'GET',
+                url: 'interaction/v1/interactions?$pageSize=5&$page=1',
+                baseURL: 'https://mct0l7nxfq2r988t1kxfy8sc47ma.rest.marketingcloudapis.com/',
+                headers: {
+                    Authorization: 'Bearer TESTTOKEN',
+                },
+            },
+            expectedRequest
+        );
+        assert.equal(200, expectedResponse.status);
+        assert.equal(5, expectedResponse.data.items.length);
         return;
     });
 });
