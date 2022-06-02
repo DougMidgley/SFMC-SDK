@@ -32,7 +32,7 @@
     ],
     "devDependencies": {
         "assert": "2.0.0",
-        "axios-mock-adapter": "1.20.0",
+        "axios-mock-adapter": "1.21.1",
         "chai": "4.3.6",
         "eslint-config-prettier": "8.5.0",
         "eslint-plugin-jsdoc": "39.2.9",
