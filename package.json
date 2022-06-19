@@ -16,7 +16,7 @@
     "license": "BSD-3-Clause",
     "dependencies": {
         "axios": "^0.27.2",
-        "fast-xml-parser": "4.0.7",
+        "fast-xml-parser": "4.0.8",
         "p-limit": "3.1.0"
     },
     "keywords": [
@@ -32,15 +32,15 @@
     ],
     "devDependencies": {
         "assert": "2.0.0",
-        "axios-mock-adapter": "1.20.0",
+        "axios-mock-adapter": "1.21.1",
         "chai": "4.3.6",
         "eslint-config-prettier": "8.5.0",
-        "eslint-plugin-jsdoc": "39.2.9",
-        "eslint-plugin-mocha": "10.0.4",
+        "eslint-plugin-jsdoc": "39.3.3",
+        "eslint-plugin-mocha": "10.0.5",
         "eslint-plugin-prettier": "4.0.0",
         "mocha": "10.0.0",
         "nyc": "15.1.0",
-        "prettier-eslint": "14.0.3",
+        "prettier-eslint": "15.0.1",
         "sinon": "14.0.0"
     },
     "engines": {
