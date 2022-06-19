@@ -1,50 +1,50 @@
 {
-    "name": "sfmc-sdk",
-    "version": "0.6.0",
-    "description": "Libarary to simplify SFMC requests with updated dependencies and less overhead",
-    "main": "./lib/index.js",
-    "scripts": {
-        "test": "nyc --reporter=text mocha",
-        "lint": "eslint ./lib &&  eslint ./test",
-        "lint:fix": "eslint ./lib --fix && eslint ./test --fix"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/DougMidgley/SFMC-SDK.git"
-    },
-    "author": "Doug Midgley <douglasmidgley@gmail.com>",
-    "license": "BSD-3-Clause",
-    "dependencies": {
-        "axios": "^0.27.2",
-        "fast-xml-parser": "4.0.8",
-        "p-limit": "3.1.0"
-    },
-    "keywords": [
-        "fuel",
-        "exacttarget",
-        "salesforce",
-        "marketing",
-        "cloud",
-        "soap",
-        "rest",
-        "auth",
-        "sdk"
-    ],
-    "devDependencies": {
-        "assert": "2.0.0",
-        "axios-mock-adapter": "1.21.1",
-        "chai": "4.3.6",
-        "eslint-config-prettier": "8.5.0",
-        "eslint-plugin-jsdoc": "39.3.3",
-        "eslint-plugin-mocha": "10.0.5",
-        "eslint-plugin-prettier": "4.0.0",
-        "mocha": "10.0.0",
-        "nyc": "15.1.0",
-        "prettier-eslint": "15.0.1",
-        "sinon": "14.0.0"
-    },
-    "engines": {
-        "npm": ">=6.14.4",
-        "node": ">=14.0.0"
-    }
+  "name": "sfmc-sdk",
+  "version": "0.6.1",
+  "description": "Libarary to simplify SFMC requests with updated dependencies and less overhead",
+  "main": "./lib/index.js",
+  "scripts": {
+    "test": "nyc --reporter=text mocha",
+    "lint": "eslint ./lib &&  eslint ./test",
+    "lint:fix": "eslint ./lib --fix && eslint ./test --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DougMidgley/SFMC-SDK.git"
+  },
+  "author": "Doug Midgley <douglasmidgley@gmail.com>",
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "fast-xml-parser": "4.0.8",
+    "p-limit": "3.1.0"
+  },
+  "keywords": [
+    "fuel",
+    "exacttarget",
+    "salesforce",
+    "marketing",
+    "cloud",
+    "soap",
+    "rest",
+    "auth",
+    "sdk"
+  ],
+  "devDependencies": {
+    "assert": "2.0.0",
+    "axios-mock-adapter": "1.21.1",
+    "chai": "4.3.6",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-jsdoc": "39.3.3",
+    "eslint-plugin-mocha": "10.0.5",
+    "eslint-plugin-prettier": "4.0.0",
+    "mocha": "10.0.0",
+    "nyc": "15.1.0",
+    "prettier-eslint": "15.0.1",
+    "sinon": "14.0.0"
+  },
+  "engines": {
+    "npm": ">=6.14.4",
+    "node": ">=14.0.0"
+  }
 }
