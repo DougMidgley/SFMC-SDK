@@ -192,6 +192,24 @@ describe('soap', function () {
         }
         assert.fail();
     });
+    it('no handler: should return an error stating the object type is not supported', async function () {
+        //given
+        addHandler(resources.noObjectHandlerFound);
+        // when
+        try {
+            await defaultSdk().soap.retrieve('DeliveryProfile', ['CustomerKey']);
+        } catch (ex) {
+            // then
+            assert.equal(
+                ex.message,
+                'Unable to find a handler for object type: DeliveryProfile. Object types are case-sensitive, check spelling.'
+            );
+            assert.lengthOf(mock.history.post, 2);
+
+            return;
+        }
+        assert.fail();
+    });
     it('bad Request: should return an error of bad request', async function () {
         //given
         addHandler(resources.badRequest);
