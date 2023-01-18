@@ -15,7 +15,7 @@
   "author": "Doug Midgley <douglasmidgley@gmail.com>",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "axios": "^0.27.2",
+    "axios": "^1.2.3",
     "fast-xml-parser": "4.0.13",
     "p-limit": "3.1.0"
   },
