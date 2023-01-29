@@ -16,7 +16,7 @@
   "license": "BSD-3-Clause",
   "dependencies": {
     "axios": "^0.27.2",
-    "fast-xml-parser": "4.0.13",
+    "fast-xml-parser": "4.0.15",
     "p-limit": "3.1.0"
   },
   "keywords": [
@@ -35,7 +35,7 @@
     "axios-mock-adapter": "1.21.2",
     "chai": "4.3.7",
     "eslint-config-prettier": "8.6.0",
-    "eslint-plugin-jsdoc": "39.6.4",
+    "eslint-plugin-jsdoc": "39.6.9",
     "eslint-plugin-mocha": "10.1.0",
     "eslint-plugin-prettier": "4.2.1",
     "mocha": "10.2.0",
