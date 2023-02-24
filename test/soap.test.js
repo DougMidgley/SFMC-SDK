@@ -273,6 +273,33 @@ describe('soap', function () {
         assert.lengthOf(mock.history.post, 2);
         return;
     });
+    it('Configure: should assign a business unit to a user', async function () {
+        //given
+        addHandler(resources.accountUserConfigure);
+        // when
+        const response = await defaultSdk().soap.configure('AccountUser', [
+            {
+                Client: { ID: 7281698 },
+                ID: '717133502',
+                BusinessUnitAssignmentConfiguration: {
+                    BusinessUnitIds: { BusinessUnitId: [7330566] },
+                    IsDelete: false,
+                },
+            },
+            {
+                Client: { ID: 7281698 },
+                ID: '717133502',
+                BusinessUnitAssignmentConfiguration: {
+                    BusinessUnitIds: { BusinessUnitId: [518003624, 7330565, 518001150] },
+                    IsDelete: true,
+                },
+            },
+        ]);
+        // then
+        assert.deepEqual(resources.accountUserConfigure.parsed, response);
+        assert.lengthOf(mock.history.post, 2);
+        return;
+    });
     it('Schedule: should schedule an Automation', async function () {
         //given
         addHandler(resources.automationSchedule);
