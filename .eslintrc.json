@@ -5,6 +5,7 @@
         "mocha": true
     },
     "extends": [
+        "plugin:unicorn/recommended",
         "eslint:recommended",
         "plugin:mocha/recommended",
         "plugin:jsdoc/recommended",
@@ -18,5 +19,9 @@
     "parserOptions": {
         "ecmaVersion": 2020,
         "sourceType": "module"
+    },
+    "rules": {
+        "unicorn/prefer-module": "off",
+        "unicorn/numeric-separators-style": "off"
     }
 }
