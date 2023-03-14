@@ -35,7 +35,7 @@
     "axios-mock-adapter": "1.21.2",
     "chai": "4.3.7",
     "eslint-config-prettier": "8.6.0",
-    "eslint-plugin-jsdoc": "40.0.0",
+    "eslint-plugin-jsdoc": "40.0.2",
     "eslint-plugin-mocha": "10.1.0",
     "eslint-plugin-prettier": "4.2.1",
     "mocha": "10.2.0",
