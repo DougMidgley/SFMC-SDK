@@ -43,8 +43,8 @@ describe('auth', function () {
         try {
             await auth;
             assert.fail();
-        } catch (ex) {
-            assert.equal(ex.response.status, 401);
+        } catch (error) {
+            assert.equal(error.response.status, 401);
         }
 
         return;
@@ -60,9 +60,9 @@ describe('auth', function () {
             });
             //then
             assert.fail();
-        } catch (ex) {
+        } catch (error) {
             assert.equal(
-                ex.message,
+                error.message,
                 'account_id must be an Integer (Integers in String format are accepted)'
             );
         }
@@ -79,9 +79,9 @@ describe('auth', function () {
             });
             //then
             assert.fail();
-        } catch (ex) {
+        } catch (error) {
             assert.equal(
-                ex.message,
+                error.message,
                 'auth_url must be in format https://mcXXXXXXXXXXXXXXXXXXXXXXXXXX.auth.marketingcloudapis.com/'
             );
         }
@@ -98,8 +98,8 @@ describe('auth', function () {
             });
             //then
             assert.fail();
-        } catch (ex) {
-            assert.equal(ex.message, 'client_id or client_secret is missing or invalid');
+        } catch (error) {
+            assert.equal(error.message, 'client_id or client_secret is missing or invalid');
         }
         return;
     });
@@ -114,8 +114,8 @@ describe('auth', function () {
             });
             //then
             assert.fail();
-        } catch (ex) {
-            assert.equal(ex.message, 'client_id or client_secret is missing or invalid');
+        } catch (error) {
+            assert.equal(error.message, 'client_id or client_secret is missing or invalid');
         }
         return;
     });
@@ -131,8 +131,8 @@ describe('auth', function () {
             });
             //then
             assert.fail();
-        } catch (ex) {
-            assert.equal(ex.message, '"somethingwrong" is/are invalid scope(s)');
+        } catch (error) {
+            assert.equal(error.message, '"somethingwrong" is/are invalid scope(s)');
         }
         return;
     });
@@ -148,8 +148,8 @@ describe('auth', function () {
             });
             //then
             assert.fail();
-        } catch (ex) {
-            assert.equal(ex.message, 'Scope must be in array format');
+        } catch (error) {
+            assert.equal(error.message, 'Scope must be in array format');
         }
         return;
     });
@@ -180,8 +180,8 @@ describe('auth', function () {
             await defaultSdk().auth.getAccessToken();
             //then
             assert.fail();
-        } catch (ex) {
-            assert.isTrue(isConnectionError(ex.code));
+        } catch (error) {
+            assert.isTrue(isConnectionError(error.code));
         }
         assert.lengthOf(mock.history.post, 2);
         return;

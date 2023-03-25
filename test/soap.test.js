@@ -121,8 +121,8 @@ describe('soap', function () {
             );
             // then
             assert.fail();
-        } catch (ex) {
-            assert.deepEqual(ex.json, resources.subscriberFailed.parsed);
+        } catch (error) {
+            assert.deepEqual(error.json, resources.subscriberFailed.parsed);
             assert.lengthOf(mock.history.post, 2);
         }
 
@@ -183,9 +183,9 @@ describe('soap', function () {
                 SubscriberKey: '1234512345',
                 EmailAddress: 'douglas@accenture.com',
             });
-        } catch (ex) {
+        } catch (error) {
             // then
-            assert.equal(ex.message, 'Token Expired');
+            assert.equal(error.message, 'Token Expired');
             assert.lengthOf(mock.history.post, 4);
 
             return;
@@ -198,10 +198,10 @@ describe('soap', function () {
         // when
         try {
             await defaultSdk().soap.retrieve('DeliveryProfile', ['CustomerKey']);
-        } catch (ex) {
+        } catch (error) {
             // then
             assert.equal(
-                ex.message,
+                error.message,
                 'Unable to find a handler for object type: DeliveryProfile. Object types are case-sensitive, check spelling.'
             );
             assert.lengthOf(mock.history.post, 2);
@@ -218,9 +218,9 @@ describe('soap', function () {
             await defaultSdk().soap.create('Subscriber', {
                 SubscriberKey: [[['value']]],
             });
-        } catch (ex) {
+        } catch (error) {
             // then
-            assert.equal(ex.response.data, 'Bad Request');
+            assert.equal(error.response.data, 'Bad Request');
             assert.lengthOf(mock.history.post, 2);
             return;
         }
@@ -391,9 +391,9 @@ describe('soap', function () {
                 QueryAllAccounts: true,
             });
             assert.fail();
-        } catch (ex) {
+        } catch (error) {
             // then
-            assert.isTrue(isConnectionError(ex.code));
+            assert.isTrue(isConnectionError(error.code));
         }
         assert.lengthOf(mock.history.post, 3);
         return;
