@@ -6,9 +6,20 @@ const { XMLValidator } = require('fast-xml-parser');
 const { isConnectionError } = require('../lib/util');
 
 const addHandler = (metadata) => {
-    mock.onPost('/Service.asmx', {
-        asymmetricMatch: XMLValidator.validate,
-    }).reply(metadata.status, metadata.response, {
+    mock.onPost(
+        '/Service.asmx',
+        {
+            asymmetricMatch: XMLValidator.validate,
+        },
+        {
+            asymmetricMatch(headers) {
+                return (
+                    headers['SOAPAction'] === metadata.action &&
+                    headers['Content-Type'] === 'text/xml'
+                );
+            },
+        }
+    ).reply(metadata.status, metadata.response, {
         'Content-Type': 'application/soap+xml; charset=utf-8',
     });
 };
@@ -52,9 +63,20 @@ describe('soap', function () {
     });
     it('retrieveBulk: should return 2 data extensions', async function () {
         //given
-        mock.onPost('/Service.asmx', {
-            asymmetricMatch: XMLValidator.validate,
-        })
+        mock.onPost(
+            '/Service.asmx',
+            {
+                asymmetricMatch: XMLValidator.validate,
+            },
+            {
+                asymmetricMatch(headers) {
+                    return (
+                        headers['SOAPAction'] === resources.retrieveBulkDataExtension.action &&
+                        headers['Content-Type'] === 'text/xml'
+                    );
+                },
+            }
+        )
             .replyOnce(
                 resources.retrieveBulkDataExtension.status,
                 resources.retrieveBulkDataExtension.response,
@@ -62,9 +84,20 @@ describe('soap', function () {
                     'Content-Type': 'application/soap+xml; charset=utf-8',
                 }
             )
-            .onPost('/Service.asmx', {
-                asymmetricMatch: XMLValidator.validate,
-            })
+            .onPost(
+                '/Service.asmx',
+                {
+                    asymmetricMatch: XMLValidator.validate,
+                },
+                {
+                    asymmetricMatch(headers) {
+                        return (
+                            headers['SOAPAction'] === resources.retrieveDataExtension.action &&
+                            headers['Content-Type'] === 'text/xml'
+                        );
+                    },
+                }
+            )
             .replyOnce(
                 resources.retrieveDataExtension.status,
                 resources.retrieveDataExtension.response,
@@ -314,9 +347,20 @@ describe('soap', function () {
 
         mock.onPost('/Service.asmx')
             .timeoutOnce()
-            .onPost('/Service.asmx', {
-                asymmetricMatch: XMLValidator.validate,
-            })
+            .onPost(
+                '/Service.asmx',
+                {
+                    asymmetricMatch: XMLValidator.validate,
+                },
+                {
+                    asymmetricMatch(headers) {
+                        return (
+                            headers['SOAPAction'] === resources.retrieveDataExtension.action &&
+                            headers['Content-Type'] === 'text/xml'
+                        );
+                    },
+                }
+            )
             .reply(
                 resources.retrieveDataExtension.status,
                 resources.retrieveDataExtension.response,
