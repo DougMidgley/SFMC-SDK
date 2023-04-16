@@ -12,11 +12,16 @@ const addHandler = (metadata) => {
             asymmetricMatch: XMLValidator.validate,
         },
         {
-            Accept: 'application/json, text/plain, */*',
-            'Content-Type': 'text/xml',
-            SOAPAction: metadata.action,
+            asymmetricMatch(headers) {
+                return (
+                    headers['SOAPAction'] === metadata.action &&
+                    headers['Content-Type'] === 'text/xml'
+                );
+            },
         }
-    ).reply(metadata.status, metadata.response);
+    ).reply(metadata.status, metadata.response, {
+        'Content-Type': 'application/soap+xml; charset=utf-8',
+    });
 };
 
 describe('soap', function () {
@@ -64,14 +69,20 @@ describe('soap', function () {
                 asymmetricMatch: XMLValidator.validate,
             },
             {
-                Accept: 'application/json, text/plain, */*',
-                'Content-Type': 'text/xml',
-                SOAPAction: resources.retrieveBulkDataExtension.action,
+                asymmetricMatch(headers) {
+                    return (
+                        headers['SOAPAction'] === resources.retrieveBulkDataExtension.action &&
+                        headers['Content-Type'] === 'text/xml'
+                    );
+                },
             }
         )
             .replyOnce(
                 resources.retrieveBulkDataExtension.status,
-                resources.retrieveBulkDataExtension.response
+                resources.retrieveBulkDataExtension.response,
+                {
+                    'Content-Type': 'application/soap+xml; charset=utf-8',
+                }
             )
             .onPost(
                 '/Service.asmx',
@@ -79,14 +90,20 @@ describe('soap', function () {
                     asymmetricMatch: XMLValidator.validate,
                 },
                 {
-                    Accept: 'application/json, text/plain, */*',
-                    'Content-Type': 'text/xml',
-                    SOAPAction: resources.retrieveDataExtension.action,
+                    asymmetricMatch(headers) {
+                        return (
+                            headers['SOAPAction'] === resources.retrieveDataExtension.action &&
+                            headers['Content-Type'] === 'text/xml'
+                        );
+                    },
                 }
             )
             .replyOnce(
                 resources.retrieveDataExtension.status,
-                resources.retrieveDataExtension.response
+                resources.retrieveDataExtension.response,
+                {
+                    'Content-Type': 'application/soap+xml; charset=utf-8',
+                }
             );
         // when
         const payload = await defaultSdk().soap.retrieveBulk('DataExtension', ['CustomerKey'], {
@@ -336,14 +353,20 @@ describe('soap', function () {
                     asymmetricMatch: XMLValidator.validate,
                 },
                 {
-                    Accept: 'application/json, text/plain, */*',
-                    'Content-Type': 'text/xml',
-                    SOAPAction: resources.retrieveDataExtension.action,
+                    asymmetricMatch(headers) {
+                        return (
+                            headers['SOAPAction'] === resources.retrieveDataExtension.action &&
+                            headers['Content-Type'] === 'text/xml'
+                        );
+                    },
                 }
             )
             .reply(
                 resources.retrieveDataExtension.status,
-                resources.retrieveDataExtension.response
+                resources.retrieveDataExtension.response,
+                {
+                    'Content-Type': 'application/soap+xml; charset=utf-8',
+                }
             );
         // when
         const payload = await defaultSdk().soap.retrieve('DataExtension', ['CustomerKey'], {
