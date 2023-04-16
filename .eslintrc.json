@@ -20,8 +20,41 @@
         "ecmaVersion": 2020,
         "sourceType": "module"
     },
+    "settings": {
+        "jsdoc": {
+            "mode": "jsdoc",
+            "preferredTypes": {
+                "array": "Array",
+                "array.<>": "[]",
+                "Array.<>": "[]",
+                "array<>": "[]",
+                "Array<>": "[]",
+                "Object": "object",
+                "object.<>": "Object.<>",
+                "object<>": "Object.<>",
+                "Object<>": "Object.<>",
+                "promise": "Promise",
+                "promise.<>": "Promise.<>",
+                "promise<>": "Promise.<>",
+                "Promise<>": "Promise.<>"
+            }
+        }
+    },
     "rules": {
         "unicorn/prefer-module": "off",
-        "unicorn/numeric-separators-style": "off"
+        "unicorn/numeric-separators-style": "off",
+        "jsdoc/check-line-alignment": 2,
+        "jsdoc/require-jsdoc": [
+            "warn",
+            {
+                "require": {
+                    "FunctionDeclaration": true,
+                    "MethodDefinition": true,
+                    "ClassDeclaration": true,
+                    "ArrowFunctionExpression": false,
+                    "FunctionExpression": true
+                }
+            }
+        ]
     }
 }
