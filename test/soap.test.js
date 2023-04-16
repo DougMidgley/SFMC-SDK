@@ -12,11 +12,16 @@ const addHandler = (metadata) => {
             asymmetricMatch: XMLValidator.validate,
         },
         {
-            Accept: 'application/json, text/plain, */*',
-            'Content-Type': 'text/xml',
-            SOAPAction: metadata.action,
+            asymmetricMatch(headers) {
+                return (
+                    headers['SOAPAction'] === metadata.action &&
+                    headers['Content-Type'] === 'text/xml'
+                );
+            },
         }
-    ).reply(metadata.status, metadata.response);
+    ).reply(metadata.status, metadata.response, {
+        'Content-Type': 'application/soap+xml; charset=utf-8',
+    });
 };
 
 describe('soap', function () {
@@ -64,14 +69,20 @@ describe('soap', function () {
                 asymmetricMatch: XMLValidator.validate,
             },
             {
-                Accept: 'application/json, text/plain, */*',
-                'Content-Type': 'text/xml',
-                SOAPAction: resources.retrieveBulkDataExtension.action,
+                asymmetricMatch(headers) {
+                    return (
+                        headers['SOAPAction'] === resources.retrieveBulkDataExtension.action &&
+                        headers['Content-Type'] === 'text/xml'
+                    );
+                },
             }
         )
             .replyOnce(
                 resources.retrieveBulkDataExtension.status,
-                resources.retrieveBulkDataExtension.response
+                resources.retrieveBulkDataExtension.response,
+                {
+                    'Content-Type': 'application/soap+xml; charset=utf-8',
+                }
             )
             .onPost(
                 '/Service.asmx',
@@ -79,14 +90,20 @@ describe('soap', function () {
                     asymmetricMatch: XMLValidator.validate,
                 },
                 {
-                    Accept: 'application/json, text/plain, */*',
-                    'Content-Type': 'text/xml',
-                    SOAPAction: resources.retrieveDataExtension.action,
+                    asymmetricMatch(headers) {
+                        return (
+                            headers['SOAPAction'] === resources.retrieveDataExtension.action &&
+                            headers['Content-Type'] === 'text/xml'
+                        );
+                    },
                 }
             )
             .replyOnce(
                 resources.retrieveDataExtension.status,
-                resources.retrieveDataExtension.response
+                resources.retrieveDataExtension.response,
+                {
+                    'Content-Type': 'application/soap+xml; charset=utf-8',
+                }
             );
         // when
         const payload = await defaultSdk().soap.retrieveBulk('DataExtension', ['CustomerKey'], {
@@ -121,8 +138,8 @@ describe('soap', function () {
             );
             // then
             assert.fail();
-        } catch (ex) {
-            assert.deepEqual(ex.json, resources.subscriberFailed.parsed);
+        } catch (error) {
+            assert.deepEqual(error.json, resources.subscriberFailed.parsed);
             assert.lengthOf(mock.history.post, 2);
         }
 
@@ -183,9 +200,9 @@ describe('soap', function () {
                 SubscriberKey: '1234512345',
                 EmailAddress: 'douglas@accenture.com',
             });
-        } catch (ex) {
+        } catch (error) {
             // then
-            assert.equal(ex.message, 'Token Expired');
+            assert.equal(error.message, 'Token Expired');
             assert.lengthOf(mock.history.post, 4);
 
             return;
@@ -198,10 +215,10 @@ describe('soap', function () {
         // when
         try {
             await defaultSdk().soap.retrieve('DeliveryProfile', ['CustomerKey']);
-        } catch (ex) {
+        } catch (error) {
             // then
             assert.equal(
-                ex.message,
+                error.message,
                 'Unable to find a handler for object type: DeliveryProfile. Object types are case-sensitive, check spelling.'
             );
             assert.lengthOf(mock.history.post, 2);
@@ -218,9 +235,9 @@ describe('soap', function () {
             await defaultSdk().soap.create('Subscriber', {
                 SubscriberKey: [[['value']]],
             });
-        } catch (ex) {
+        } catch (error) {
             // then
-            assert.equal(ex.response.data, 'Bad Request');
+            assert.equal(error.response.data, 'Bad Request');
             assert.lengthOf(mock.history.post, 2);
             return;
         }
@@ -336,14 +353,20 @@ describe('soap', function () {
                     asymmetricMatch: XMLValidator.validate,
                 },
                 {
-                    Accept: 'application/json, text/plain, */*',
-                    'Content-Type': 'text/xml',
-                    SOAPAction: resources.retrieveDataExtension.action,
+                    asymmetricMatch(headers) {
+                        return (
+                            headers['SOAPAction'] === resources.retrieveDataExtension.action &&
+                            headers['Content-Type'] === 'text/xml'
+                        );
+                    },
                 }
             )
             .reply(
                 resources.retrieveDataExtension.status,
-                resources.retrieveDataExtension.response
+                resources.retrieveDataExtension.response,
+                {
+                    'Content-Type': 'application/soap+xml; charset=utf-8',
+                }
             );
         // when
         const payload = await defaultSdk().soap.retrieve('DataExtension', ['CustomerKey'], {
@@ -391,9 +414,9 @@ describe('soap', function () {
                 QueryAllAccounts: true,
             });
             assert.fail();
-        } catch (ex) {
+        } catch (error) {
             // then
-            assert.isTrue(isConnectionError(ex.code));
+            assert.isTrue(isConnectionError(error.code));
         }
         assert.lengthOf(mock.history.post, 3);
         return;

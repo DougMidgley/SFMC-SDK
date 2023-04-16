@@ -137,7 +137,7 @@ describe('rest', function () {
         // when
         const payload = await defaultSdk().rest.patch('contacts/v1/contacts', {
             contactKey: '0039E00000DcvwjQAB',
-            contactId: null,
+            contactId: undefined,
             attributeSets: [
                 {
                     name: 'MobileConnect Demographics',
@@ -223,8 +223,8 @@ describe('rest', function () {
             // when
             await defaultSdk().rest.delete('hub/v1/campaigns/12656');
             assert.fail();
-        } catch (ex) {
-            assert.deepEqual(ex.response.data, unauthorized.response);
+        } catch (error) {
+            assert.deepEqual(error.response.data, unauthorized.response);
             assert.lengthOf(mock.history.post, 2);
             assert.lengthOf(mock.history.delete, 0);
         }
@@ -239,10 +239,10 @@ describe('rest', function () {
             await defaultSdk().rest.delete('hub/v1/campaigns/abc');
             assert.fail();
             // then
-        } catch (ex) {
+        } catch (error) {
             // console.log(ex.response);
-            assert.equal(ex.response.status, campaignFailed.status);
-            assert.deepEqual(ex.response.data, campaignFailed.response);
+            assert.equal(error.response.status, campaignFailed.status);
+            assert.deepEqual(error.response.data, campaignFailed.response);
         }
 
         assert.lengthOf(mock.history.post, 1);
@@ -274,9 +274,9 @@ describe('rest', function () {
         try {
             await defaultSdk().rest.get('interaction/v1/interactions?$pageSize=5&$page=1');
             assert.fail();
-        } catch (ex) {
+        } catch (error) {
             // then
-            assert.isTrue(isConnectionError(ex.code));
+            assert.isTrue(isConnectionError(error.code));
         }
         assert.lengthOf(mock.history.post, 1);
         assert.lengthOf(mock.history.get, 2);
@@ -288,6 +288,7 @@ describe('rest', function () {
         const { journeysPage1 } = resources;
 
         mock.onGet(journeysPage1.url).reply(() => {
+            // eslint-disable-next-line unicorn/error-message
             const connectionError = new Error();
             connectionError.code = 'ECONNRESET';
             throw connectionError;
@@ -296,9 +297,9 @@ describe('rest', function () {
         try {
             await defaultSdk().rest.get('interaction/v1/interactions?$pageSize=5&$page=1');
             assert.fail();
-        } catch (ex) {
+        } catch (error) {
             // then
-            assert.isTrue(isConnectionError(ex.code));
+            assert.isTrue(isConnectionError(error.code));
         }
         assert.lengthOf(mock.history.post, 1);
         assert.lengthOf(mock.history.get, 2);
@@ -321,12 +322,12 @@ describe('rest', function () {
             },
             {
                 eventHandlers: {
-                    logRequest: (reqObj) => {
-                        expectedRequest = reqObj;
+                    logRequest: (requestObject) => {
+                        expectedRequest = requestObject;
                     },
 
-                    logResponse: (resObj) => {
-                        expectedResponse = resObj;
+                    logResponse: (responseObject) => {
+                        expectedResponse = responseObject;
                     },
                     onConnectionError: () => {
                         return;
