@@ -374,5 +374,43 @@
             "errorcode": 10000,
             "documentation": ""
         }
+    },
+    "keywordPage1": {
+        "status": 200,
+        "url": "https://mct0l7nxfq2r988t1kxfy8sc47ma.rest.marketingcloudapis.com/legacy/v1/beta/mobile/keyword/?view=simple&$top=50&$skip=0",
+        "response": {
+            "startIndex": 0,
+            "itemsPerPage": 50,
+            "totalResults": 12,
+            "entry": [
+                {
+                    "id": "MGtuaEdmbDRJMEtzMmN5cGIyTlJzQTo4Njow"
+                },
+                {
+                    "id": "ZVVGOUl2ZzlXVWVockxLSlUzTWRFQTo4Njow"
+                },
+                {
+                    "id": "VVF0NnJIYjhyVS1xa2dITW5rTkNuUTo4Njow"
+                },
+                {
+                    "id": "S3FsUGRJUks1RUNUdEJVR1VxcG9Hdzo4Njow"
+                },
+                {
+                    "id": "TGwxNGZ3ZmFFVWlOM2ZmdGgzd1Rqdzo4Njow"
+                },
+                {
+                    "id": "M211MUc3MmNJRU80d2FvdndUS3E1Zzo4Njow"
+                },
+                {
+                    "id": "OFplbURfd1U2RXl3eHVxMU1GZGJjZzo4Njow"
+                },
+                {
+                    "id": "a3ZYLXdXSXlsVWVKb09yVjZxMC1MZzo4Njow"
+                },
+                {
+                    "id": "YkJrNDUxSVc4MDZ3eDBtVlZLMTRudzo4Njow"
+                }
+            ]
+        }
     }
 }

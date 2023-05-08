@@ -28,6 +28,21 @@ describe('rest', function () {
         assert.lengthOf(mock.history.get, 2);
         return;
     });
+    it('GET Bulk: should return 9 keyword items', async function () {
+        //given
+        const { keywordPage1 } = resources;
+        mock.onGet(keywordPage1.url).reply(keywordPage1.status, keywordPage1.response);
+        // when
+        const payload = await defaultSdk().rest.getBulk(
+            '/legacy/v1/beta/mobile/keyword/?view=simple',
+            10
+        );
+        // then
+        assert.lengthOf(payload.entry, 9);
+        assert.lengthOf(mock.history.post, 1);
+        assert.lengthOf(mock.history.get, 1);
+        return;
+    });
     it('GET: should return 5 journey items', async function () {
         //given
         const { journeysPage1 } = resources;
