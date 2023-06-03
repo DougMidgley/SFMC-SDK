@@ -1,16 +1,13 @@
-const assert = require('chai').assert;
-const { defaultSdk, mock } = require('./utils.js');
-const SDK = require('../lib');
-const resources = require('./resources/rest.json');
-const authResources = require('./resources/auth.json');
-const { isConnectionError } = require('../lib/util');
+import { assert } from 'chai';
+import { defaultSdk, mock } from './utils.js';
+import SDK from '../lib/index.js';
+import * as resources from './resources/rest.js';
+import { success, expired, unauthorized } from './resources/auth.js';
+import { isConnectionError } from '../lib/util.js';
 
 describe('rest', function () {
     beforeEach(function () {
-        mock.onPost(authResources.success.url).reply(
-            authResources.success.status,
-            authResources.success.response
-        );
+        mock.onPost(success.url).reply(success.status, success.response);
     });
     afterEach(function () {
         mock.reset();
@@ -210,7 +207,6 @@ describe('rest', function () {
     it('should retry auth one time on first failure then work', async function () {
         //given
         mock.reset(); // needed to avoid before hook being used
-        const { expired, success } = authResources;
         mock.onPost(expired.url)
             .replyOnce(expired.status, expired.response)
             .onPost(success.url)
@@ -229,7 +225,6 @@ describe('rest', function () {
     it('should retry auth one time on first failure then fail', async function () {
         //given
         mock.reset(); // needed to avoid before hook being used
-        const { unauthorized } = authResources;
         mock.onPost(unauthorized.url).reply(unauthorized.status, unauthorized.response);
 
         const { campaignDelete } = resources;

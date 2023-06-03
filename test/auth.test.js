@@ -1,8 +1,8 @@
-const assert = require('chai').assert;
-const SDK = require('../lib');
-const { defaultSdk, mock } = require('./utils.js');
-const resources = require('./resources/auth.json');
-const { isConnectionError } = require('../lib/util');
+import { assert } from 'chai';
+import SDK from '../lib/index.js';
+import { defaultSdk, mock } from './utils.js';
+import { success, unauthorized } from './resources/auth.js';
+import { isConnectionError } from '../lib/util.js';
 
 describe('auth', function () {
     afterEach(function () {
@@ -10,7 +10,6 @@ describe('auth', function () {
     });
     it('should return an auth payload with token', async function () {
         //given
-        const { success } = resources;
 
         //when
         mock.onPost(success.url).reply(success.status, success.response);
@@ -22,7 +21,7 @@ describe('auth', function () {
     });
     it('should return an auth payload with previous token and one request', async function () {
         //given
-        const { success } = resources;
+
         mock.onPost(success.url).reply(success.status, success.response);
         // when
         const sdk = defaultSdk();
@@ -35,7 +34,6 @@ describe('auth', function () {
     });
     it('should return an unauthorized error', async function () {
         //given
-        const { unauthorized } = resources;
         mock.onPost(unauthorized.url).reply(unauthorized.status, unauthorized.response);
         // when
         const auth = defaultSdk().auth.getAccessToken();
@@ -156,7 +154,6 @@ describe('auth', function () {
 
     it('RETRY: should return an success, after a connection issues', async function () {
         //given
-        const { success } = resources;
 
         //when
         mock.onPost(success.url)
@@ -171,7 +168,6 @@ describe('auth', function () {
     });
     it('FAILED RETRY: should return an error, after multiple connection issues', async function () {
         //given
-        const { success } = resources;
 
         //when
         mock.onPost(success.url).timeout();

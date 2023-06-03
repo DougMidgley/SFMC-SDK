@@ -1,8 +1,9 @@
-const MockAdapter = require('axios-mock-adapter');
-const { axiosInstance } = require('../lib/util');
-const SDK = require('../lib');
-exports.mock = new MockAdapter(axiosInstance, { onNoMatch: 'throwException' });
-exports.defaultSdk = () => {
+import MockAdapter from 'axios-mock-adapter';
+import { axiosInstance } from '../lib/util.js';
+import SDK from '../lib/index.js';
+export const mock = new MockAdapter(axiosInstance, { onNoMatch: 'throwException' });
+
+export const defaultSdk = () => {
     return new SDK(
         {
             client_id: 'XXXXX',

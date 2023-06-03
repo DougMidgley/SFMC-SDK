@@ -1,9 +1,9 @@
-const assert = require('chai').assert;
-const { defaultSdk, mock } = require('./utils.js');
-const resources = require('./resources/soap.json');
-const authResources = require('./resources/auth.json');
-const { XMLValidator } = require('fast-xml-parser');
-const { isConnectionError } = require('../lib/util');
+import { assert } from 'chai';
+import { defaultSdk, mock } from './utils.js';
+import * as resources from './resources/soap.js';
+import { success } from './resources/auth.js';
+import { XMLValidator } from 'fast-xml-parser';
+import { isConnectionError } from '../lib/util.js';
 
 const addHandler = (metadata) => {
     mock.onPost(
@@ -26,10 +26,7 @@ const addHandler = (metadata) => {
 
 describe('soap', function () {
     beforeEach(function () {
-        mock.onPost(authResources.success.url).reply(
-            authResources.success.status,
-            authResources.success.response
-        );
+        mock.onPost(success.url).reply(success.status, success.response);
     });
     afterEach(function () {
         mock.reset();
