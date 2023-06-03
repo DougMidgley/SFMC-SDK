@@ -14,7 +14,6 @@ const addHandler = (metadata) => {
         {
             /**
              * matcher based on headers
-             *
              * @param {object} headers which should be passed for matching
              * @returns {boolean} if value matches
              */
@@ -74,7 +73,6 @@ describe('soap', function () {
             {
                 /**
                  * matcher based on headers
-                 *
                  * @param {object} headers which should be passed for matching
                  * @returns {boolean} if value matches
                  */
@@ -101,7 +99,6 @@ describe('soap', function () {
                 {
                     /**
                      * matcher based on headers
-                     *
                      * @param {object} headers which should be passed for matching
                      * @returns {boolean} if value matches
                      */
@@ -370,7 +367,6 @@ describe('soap', function () {
                 {
                     /**
                      * matcher based on headers
-                     *
                      * @param {object} headers which should be passed for matching
                      * @returns {boolean} if value matches
                      */
