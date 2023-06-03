@@ -5,8 +5,8 @@
     "main": "./lib/index.js",
     "scripts": {
         "test": "nyc --reporter=text mocha",
-        "lint": "eslint ./lib &&  eslint ./test",
-        "lint:fix": "eslint ./lib --fix && eslint ./test --fix",
+        "lint": "eslint ./lib ./test",
+        "lint:fix": "eslint ./lib ./test --fix",
         "prepare": "husky install"
     },
     "repository": {

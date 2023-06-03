@@ -1,3 +1,5 @@
+/* eslint-disable unicorn/no-null */
+/* eslint-disable unicorn/no-zero-fractions */
 export const journeysPage1 = {
     url: 'https://mct0l7nxfq2r988t1kxfy8sc47ma.rest.marketingcloudapis.com/interaction/v1/interactions?$pageSize=5&$page=1',
     response: {

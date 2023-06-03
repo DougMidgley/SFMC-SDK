@@ -12,6 +12,12 @@ const addHandler = (metadata) => {
             asymmetricMatch: XMLValidator.validate,
         },
         {
+            /**
+             * matcher based on headers
+             *
+             * @param {object} headers which should be passed for matching
+             * @returns {boolean} if value matches
+             */
             asymmetricMatch(headers) {
                 return (
                     headers['SOAPAction'] === metadata.action &&
@@ -66,6 +72,12 @@ describe('soap', function () {
                 asymmetricMatch: XMLValidator.validate,
             },
             {
+                /**
+                 * matcher based on headers
+                 *
+                 * @param {object} headers which should be passed for matching
+                 * @returns {boolean} if value matches
+                 */
                 asymmetricMatch(headers) {
                     return (
                         headers['SOAPAction'] === resources.retrieveBulkDataExtension.action &&
@@ -87,6 +99,12 @@ describe('soap', function () {
                     asymmetricMatch: XMLValidator.validate,
                 },
                 {
+                    /**
+                     * matcher based on headers
+                     *
+                     * @param {object} headers which should be passed for matching
+                     * @returns {boolean} if value matches
+                     */
                     asymmetricMatch(headers) {
                         return (
                             headers['SOAPAction'] === resources.retrieveDataExtension.action &&
@@ -350,6 +368,12 @@ describe('soap', function () {
                     asymmetricMatch: XMLValidator.validate,
                 },
                 {
+                    /**
+                     * matcher based on headers
+                     *
+                     * @param {object} headers which should be passed for matching
+                     * @returns {boolean} if value matches
+                     */
                     asymmetricMatch(headers) {
                         return (
                             headers['SOAPAction'] === resources.retrieveDataExtension.action &&
