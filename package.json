@@ -1,6 +1,6 @@
 {
     "name": "sfmc-sdk",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "description": "Libarary to simplify SFMC requests with updated dependencies and less overhead",
     "main": "./lib/index.js",
     "scripts": {
