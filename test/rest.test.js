@@ -32,7 +32,7 @@ describe('rest', function () {
         // when
         const payload = await defaultSdk().rest.getBulk(
             '/legacy/v1/beta/mobile/keyword/?view=simple',
-            10
+            10,
         );
         // then
         assert.lengthOf(payload.entry, 9);
@@ -46,7 +46,7 @@ describe('rest', function () {
         mock.onGet(journeysPage1.url).reply(journeysPage1.status, journeysPage1.response);
         // when
         const payload = await defaultSdk().rest.get(
-            'interaction/v1/interactions?$pageSize=5&$page=1'
+            'interaction/v1/interactions?$pageSize=5&$page=1',
         );
         // then
         assert.lengthOf(payload.items, 5);
@@ -108,7 +108,7 @@ describe('rest', function () {
         const { dataExtensionUpsert } = resources;
         mock.onPost(dataExtensionUpsert.url).reply(
             dataExtensionUpsert.status,
-            dataExtensionUpsert.response
+            dataExtensionUpsert.response,
         );
         // when
         const payload = await defaultSdk().rest.post('hub/v1/dataevents/key:key/rowset', [
@@ -134,7 +134,7 @@ describe('rest', function () {
                 eventDefinitionKey: 'ExampleEventToDelete',
                 sourceApplicationExtensionId: '7db1f972-f8b7-49b6-91b5-fa218e13953d',
                 isVisibleInPicker: true,
-            }
+            },
         );
         // then
         assert.deepEqual(payload, eventupdate.response);
@@ -268,7 +268,7 @@ describe('rest', function () {
             .reply(journeysPage1.status, journeysPage1.response);
         // when
         const payload = await defaultSdk().rest.get(
-            'interaction/v1/interactions?$pageSize=5&$page=1'
+            'interaction/v1/interactions?$pageSize=5&$page=1',
         );
         // then
         assert.lengthOf(payload.items, 5);
@@ -345,7 +345,7 @@ describe('rest', function () {
                 },
                 retryOnConnectionError: true,
                 requestAttempts: 2,
-            }
+            },
         );
         // when
         await sdk.rest.get('interaction/v1/interactions?$pageSize=5&$page=1');
@@ -359,7 +359,7 @@ describe('rest', function () {
                     Authorization: 'Bearer TESTTOKEN',
                 },
             },
-            expectedRequest
+            expectedRequest,
         );
         assert.equal(200, expectedResponse.status);
         assert.equal(5, expectedResponse.data.items.length);

@@ -115,6 +115,6 @@ export const defaultSdk = () => {
             },
             retryOnConnectionError: true,
             requestAttempts: 2,
-        }
+        },
     );
 };

@@ -61,7 +61,7 @@ describe('auth', function () {
         } catch (error) {
             assert.equal(
                 error.message,
-                'account_id must be an Integer (Integers in String format are accepted)'
+                'account_id must be an Integer (Integers in String format are accepted)',
             );
         }
         return;
@@ -80,7 +80,7 @@ describe('auth', function () {
         } catch (error) {
             assert.equal(
                 error.message,
-                'auth_url must be in format https://mcXXXXXXXXXXXXXXXXXXXXXXXXXX.auth.marketingcloudapis.com/'
+                'auth_url must be in format https://mcXXXXXXXXXXXXXXXXXXXXXXXXXX.auth.marketingcloudapis.com/',
             );
         }
         return;

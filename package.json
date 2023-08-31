@@ -1,10 +1,10 @@
 {
     "name": "sfmc-sdk",
-    "version": "1.0.1",
+    "version": "2.0.0",
     "description": "Libarary to simplify SFMC requests with updated dependencies and less overhead",
     "main": "./lib/index.js",
     "scripts": {
-        "test": "nyc --reporter=text mocha",
+        "test": "c8 --reporter=text mocha",
         "lint": "eslint ./lib ./test",
         "lint:fix": "eslint ./lib ./test --fix",
         "prepare": "husky install"
@@ -16,8 +16,8 @@
     "author": "Doug Midgley <douglasmidgley@gmail.com>",
     "license": "BSD-3-Clause",
     "dependencies": {
-        "axios": "^1.4.0",
-        "fast-xml-parser": "4.2.2",
+        "axios": "^1.5.0",
+        "fast-xml-parser": "4.2.7",
         "p-limit": "4.0.0"
     },
     "keywords": [
@@ -33,23 +33,23 @@
     ],
     "devDependencies": {
         "assert": "2.0.0",
-        "axios-mock-adapter": "1.21.4",
-        "chai": "4.3.7",
-        "eslint": "8.42.0",
-        "eslint-config-prettier": "8.8.0",
-        "eslint-plugin-jsdoc": "46.2.0",
+        "axios-mock-adapter": "1.21.5",
+        "c8": "8.0.1",
+        "chai": "4.3.8",
+        "eslint": "8.48.0",
+        "eslint-config-prettier": "9.0.0",
+        "eslint-plugin-jsdoc": "46.5.1",
         "eslint-plugin-mocha": "10.1.0",
-        "eslint-plugin-prettier": "4.2.1",
-        "eslint-plugin-unicorn": "47.0.0",
+        "eslint-plugin-prettier": "5.0.0",
+        "eslint-plugin-unicorn": "48.0.1",
         "husky": "8.0.3",
         "mocha": "10.2.0",
-        "nyc": "15.1.0",
         "prettier-eslint": "15.0.1",
-        "sinon": "15.1.0"
+        "sinon": "15.2.0"
     },
     "engines": {
-        "npm": ">=9.5.1",
-        "node": ">=18.16.0"
+        "npm": ">=9",
+        "node": ">=18"
     },
     "type": "module"
 }
