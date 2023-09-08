@@ -1,8 +1,9 @@
 import { assert } from 'chai';
 import SDK from '../lib/index.js';
-import { defaultSdk, mock } from './utils.js';
+import { defaultSdk, mock, sdkWithGrantType } from './utils.js';
 import { success, unauthorized } from './resources/auth.js';
 import { isConnectionError } from '../lib/util.js';
+import { GRANT_TYPE_AUTHORIZATION_CODE } from '../lib/auth.js';
 
 describe('auth', function () {
     afterEach(function () {
@@ -180,6 +181,40 @@ describe('auth', function () {
             assert.isTrue(isConnectionError(error.code));
         }
         assert.lengthOf(mock.history.post, 2);
+        return;
+    });
+
+    it('should return an access_token required error if grant_type is present', async function () {
+        try {
+            //given
+            new SDK({
+                grant_type: GRANT_TYPE_AUTHORIZATION_CODE,
+                client_id: 'XXXXX',
+                client_secret: 'YYYYYY',
+                auth_url: 'https://mct0l7nxfq2r988t1kxfy8sc47ma.auth.marketingcloudapis.com/',
+                account_id: '1111111',
+                scope: ['something'],
+            });
+            //then
+            assert.fail();
+        } catch (error) {
+            assert.equal(
+                error.message,
+                'authObject with access_token is required if grant_type => authorization_code',
+            );
+        }
+        return;
+    });
+
+    it('should return an auth payload  if grant_type is present', async function () {
+        //given
+
+        // when
+        const sdk = sdkWithGrantType();
+        await sdk.auth.getAccessToken();
+        const auth = await sdk.auth.getAccessToken();
+        // then
+        assert.equal(auth.access_token, success.response.access_token);
         return;
     });
 });

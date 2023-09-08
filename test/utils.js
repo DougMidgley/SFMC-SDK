@@ -1,6 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 import { axiosInstance } from '../lib/util.js';
 import SDK from '../lib/index.js';
+import { GRANT_TYPE_AUTHORIZATION_CODE } from '../lib/auth.js';
 export const mock = new MockAdapter(axiosInstance, { onNoMatch: 'throwException' });
 
 export const defaultSdk = () => {
@@ -93,6 +94,43 @@ export const defaultSdk = () => {
                 'deep_linking_settings_read',
                 'deep_linking_settings_write',
             ],
+        },
+        {
+            eventHandlers: {
+                logRequest: () => {
+                    return;
+                },
+
+                logResponse: () => {
+                    return;
+                },
+                onConnectionError: () => {
+                    return;
+                },
+                onRefresh: () => {
+                    return;
+                },
+                onLoop: () => {
+                    return;
+                },
+            },
+            retryOnConnectionError: true,
+            requestAttempts: 2,
+        },
+    );
+};
+
+export const sdkWithGrantType = () => {
+    return new SDK(
+        {
+            grant_type: GRANT_TYPE_AUTHORIZATION_CODE,
+            access_token: 'TESTTOKEN',
+            refresh_token: 'yyyyyy',
+            token_type: 'Bearer',
+            expires_in: 1079,
+            scope: 'tracking_events_read file_locations_read data_extensions_read list_and_subscribers_read audiences_read journeys_read automations_read',
+            soap_instance_url: 'https://xxxxxxxxxxx.soap.marketingcloudapis.com/',
+            rest_instance_url: 'https://xxxxxxxxxxx.rest.marketingcloudapis.com/',
         },
         {
             eventHandlers: {
