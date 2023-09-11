@@ -123,7 +123,6 @@ export const defaultSdk = () => {
 export const sdkWithGrantType = () => {
     return new SDK(
         {
-            grant_type: GRANT_TYPE_AUTHORIZATION_CODE,
             access_token: 'TESTTOKEN',
             refresh_token: 'yyyyyy',
             token_type: 'Bearer',
@@ -154,5 +153,6 @@ export const sdkWithGrantType = () => {
             retryOnConnectionError: true,
             requestAttempts: 2,
         },
+        GRANT_TYPE_AUTHORIZATION_CODE,
     );
 };

@@ -187,14 +187,17 @@ describe('auth', function () {
     it('should return an access_token required error if grant_type is present', async function () {
         try {
             //given
-            new SDK({
-                grant_type: GRANT_TYPE_AUTHORIZATION_CODE,
-                client_id: 'XXXXX',
-                client_secret: 'YYYYYY',
-                auth_url: 'https://mct0l7nxfq2r988t1kxfy8sc47ma.auth.marketingcloudapis.com/',
-                account_id: '1111111',
-                scope: ['something'],
-            });
+            new SDK(
+                {
+                    client_id: 'XXXXX',
+                    client_secret: 'YYYYYY',
+                    auth_url: 'https://mct0l7nxfq2r988t1kxfy8sc47ma.auth.marketingcloudapis.com/',
+                    account_id: '1111111',
+                    scope: ['something'],
+                },
+                {},
+                GRANT_TYPE_AUTHORIZATION_CODE,
+            );
             //then
             assert.fail();
         } catch (error) {
