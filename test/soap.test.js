@@ -14,6 +14,7 @@ const addHandler = (metadata) => {
         {
             /**
              * matcher based on headers
+             *
              * @param {object} headers which should be passed for matching
              * @returns {boolean} if value matches
              */
@@ -23,7 +24,7 @@ const addHandler = (metadata) => {
                     headers['Content-Type'] === 'text/xml'
                 );
             },
-        },
+        }
     ).reply(metadata.status, metadata.response, {
         'Content-Type': 'application/soap+xml; charset=utf-8',
     });
@@ -73,6 +74,7 @@ describe('soap', function () {
             {
                 /**
                  * matcher based on headers
+                 *
                  * @param {object} headers which should be passed for matching
                  * @returns {boolean} if value matches
                  */
@@ -82,14 +84,14 @@ describe('soap', function () {
                         headers['Content-Type'] === 'text/xml'
                     );
                 },
-            },
+            }
         )
             .replyOnce(
                 resources.retrieveBulkDataExtension.status,
                 resources.retrieveBulkDataExtension.response,
                 {
                     'Content-Type': 'application/soap+xml; charset=utf-8',
-                },
+                }
             )
             .onPost(
                 '/Service.asmx',
@@ -99,6 +101,7 @@ describe('soap', function () {
                 {
                     /**
                      * matcher based on headers
+                     *
                      * @param {object} headers which should be passed for matching
                      * @returns {boolean} if value matches
                      */
@@ -108,14 +111,14 @@ describe('soap', function () {
                             headers['Content-Type'] === 'text/xml'
                         );
                     },
-                },
+                }
             )
             .replyOnce(
                 resources.retrieveDataExtension.status,
                 resources.retrieveDataExtension.response,
                 {
                     'Content-Type': 'application/soap+xml; charset=utf-8',
-                },
+                }
             );
         // when
         const payload = await defaultSdk().soap.retrieveBulk('DataExtension', ['CustomerKey'], {
@@ -146,7 +149,7 @@ describe('soap', function () {
                     options: {
                         SaveOptions: { SaveAction: 'UpdateAdd' },
                     },
-                },
+                }
             );
             // then
             assert.fail();
@@ -172,7 +175,7 @@ describe('soap', function () {
                 options: {
                     SaveOptions: { SaveAction: 'UpdateAdd' },
                 },
-            },
+            }
         );
         // then
         assert.deepEqual(response, resources.subscriberCreated.parsed);
@@ -195,7 +198,7 @@ describe('soap', function () {
                 options: {
                     SaveOptions: { SaveAction: 'UpdateAdd' },
                 },
-            },
+            }
         );
         // then
         assert.deepEqual(response, resources.subscriberUpdated.parsed);
@@ -231,7 +234,7 @@ describe('soap', function () {
             // then
             assert.equal(
                 error.message,
-                'Unable to find a handler for object type: DeliveryProfile. Object types are case-sensitive, check spelling.',
+                'Unable to find a handler for object type: DeliveryProfile. Object types are case-sensitive, check spelling.'
             );
             assert.lengthOf(mock.history.post, 2);
 
@@ -347,7 +350,7 @@ describe('soap', function () {
                     ObjectID: '94d015c2-54e6-4bcf-8afe-74067b61974b',
                 },
             },
-            'Start',
+            'Start'
         );
         // then
         assert.deepEqual(resources.automationSchedule.parsed, response);
@@ -367,6 +370,7 @@ describe('soap', function () {
                 {
                     /**
                      * matcher based on headers
+                     *
                      * @param {object} headers which should be passed for matching
                      * @returns {boolean} if value matches
                      */
@@ -376,14 +380,14 @@ describe('soap', function () {
                             headers['Content-Type'] === 'text/xml'
                         );
                     },
-                },
+                }
             )
             .reply(
                 resources.retrieveDataExtension.status,
                 resources.retrieveDataExtension.response,
                 {
                     'Content-Type': 'application/soap+xml; charset=utf-8',
-                },
+                }
             );
         // when
         const payload = await defaultSdk().soap.retrieve('DataExtension', ['CustomerKey'], {
