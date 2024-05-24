@@ -32,6 +32,7 @@
         "sdk"
     ],
     "devDependencies": {
+        "@types/node": "20.12.12",
         "assert": "2.0.0",
         "axios-mock-adapter": "1.21.5",
         "c8": "8.0.1",

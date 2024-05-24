@@ -1,4 +1,6 @@
 {
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "js/ts.implicitProjectConfig.checkJs": true,
+    "javascript.validate.enable": true
 }
