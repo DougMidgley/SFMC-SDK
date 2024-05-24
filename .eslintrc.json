@@ -5,11 +5,11 @@
         "mocha": true
     },
     "extends": [
-        "plugin:unicorn/recommended",
         "eslint:recommended",
-        "plugin:mocha/recommended",
         "plugin:jsdoc/recommended",
-        "plugin:prettier/recommended"
+        "plugin:prettier/recommended",
+        "plugin:unicorn/recommended",
+        "plugin:mocha/recommended"
     ],
     "plugins": ["mocha", "jsdoc"],
     "globals": {
@@ -17,7 +17,7 @@
         "SharedArrayBuffer": "readonly"
     },
     "parserOptions": {
-        "ecmaVersion": 2020,
+        "ecmaVersion": 2022,
         "sourceType": "module"
     },
     "settings": {
@@ -33,6 +33,10 @@
                 "object.<>": "Object.<>",
                 "object<>": "Object.<>",
                 "Object<>": "Object.<>",
+                "set": "Set",
+                "set.<>": "Set.<>",
+                "set<>": "Set.<>",
+                "Set<>": "Set.<>",
                 "promise": "Promise",
                 "promise.<>": "Promise.<>",
                 "promise<>": "Promise.<>",
