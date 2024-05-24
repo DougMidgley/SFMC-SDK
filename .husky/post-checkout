@@ -1,4 +1,3 @@
-#!/bin/sh
 git config commit.template .git/templatemessage
 TICKETID=`git rev-parse --abbrev-ref HEAD | LC_ALL=en_US.utf8 grep -oP '((feature|bug|bugfix|fix|hotfix|task|chore)\/)\K\d{1,7}'`
 echo "[POST_CHECKOUT] Setting template commit to $TICKETID"

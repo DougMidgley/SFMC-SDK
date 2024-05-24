@@ -300,6 +300,7 @@ describe('rest', function () {
         mock.onGet(journeysPage1.url).reply(() => {
             // eslint-disable-next-line unicorn/error-message
             const connectionError = new Error();
+            // @ts-expect-error
             connectionError.code = 'ECONNRESET';
             throw connectionError;
         });
@@ -321,7 +322,9 @@ describe('rest', function () {
         const { journeysPage1 } = resources;
         mock.onGet(journeysPage1.url).reply(journeysPage1.status, journeysPage1.response);
         // when
+        /** @type {object} */
         let expectedRequest;
+        /** @type {object} */
         let expectedResponse;
         const sdk = new SDK(
             {

@@ -1,0 +1,3 @@
+# update typescript type declarations
+npx tsc
+git add @types

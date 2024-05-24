@@ -3,11 +3,22 @@
     "version": "2.0.1",
     "description": "Libarary to simplify SFMC requests with updated dependencies and less overhead",
     "main": "./lib/index.js",
+    "exports": {
+        ".": {
+            "types": "./@types/index.d.ts",
+            "default": "./lib/index.js"
+        },
+        "./*": {
+            "types": "./@types/*.d.ts",
+            "default": "./lib/*.js"
+        }
+    },
     "scripts": {
         "test": "c8 --reporter=text mocha",
         "lint": "eslint ./lib ./test",
         "lint:fix": "eslint ./lib ./test --fix",
-        "prepare": "husky install"
+        "prepare": "husky || true",
+        "declarations": "tsc"
     },
     "repository": {
         "type": "git",
@@ -32,6 +43,7 @@
         "sdk"
     ],
     "devDependencies": {
+        "@types/node": "20.12.12",
         "assert": "2.0.0",
         "axios-mock-adapter": "1.21.5",
         "c8": "8.0.1",
@@ -42,11 +54,12 @@
         "eslint-plugin-mocha": "10.1.0",
         "eslint-plugin-prettier": "5.1.2",
         "eslint-plugin-unicorn": "52.0.0",
-        "husky": "8.0.3",
+        "husky": "9.0.11",
         "mocha": "10.2.0",
         "prettier": "3.2.5",
         "prettier-eslint": "16.3.0",
-        "sinon": "15.2.0"
+        "sinon": "15.2.0",
+        "typescript": "5.4.5"
     },
     "engines": {
         "npm": ">=9",

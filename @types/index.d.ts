@@ -1,8 +1,3 @@
-'use strict';
-import Auth from './auth.js';
-import Rest from './rest.js';
-import Soap from './soap.js';
-
 /**
  * Class main handler for the SDK
  */
@@ -16,18 +11,16 @@ export default class SDK {
      * @param {boolean} [options.retryOnConnectionError] should request be retried in case of connection issues
      * @param {object} [options.eventHandlers] collection of functions which are executed on certain events
      */
-    constructor(authObject, options) {
-        if (options == undefined) {
-            options = {};
-        }
-        if (options.requestAttempts == undefined) {
-            options.requestAttempts = 1;
-        }
-        if (options.retryOnConnectionError == undefined) {
-            options.retryOnConnectionError = true;
-        }
-        this.auth = new Auth(authObject, options);
-        this.rest = new Rest(this.auth, options);
-        this.soap = new Soap(this.auth, options);
-    }
+    constructor(authObject: object, options?: {
+        requestAttempts?: number;
+        retryOnConnectionError?: boolean;
+        eventHandlers?: object;
+    });
+    auth: Auth;
+    rest: Rest;
+    soap: Soap;
 }
+import Auth from './auth.js';
+import Rest from './rest.js';
+import Soap from './soap.js';
+//# sourceMappingURL=index.d.ts.map
