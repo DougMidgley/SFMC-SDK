@@ -44,7 +44,7 @@
     ],
     "devDependencies": {
         "@types/node": "20.12.12",
-        "assert": "2.0.0",
+        "assert": "2.1.0",
         "axios-mock-adapter": "1.22.0",
         "c8": "8.0.1",
         "chai": "4.3.8",
