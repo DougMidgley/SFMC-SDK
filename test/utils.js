@@ -1,7 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import { axiosInstance } from '../lib/util.js';
 import SDK from '../lib/index.js';
-import { GRANT_TYPE_AUTHORIZATION_CODE } from '../lib/auth.js';
 export const mock = new MockAdapter(axiosInstance, { onNoMatch: 'throwException' });
 
 export const defaultSdk = () => {
@@ -120,7 +119,7 @@ export const defaultSdk = () => {
     );
 };
 
-export const sdkWithGrantType = () => {
+export const sdkWithAccessToken = () => {
     return new SDK(
         {
             access_token: 'TESTTOKEN',
@@ -153,6 +152,5 @@ export const sdkWithGrantType = () => {
             retryOnConnectionError: true,
             requestAttempts: 2,
         },
-        GRANT_TYPE_AUTHORIZATION_CODE,
     );
 };
