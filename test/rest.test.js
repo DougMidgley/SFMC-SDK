@@ -9,9 +9,11 @@ describe('rest', function () {
     beforeEach(function () {
         mock.onPost(success.url).reply(success.status, success.response);
     });
+
     afterEach(function () {
         mock.reset();
     });
+
     it('GET Bulk: should return 6 journey items', async function () {
         //given
         const { journeysPage1, journeysPage2 } = resources;
@@ -25,6 +27,7 @@ describe('rest', function () {
         assert.lengthOf(mock.history.get, 2);
         return;
     });
+
     it('GET Bulk: should return 9 keyword items', async function () {
         //given
         const { keywordPage1 } = resources;
@@ -40,6 +43,7 @@ describe('rest', function () {
         assert.lengthOf(mock.history.get, 1);
         return;
     });
+
     it('GET: should return 5 journey items', async function () {
         //given
         const { journeysPage1 } = resources;
@@ -54,6 +58,7 @@ describe('rest', function () {
         assert.lengthOf(mock.history.get, 1);
         return;
     });
+
     it('GETCOLLECTION: should return 2 identical payloads', async function () {
         //given
         const { journeysPage1 } = resources;
@@ -70,6 +75,7 @@ describe('rest', function () {
         assert.lengthOf(mock.history.get, 2);
         return;
     });
+
     it('POST: should create Event Definition', async function () {
         //given
         const { eventcreate } = resources;
@@ -103,6 +109,7 @@ describe('rest', function () {
         assert.lengthOf(mock.history.post, 2);
         return;
     });
+
     it('POST: should add an entry to a Data Extension', async function () {
         //given
         const { dataExtensionUpsert } = resources;
@@ -119,6 +126,7 @@ describe('rest', function () {
         assert.lengthOf(mock.history.post, 2);
         return;
     });
+
     it('PUT: should update Event Definition', async function () {
         //given
         const { eventupdate } = resources;
@@ -142,6 +150,7 @@ describe('rest', function () {
         assert.lengthOf(mock.history.put, 1);
         return;
     });
+
     it('PATCH: should update Contact', async function () {
         //given
         const { contactPatch } = resources;
@@ -192,6 +201,7 @@ describe('rest', function () {
         assert.lengthOf(mock.history.patch, 1);
         return;
     });
+
     it('DELETE: should delete Campaign', async function () {
         //given
         const { campaignDelete } = resources;
@@ -204,6 +214,7 @@ describe('rest', function () {
         assert.lengthOf(mock.history.delete, 1);
         return;
     });
+
     it('should retry auth one time on first failure then work', async function () {
         //given
         mock.reset(); // needed to avoid before hook being used
@@ -222,6 +233,7 @@ describe('rest', function () {
         assert.lengthOf(mock.history.delete, 1);
         return;
     });
+
     it('should retry auth one time on first failure then fail', async function () {
         //given
         mock.reset(); // needed to avoid before hook being used
@@ -240,6 +252,7 @@ describe('rest', function () {
         }
         return;
     });
+
     it('should fail to delete campaign', async function () {
         //given
         const { campaignFailed } = resources;
@@ -259,6 +272,7 @@ describe('rest', function () {
         assert.lengthOf(mock.history.delete, 1);
         return;
     });
+
     it('RETRY: should return 5 journey items, after a connection error', async function () {
         //given
         const { journeysPage1 } = resources;
@@ -276,6 +290,7 @@ describe('rest', function () {
         assert.lengthOf(mock.history.get, 2);
         return;
     });
+
     it('FAILED RETRY: should return error, after 2 connection timeout errors', async function () {
         //given
         const { journeysPage1 } = resources;
@@ -293,6 +308,7 @@ describe('rest', function () {
 
         return;
     });
+
     it('FAILED RETRY: should return error, after 2 ECONNRESET errors', async function () {
         //given
         const { journeysPage1 } = resources;
@@ -317,6 +333,7 @@ describe('rest', function () {
 
         return;
     });
+
     it('LogRequest & Response: should run middleware for logging ', async function () {
         //given
         const { journeysPage1 } = resources;
