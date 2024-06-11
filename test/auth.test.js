@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 import SDK from '../lib/index.js';
-import { defaultSdk, mock, sdkWithGrantType } from './utils.js';
+import { defaultSdk, mock, sdkWithAccessToken } from './utils.js';
 import { success, unauthorized } from './resources/auth.js';
 import { isConnectionError } from '../lib/util.js';
 
