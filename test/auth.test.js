@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 import SDK from '../lib/index.js';
-import { defaultSdk, mock } from './utils.js';
+import { defaultSdk, mock, sdkWithAccessToken } from './utils.js';
 import { success, unauthorized } from './resources/auth.js';
 import { isConnectionError } from '../lib/util.js';
 
@@ -180,6 +180,18 @@ describe('auth', function () {
             assert.isTrue(isConnectionError(error.code));
         }
         assert.lengthOf(mock.history.post, 2);
+        return;
+    });
+
+    it('should return an auth payload  if access token is present', async function () {
+        //given
+
+        // when
+        const sdk = sdkWithAccessToken();
+        await sdk.auth.getAccessToken();
+        const auth = await sdk.auth.getAccessToken();
+        // then
+        assert.equal(auth.access_token, success.response.access_token);
         return;
     });
 });

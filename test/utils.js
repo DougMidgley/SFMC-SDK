@@ -118,3 +118,39 @@ export const defaultSdk = () => {
         },
     );
 };
+
+export const sdkWithAccessToken = () => {
+    return new SDK(
+        {
+            access_token: 'TESTTOKEN',
+            refresh_token: 'yyyyyy',
+            token_type: 'Bearer',
+            expires_in: 1079,
+            scope: 'tracking_events_read file_locations_read data_extensions_read list_and_subscribers_read audiences_read journeys_read automations_read',
+            soap_instance_url: 'https://xxxxxxxxxxx.soap.marketingcloudapis.com/',
+            rest_instance_url: 'https://xxxxxxxxxxx.rest.marketingcloudapis.com/',
+        },
+        {
+            eventHandlers: {
+                logRequest: () => {
+                    return;
+                },
+
+                logResponse: () => {
+                    return;
+                },
+                onConnectionError: () => {
+                    return;
+                },
+                onRefresh: () => {
+                    return;
+                },
+                onLoop: () => {
+                    return;
+                },
+            },
+            retryOnConnectionError: true,
+            requestAttempts: 2,
+        },
+    );
+};
