@@ -34,6 +34,7 @@ describe('soap', function () {
     beforeEach(function () {
         mock.onPost(success.url).reply(success.status, success.response);
     });
+
     afterEach(function () {
         mock.reset();
     });
@@ -64,6 +65,7 @@ describe('soap', function () {
         assert.lengthOf(mock.history.post, 2);
         return;
     });
+
     it('retrieveBulk: should return 2 data extensions', async function () {
         //given
         mock.onPost(
@@ -134,6 +136,7 @@ describe('soap', function () {
         assert.lengthOf(mock.history.post, 3);
         return;
     });
+
     it('failed: should fail to create 1 subscriber', async function () {
         //given
         addHandler(resources.subscriberFailed);
@@ -160,6 +163,7 @@ describe('soap', function () {
 
         return;
     });
+
     it('create: should create 1 subscriber', async function () {
         //given
         addHandler(resources.subscriberCreated);
@@ -183,6 +187,7 @@ describe('soap', function () {
 
         return;
     });
+
     it('update: should update 1 subscriber', async function () {
         //given
         addHandler(resources.subscriberUpdated);
@@ -206,6 +211,7 @@ describe('soap', function () {
 
         return;
     });
+
     it('expired: should return an error of expired token', async function () {
         //given
         addHandler(resources.expiredToken);
@@ -224,6 +230,7 @@ describe('soap', function () {
         }
         assert.fail();
     });
+
     it('no handler: should return an error stating the object type is not supported', async function () {
         //given
         addHandler(resources.noObjectHandlerFound);
@@ -242,6 +249,7 @@ describe('soap', function () {
         }
         assert.fail();
     });
+
     it('bad Request: should return an error of bad request', async function () {
         //given
         addHandler(resources.badRequest);
@@ -258,6 +266,7 @@ describe('soap', function () {
         }
         assert.fail();
     });
+
     it('Delete: should delete a subscriber', async function () {
         //given
         addHandler(resources.subscriberDeleted);
@@ -270,6 +279,7 @@ describe('soap', function () {
         assert.lengthOf(mock.history.post, 2);
         return;
     });
+
     it('Describe: should describe the subscriber type', async function () {
         //given
         addHandler(resources.subscriberDescribed);
@@ -280,6 +290,7 @@ describe('soap', function () {
         assert.lengthOf(mock.history.post, 2);
         return;
     });
+
     it('Execute: should unsubscribe subscriber', async function () {
         //given
         addHandler(resources.subscribeUnsub);
@@ -293,6 +304,7 @@ describe('soap', function () {
         assert.lengthOf(mock.history.post, 2);
         return;
     });
+
     it('Perform: should unsubscribe subscriber', async function () {
         //given
         addHandler(resources.queryPerform);
@@ -305,6 +317,7 @@ describe('soap', function () {
         assert.lengthOf(mock.history.post, 2);
         return;
     });
+
     it('Configure: should assign a business unit to a user', async function () {
         //given
         addHandler(resources.accountUserConfigure);
@@ -332,6 +345,7 @@ describe('soap', function () {
         assert.lengthOf(mock.history.post, 2);
         return;
     });
+
     it('Schedule: should schedule an Automation', async function () {
         //given
         addHandler(resources.automationSchedule);
@@ -357,6 +371,7 @@ describe('soap', function () {
         assert.lengthOf(mock.history.post, 2);
         return;
     });
+
     it('RETRY: should return 1 data extension, after a connection error', async function () {
         //given
 
@@ -412,6 +427,7 @@ describe('soap', function () {
         assert.lengthOf(mock.history.post, 3);
         return;
     });
+
     it('FAILED RETRY: should return error, after multiple connection error', async function () {
         //given
 

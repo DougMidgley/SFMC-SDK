@@ -7,20 +7,24 @@ jobs:
     pr-labeler:
         runs-on: ubuntu-latest
         steps:
-            - uses: TimonVS/pr-labeler-action@v4
+            - uses: TimonVS/pr-labeler-action@v5
               with:
                   configuration-path: .github/pr-labeler.yml # optional, .github/pr-labeler.yml is the default value
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     test:
         runs-on: ubuntu-latest
-
+        strategy:
+            matrix:
+                node: [18, 20, 22]
+        name: Run Tests with node ${{ matrix.node }}
         steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-node@v3
+            - uses: actions/checkout@v4
+            - name: Setup node
+              uses: actions/setup-node@v4
               with:
-                  node-version: 18
-                  registry-url: https://registry.npmjs.org/
+                  node-version: ${{ matrix.node }}
             - run: npm install
             - run: npm run lint
             - run: npm run test
