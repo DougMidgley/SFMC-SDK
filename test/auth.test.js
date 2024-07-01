@@ -8,6 +8,7 @@ describe('auth', function () {
     afterEach(function () {
         mock.reset();
     });
+
     it('should return an auth payload with token', async function () {
         //given
 
@@ -19,6 +20,7 @@ describe('auth', function () {
         assert.lengthOf(mock.history.post, 1);
         return;
     });
+
     it('should return an auth payload with previous token and one request', async function () {
         //given
 
@@ -32,6 +34,7 @@ describe('auth', function () {
         assert.lengthOf(mock.history.post, 1);
         return;
     });
+
     it('should return an unauthorized error', async function () {
         //given
         mock.onPost(unauthorized.url).reply(unauthorized.status, unauthorized.response);
@@ -47,6 +50,7 @@ describe('auth', function () {
 
         return;
     });
+
     it('should return an incorrect account_id error', async function () {
         try {
             //given
@@ -61,11 +65,12 @@ describe('auth', function () {
         } catch (error) {
             assert.equal(
                 error.message,
-                'account_id must be an Integer (Integers in String format are accepted)',
+                'account_id must be an Integer (Integers in String format are accepted)'
             );
         }
         return;
     });
+
     it('should return an incorrect auth_url error', async function () {
         try {
             //given
@@ -80,11 +85,12 @@ describe('auth', function () {
         } catch (error) {
             assert.equal(
                 error.message,
-                'auth_url must be in format https://mcXXXXXXXXXXXXXXXXXXXXXXXXXX.auth.marketingcloudapis.com/',
+                'auth_url must be in format https://mcXXXXXXXXXXXXXXXXXXXXXXXXXX.auth.marketingcloudapis.com/'
             );
         }
         return;
     });
+
     it('should return an incorrect client_id error', async function () {
         try {
             //given
@@ -101,6 +107,7 @@ describe('auth', function () {
         }
         return;
     });
+
     it('should return an incorrect client_key error', async function () {
         try {
             //given
@@ -117,6 +124,7 @@ describe('auth', function () {
         }
         return;
     });
+
     it('should return an invalid scope error', async function () {
         try {
             //given
@@ -134,6 +142,7 @@ describe('auth', function () {
         }
         return;
     });
+
     it('should return an invalid scope type error', async function () {
         try {
             //given
@@ -166,6 +175,7 @@ describe('auth', function () {
         assert.lengthOf(mock.history.post, 2);
         return;
     });
+
     it('FAILED RETRY: should return an error, after multiple connection issues', async function () {
         //given
 

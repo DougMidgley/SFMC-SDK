@@ -14,6 +14,7 @@ const addHandler = (metadata) => {
         {
             /**
              * matcher based on headers
+             *
              * @param {object} headers which should be passed for matching
              * @returns {boolean} if value matches
              */
@@ -23,7 +24,7 @@ const addHandler = (metadata) => {
                     headers['Content-Type'] === 'text/xml'
                 );
             },
-        },
+        }
     ).reply(metadata.status, metadata.response, {
         'Content-Type': 'application/soap+xml; charset=utf-8',
     });
@@ -33,6 +34,7 @@ describe('soap', function () {
     beforeEach(function () {
         mock.onPost(success.url).reply(success.status, success.response);
     });
+
     afterEach(function () {
         mock.reset();
     });
@@ -63,6 +65,7 @@ describe('soap', function () {
         assert.lengthOf(mock.history.post, 2);
         return;
     });
+
     it('retrieveBulk: should return 2 data extensions', async function () {
         //given
         mock.onPost(
@@ -73,6 +76,7 @@ describe('soap', function () {
             {
                 /**
                  * matcher based on headers
+                 *
                  * @param {object} headers which should be passed for matching
                  * @returns {boolean} if value matches
                  */
@@ -82,14 +86,14 @@ describe('soap', function () {
                         headers['Content-Type'] === 'text/xml'
                     );
                 },
-            },
+            }
         )
             .replyOnce(
                 resources.retrieveBulkDataExtension.status,
                 resources.retrieveBulkDataExtension.response,
                 {
                     'Content-Type': 'application/soap+xml; charset=utf-8',
-                },
+                }
             )
             .onPost(
                 '/Service.asmx',
@@ -99,6 +103,7 @@ describe('soap', function () {
                 {
                     /**
                      * matcher based on headers
+                     *
                      * @param {object} headers which should be passed for matching
                      * @returns {boolean} if value matches
                      */
@@ -108,14 +113,14 @@ describe('soap', function () {
                             headers['Content-Type'] === 'text/xml'
                         );
                     },
-                },
+                }
             )
             .replyOnce(
                 resources.retrieveDataExtension.status,
                 resources.retrieveDataExtension.response,
                 {
                     'Content-Type': 'application/soap+xml; charset=utf-8',
-                },
+                }
             );
         // when
         const payload = await defaultSdk().soap.retrieveBulk('DataExtension', ['CustomerKey'], {
@@ -131,6 +136,7 @@ describe('soap', function () {
         assert.lengthOf(mock.history.post, 3);
         return;
     });
+
     it('failed: should fail to create 1 subscriber', async function () {
         //given
         addHandler(resources.subscriberFailed);
@@ -146,7 +152,7 @@ describe('soap', function () {
                     options: {
                         SaveOptions: { SaveAction: 'UpdateAdd' },
                     },
-                },
+                }
             );
             // then
             assert.fail();
@@ -157,6 +163,7 @@ describe('soap', function () {
 
         return;
     });
+
     it('create: should create 1 subscriber', async function () {
         //given
         addHandler(resources.subscriberCreated);
@@ -172,7 +179,7 @@ describe('soap', function () {
                 options: {
                     SaveOptions: { SaveAction: 'UpdateAdd' },
                 },
-            },
+            }
         );
         // then
         assert.deepEqual(response, resources.subscriberCreated.parsed);
@@ -180,6 +187,7 @@ describe('soap', function () {
 
         return;
     });
+
     it('update: should update 1 subscriber', async function () {
         //given
         addHandler(resources.subscriberUpdated);
@@ -195,7 +203,7 @@ describe('soap', function () {
                 options: {
                     SaveOptions: { SaveAction: 'UpdateAdd' },
                 },
-            },
+            }
         );
         // then
         assert.deepEqual(response, resources.subscriberUpdated.parsed);
@@ -203,6 +211,7 @@ describe('soap', function () {
 
         return;
     });
+
     it('expired: should return an error of expired token', async function () {
         //given
         addHandler(resources.expiredToken);
@@ -221,6 +230,7 @@ describe('soap', function () {
         }
         assert.fail();
     });
+
     it('no handler: should return an error stating the object type is not supported', async function () {
         //given
         addHandler(resources.noObjectHandlerFound);
@@ -231,7 +241,7 @@ describe('soap', function () {
             // then
             assert.equal(
                 error.message,
-                'Unable to find a handler for object type: DeliveryProfile. Object types are case-sensitive, check spelling.',
+                'Unable to find a handler for object type: DeliveryProfile. Object types are case-sensitive, check spelling.'
             );
             assert.lengthOf(mock.history.post, 2);
 
@@ -239,6 +249,7 @@ describe('soap', function () {
         }
         assert.fail();
     });
+
     it('bad Request: should return an error of bad request', async function () {
         //given
         addHandler(resources.badRequest);
@@ -255,6 +266,7 @@ describe('soap', function () {
         }
         assert.fail();
     });
+
     it('Delete: should delete a subscriber', async function () {
         //given
         addHandler(resources.subscriberDeleted);
@@ -267,6 +279,7 @@ describe('soap', function () {
         assert.lengthOf(mock.history.post, 2);
         return;
     });
+
     it('Describe: should describe the subscriber type', async function () {
         //given
         addHandler(resources.subscriberDescribed);
@@ -277,6 +290,7 @@ describe('soap', function () {
         assert.lengthOf(mock.history.post, 2);
         return;
     });
+
     it('Execute: should unsubscribe subscriber', async function () {
         //given
         addHandler(resources.subscribeUnsub);
@@ -290,6 +304,7 @@ describe('soap', function () {
         assert.lengthOf(mock.history.post, 2);
         return;
     });
+
     it('Perform: should unsubscribe subscriber', async function () {
         //given
         addHandler(resources.queryPerform);
@@ -302,6 +317,7 @@ describe('soap', function () {
         assert.lengthOf(mock.history.post, 2);
         return;
     });
+
     it('Configure: should assign a business unit to a user', async function () {
         //given
         addHandler(resources.accountUserConfigure);
@@ -329,6 +345,7 @@ describe('soap', function () {
         assert.lengthOf(mock.history.post, 2);
         return;
     });
+
     it('Schedule: should schedule an Automation', async function () {
         //given
         addHandler(resources.automationSchedule);
@@ -347,13 +364,14 @@ describe('soap', function () {
                     ObjectID: '94d015c2-54e6-4bcf-8afe-74067b61974b',
                 },
             },
-            'Start',
+            'Start'
         );
         // then
         assert.deepEqual(resources.automationSchedule.parsed, response);
         assert.lengthOf(mock.history.post, 2);
         return;
     });
+
     it('RETRY: should return 1 data extension, after a connection error', async function () {
         //given
 
@@ -367,6 +385,7 @@ describe('soap', function () {
                 {
                     /**
                      * matcher based on headers
+                     *
                      * @param {object} headers which should be passed for matching
                      * @returns {boolean} if value matches
                      */
@@ -376,14 +395,14 @@ describe('soap', function () {
                             headers['Content-Type'] === 'text/xml'
                         );
                     },
-                },
+                }
             )
             .reply(
                 resources.retrieveDataExtension.status,
                 resources.retrieveDataExtension.response,
                 {
                     'Content-Type': 'application/soap+xml; charset=utf-8',
-                },
+                }
             );
         // when
         const payload = await defaultSdk().soap.retrieve('DataExtension', ['CustomerKey'], {
@@ -408,6 +427,7 @@ describe('soap', function () {
         assert.lengthOf(mock.history.post, 3);
         return;
     });
+
     it('FAILED RETRY: should return error, after multiple connection error', async function () {
         //given
 
