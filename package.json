@@ -1,6 +1,6 @@
 {
     "name": "sfmc-sdk",
-    "version": "2.0.1",
+    "version": "2.1.0",
     "description": "Libarary to simplify SFMC requests with updated dependencies and less overhead",
     "main": "./lib/index.js",
     "exports": {
@@ -22,7 +22,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/DougMidgley/SFMC-SDK.git"
+        "url": "git+https://github.com/DougMidgley/SFMC-SDK.git"
     },
     "author": "Doug Midgley <douglasmidgley@gmail.com>",
     "license": "BSD-3-Clause",
