@@ -47,7 +47,7 @@ export class RestError extends Error {
  * @property {object} response -
  * @property {string} code -
  * @property {string} endpoint -
- * @typedef {SFMCSoapError & Error} EnhancedSoapError - Error object
+ * @typedef {Error & SFMCSoapError} EnhancedSoapError - Error object
  */
 /**
  * CustomError type for handling SOAP based errors
@@ -109,5 +109,5 @@ export type SFMCSoapError = {
 /**
  * - Error object
  */
-export type EnhancedSoapError = SFMCSoapError & Error;
+export type EnhancedSoapError = Error & SFMCSoapError;
 //# sourceMappingURL=util.d.ts.map
