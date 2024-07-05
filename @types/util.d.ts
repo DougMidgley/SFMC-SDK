@@ -20,11 +20,11 @@ export function isPayload(object: object): boolean;
  */
 export function isConnectionError(code: string): boolean;
 /**
- * @typedef {object} SFMCRestError - Error object
+ * @typedef {object} EnhancedRestErrorHelper - Error object
  * @property {object} response -
  * @property {string} code -
  * @property {string} endpoint -
- * @typedef {Error & SFMCRestError} EnhancedRestError - Error object
+ * @typedef {Error & EnhancedRestErrorHelper} EnhancedRestError - Error object
  */
 /**
  * CustomError type for handling REST (including Auth) based errors
@@ -43,11 +43,11 @@ export class RestError extends Error {
     response: any;
 }
 /**
- * @typedef {object} SFMCSoapError - Error object
+ * @typedef {object} EnhancedSoapErrorHelper  - Error object
  * @property {object} response -
  * @property {string} code -
  * @property {string} endpoint -
- * @typedef {Error & SFMCSoapError} EnhancedSoapError - Error object
+ * @typedef {Error & EnhancedSoapErrorHelper } EnhancedSoapError - Error object
  */
 /**
  * CustomError type for handling SOAP based errors
@@ -71,7 +71,7 @@ export const axiosInstance: import("axios").AxiosInstance;
 /**
  * - Error object
  */
-export type SFMCRestError = {
+export type EnhancedRestErrorHelper = {
     /**
      * -
      */
@@ -88,11 +88,11 @@ export type SFMCRestError = {
 /**
  * - Error object
  */
-export type EnhancedRestError = Error & SFMCRestError;
+export type EnhancedRestError = Error & EnhancedRestErrorHelper;
 /**
  * - Error object
  */
-export type SFMCSoapError = {
+export type EnhancedSoapErrorHelper = {
     /**
      * -
      */
@@ -109,5 +109,5 @@ export type SFMCSoapError = {
 /**
  * - Error object
  */
-export type EnhancedSoapError = Error & SFMCSoapError;
+export type EnhancedSoapError = Error & EnhancedSoapErrorHelper;
 //# sourceMappingURL=util.d.ts.map
