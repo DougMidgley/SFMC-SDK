@@ -45,6 +45,7 @@ export default [
             'jsdoc/require-param-type': 'error',
             'jsdoc/tag-lines': ['warn', 'any', { startLines: 1 }],
             'jsdoc/no-undefined-types': 'error',
+            'jsdoc/valid-types': 'off',
         },
 
         settings: {
