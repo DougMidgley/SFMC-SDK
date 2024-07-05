@@ -17,9 +17,9 @@ export default class Rest {
      * Method that makes the GET API request
      *
      * @param {string} url of the resource to retrieve
-     * @returns {Promise.<object>} API response
+     * @returns {Promise.<any>} API response
      */
-    get(url: string): Promise<object>;
+    get(url: string): Promise<any>;
     /**
      * helper for {@link this.getBulk} to determine if the url is a transactional message API
      *
@@ -42,9 +42,9 @@ export default class Rest {
      * @param {string} url of the resource to retrieve
      * @param {number} [pageSize] of the response, defaults to 50
      * @param {string} [iteratorField] attribute of the response to iterate over (only required if it's not 'items'|'definitions'|'entry')
-     * @returns {Promise.<object>} API response combined items
+     * @returns {Promise.<any>} API response combined items
      */
-    getBulk(url: string, pageSize?: number, iteratorField?: string): Promise<object>;
+    getBulk(url: string, pageSize?: number, iteratorField?: string): Promise<any>;
     /**
      * Method that makes a GET API request for each URL (including rate limiting)
      *
@@ -59,42 +59,42 @@ export default class Rest {
      * @param {string} url of the resource to create
      * @param {object} payload for the POST request body
      * @param {object} [headers] optional headers to include in the request; note that Authorization-header is always overwritten
-     * @returns {Promise.<object>} API response
+     * @returns {Promise.<any>} API response
      */
-    post(url: string, payload: object, headers?: object): Promise<object>;
+    post(url: string, payload: object, headers?: object): Promise<any>;
     /**
      * Method that makes the PUT api request
      *
      * @param {string} url of the resource to replace
      * @param {object} payload for the PUT request body
      * @param {object} [headers] optional headers to include in the request; note that Authorization-header is always overwritten
-     * @returns {Promise.<object>} API response
+     * @returns {Promise.<any>} API response
      */
-    put(url: string, payload: object, headers?: object): Promise<object>;
+    put(url: string, payload: object, headers?: object): Promise<any>;
     /**
      * Method that makes the PATCH api request
      *
      * @param {string} url of the resource to update
      * @param {object} payload for the PATCH request body
      * @param {object} [headers] optional headers to include in the request; note that Authorization-header is always overwritten
-     * @returns {Promise.<object>} API response
+     * @returns {Promise.<any>} API response
      */
-    patch(url: string, payload: object, headers?: object): Promise<object>;
+    patch(url: string, payload: object, headers?: object): Promise<any>;
     /**
      * Method that makes the DELETE api request
      *
      * @param {string} url of the resource to delete
-     * @returns {Promise.<object>} API response
+     * @returns {Promise.<any>} API response
      */
-    delete(url: string): Promise<object>;
+    delete(url: string): Promise<any>;
     /**
      * Method that makes the api request
      *
      * @param {object} requestOptions configuration for the request including body
      * @param {number} remainingAttempts number of times this request should be reattempted in case of error
      * @param {object} [headers] optional headers to include in the request; note that Authorization-header is always overwritten
-     * @returns {Promise.<object>} Results from the Rest request in Object format
+     * @returns {Promise.<any>} Results from the Rest request in Object format
      */
-    _apiRequest(requestOptions: object, remainingAttempts: number, headers?: object): Promise<object>;
+    _apiRequest(requestOptions: object, remainingAttempts: number, headers?: object): Promise<any>;
 }
 //# sourceMappingURL=rest.d.ts.map
