@@ -91,10 +91,8 @@ export default class Rest {
      * Method that makes the api request
      *
      * @param {object} requestOptions configuration for the request including body
-     * @param {number} remainingAttempts number of times this request should be reattempted in case of error
-     * @param {object} [headers] optional headers to include in the request; note that Authorization-header is always overwritten
      * @returns {Promise.<object>} Results from the Rest request in Object format
      */
-    _apiRequest(requestOptions: object, remainingAttempts: number, headers?: object): Promise<object>;
+    _apiRequest(requestOptions: object): Promise<object>;
 }
 //# sourceMappingURL=rest.d.ts.map

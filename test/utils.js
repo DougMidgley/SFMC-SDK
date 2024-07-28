@@ -1,7 +1,19 @@
+//deprecate
 import MockAdapter from 'axios-mock-adapter';
+//deprecate
 import { axiosInstance } from '../lib/util.js';
 import SDK from '../lib/index.js';
+//deprecate
 export const mock = new MockAdapter(axiosInstance, { onNoMatch: 'throwException' });
+
+export const makeResponse = (mockData) => {
+    return new Response(JSON.stringify(mockData.response), {
+        status: mockData.status,
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+};
 
 export const defaultSdk = () => {
     return new SDK(

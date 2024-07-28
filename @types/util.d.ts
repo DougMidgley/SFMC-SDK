@@ -20,6 +20,13 @@ export function isPayload(object: object): boolean;
  */
 export function isConnectionError(code: string): boolean;
 /**
+ * Method to check if the repsonse is JSON
+ *
+ * @param {object} apiResponse Fetch response before parsing body
+ * @returns {boolean} true if is simple Object
+ */
+export function isJSONResponse(apiResponse: object): boolean;
+/**
  * @typedef {object} EnhancedRestError - Error object
  * @augments {Error}
  * @property {object} response -
@@ -34,21 +41,31 @@ export function isConnectionError(code: string): boolean;
  */
 export class RestError extends Error {
     /**
-     *
-     * @param {EnhancedRestError} ex Error object
+     * @param {object} response api respone
+     * @param {object} responseBody rest body
      */
-    constructor(ex: EnhancedRestError);
+    constructor(response: object, responseBody: object);
     code: any;
-    endpoint: any;
     response: any;
+    json: any;
+    endpoint: any;
 }
 /**
- * @typedef {object} EnhancedSoapError - Error object
+ * CustomError type for handling Network based errors
+ * ie. errors not returning a 400-500 code
+ *
+ * @class NetworkError
  * @augments {Error}
- * @property {object} response -
- * @property {string} code -
- * @property {string} endpoint -
  */
+export class NetworkError extends Error {
+    /**
+     * @param {Error} ex Error object
+     * @param {string} url url of request, if available
+     */
+    constructor(ex: Error, url: string);
+    code: any;
+    endpoint: string;
+}
 /**
  * CustomError type for handling SOAP based errors
  *
@@ -58,22 +75,18 @@ export class RestError extends Error {
 export class SOAPError extends Error {
     /**
      *
-     * @param {EnhancedSoapError} ex Error object
-     * @param {object} response api respone
-     * @param {object} soapBody soap body
+     * @param {object} response api response
+     * @param {object} responseBody response body (parsed)
      */
-    constructor(ex: EnhancedSoapError, response: object, soapBody: object);
+    constructor(response: object, responseBody: object);
     code: any;
     response: any;
     json: any;
+    endpoint: any;
 }
 export const axiosInstance: import("axios").AxiosInstance;
 /**
  * - Error object
  */
 export type EnhancedRestError = object;
-/**
- * - Error object
- */
-export type EnhancedSoapError = object;
 //# sourceMappingURL=util.d.ts.map

@@ -1,43 +1,43 @@
 import { assert } from 'chai';
 import SDK from '../lib/index.js';
-import { defaultSdk, mock } from './utils.js';
+import { defaultSdk, mock, makeResponse } from './utils.js';
 import { success, unauthorized } from './resources/auth.js';
 import { isConnectionError } from '../lib/util.js';
 
+import fetchMock from 'fetch-mock';
+
 describe('auth', function () {
     afterEach(function () {
-        mock.reset();
+        fetchMock.reset();
     });
 
     it('should return an auth payload with token', async function () {
         //given
-
+        fetchMock.mock(success.url, () => makeResponse(success));
         //when
-        mock.onPost(success.url).reply(success.status, success.response);
         const auth = await defaultSdk().auth.getAccessToken();
         // then
         assert.equal(auth.access_token, success.response.access_token);
-        assert.lengthOf(mock.history.post, 1);
+        assert.lengthOf(fetchMock.calls(), 1);
         return;
     });
 
     it('should return an auth payload with previous token and one request', async function () {
         //given
-
-        mock.onPost(success.url).reply(success.status, success.response);
+        fetchMock.mock(success.url, () => makeResponse(success));
         // when
         const sdk = defaultSdk();
         await sdk.auth.getAccessToken();
         const auth = await sdk.auth.getAccessToken();
         // then
         assert.equal(auth.access_token, success.response.access_token);
-        assert.lengthOf(mock.history.post, 1);
+        assert.lengthOf(fetchMock.calls(), 1);
         return;
     });
 
     it('should return an unauthorized error', async function () {
         //given
-        mock.onPost(unauthorized.url).reply(unauthorized.status, unauthorized.response);
+        fetchMock.mock(unauthorized.url, () => makeResponse(unauthorized));
         // when
         const auth = defaultSdk().auth.getAccessToken();
         // then
@@ -45,6 +45,7 @@ describe('auth', function () {
             await auth;
             assert.fail();
         } catch (error) {
+            console.log('UNAUTH', error);
             assert.equal(error.response.status, 401);
         }
 
@@ -163,33 +164,32 @@ describe('auth', function () {
 
     it('RETRY: should return an success, after a connection issues', async function () {
         //given
-
-        //when
-        mock.onPost(success.url)
-            .timeoutOnce()
-            .onPost(success.url)
-            .reply(success.status, success.response);
+        fetchMock
+            .once(success.url, { throws: new TypeError('ECONNRESET') }, { name: 'ConnectionIssue' })
+            .mock(success.url, () => makeResponse(success), { name: 'Success' });
         const auth = await defaultSdk().auth.getAccessToken();
         // then
         assert.equal(auth.access_token, success.response.access_token);
-        assert.lengthOf(mock.history.post, 2);
+        assert.lengthOf(fetchMock.calls(), 2);
         return;
     });
 
     it('FAILED RETRY: should return an error, after multiple connection issues', async function () {
         //given
-
+        const errorToReturn = new TypeError('ECONNRESET');
+        errorToReturn.code = 'ECONNRESET';
+        errorToReturn.errno = '-4077';
+        errorToReturn.syscall = 'read';
+        fetchMock.mock(success.url, { throws: errorToReturn }, { name: 'ConnectionIssue' });
         //when
-        mock.onPost(success.url).timeout();
-        // when
         try {
             await defaultSdk().auth.getAccessToken();
             //then
             assert.fail();
         } catch (error) {
-            assert.isTrue(isConnectionError(error.code));
+            assert.equal(error.code, 'ECONNRESET');
         }
-        assert.lengthOf(mock.history.post, 2);
+        assert.lengthOf(fetchMock.calls(), 2);
         return;
     });
 });

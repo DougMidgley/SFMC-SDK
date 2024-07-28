@@ -12,6 +12,10 @@ export default class Auth {
      * @param {string} authObject.auth_url Auth URL from SFMC config
      * @param {string[]} [authObject.scope] Array of scopes used for requests
      * @param {object} options options for the SDK as a whole, for example collection of handler functions, or retry settings
+     * @param {object} options.requestAttempts number of attempts which should be made before
+     * @param {object} options.retryOnConnectionError if continued attempts should be made in case of connection issue
+     *
+     *
      */
     constructor(authObject: {
         client_id: string;
@@ -19,7 +23,10 @@ export default class Auth {
         account_id: number;
         auth_url: string;
         scope?: string[];
-    }, options: object);
+    }, options: {
+        requestAttempts: object;
+        retryOnConnectionError: object;
+    });
     authObject: {
         client_id: string;
         client_secret: string;
@@ -27,15 +34,17 @@ export default class Auth {
         auth_url: string;
         scope?: string[];
     };
-    options: any;
+    options: {
+        requestAttempts: object;
+        retryOnConnectionError: object;
+    };
     /**
      *
      *
      * @param {boolean} [forceRefresh] used to enforce a refresh of token
-     * @param {number} [remainingAttempts] number of retries in case of issues
      * @returns {Promise.<object>} current session information
      */
-    getAccessToken(forceRefresh?: boolean, remainingAttempts?: number): Promise<object>;
+    getAccessToken(forceRefresh?: boolean): Promise<object>;
     /**
      * Helper to get back list of scopes supported by SDK
      *
