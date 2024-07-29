@@ -28,7 +28,7 @@
     "license": "BSD-3-Clause",
     "dependencies": {
         "axios": "^1.7.2",
-        "fast-xml-parser": "4.4.0",
+        "fast-xml-parser": "4.4.1",
         "p-limit": "5.0.0"
     },
     "keywords": [
