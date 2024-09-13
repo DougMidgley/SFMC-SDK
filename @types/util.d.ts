@@ -84,7 +84,6 @@ export class SOAPError extends Error {
     json: any;
     endpoint: any;
 }
-export const axiosInstance: import("axios").AxiosInstance;
 /**
  * - Error object
  */

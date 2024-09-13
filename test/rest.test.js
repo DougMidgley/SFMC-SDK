@@ -1,37 +1,39 @@
 import { assert } from 'chai';
-import { defaultSdk, mock } from './utils.js';
+import { defaultSdk, makeResponse, connectionError } from './utils.js';
 import SDK from '../lib/index.js';
 import * as resources from './resources/rest.js';
 import { success, expired, unauthorized } from './resources/auth.js';
-import { isConnectionError } from '../lib/util.js';
+
+import fetchMock from 'fetch-mock';
 
 describe('rest', function () {
     beforeEach(function () {
-        mock.onPost(success.url).reply(success.status, success.response);
+        fetchMock.post(success.url, () => makeResponse(success));
     });
 
     afterEach(function () {
-        mock.reset();
+        fetchMock.reset();
     });
 
     it('GET Bulk: should return 6 journey items', async function () {
         //given
         const { journeysPage1, journeysPage2 } = resources;
-        mock.onGet(journeysPage1.url).reply(journeysPage1.status, journeysPage1.response);
-        mock.onGet(journeysPage2.url).reply(journeysPage2.status, journeysPage2.response);
+        fetchMock.get(journeysPage1.url, () => makeResponse(journeysPage1));
+        fetchMock.get(journeysPage2.url, () => makeResponse(journeysPage2));
+
         // when
         const payload = await defaultSdk().rest.getBulk('interaction/v1/interactions', 5);
         // then
         assert.lengthOf(payload.items, 6);
-        assert.lengthOf(mock.history.post, 1);
-        assert.lengthOf(mock.history.get, 2);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 1);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'get' }), 2);
         return;
     });
 
     it('GET Bulk: should return 9 keyword items', async function () {
         //given
         const { keywordPage1 } = resources;
-        mock.onGet(keywordPage1.url).reply(keywordPage1.status, keywordPage1.response);
+        fetchMock.get(keywordPage1.url, () => makeResponse(keywordPage1));
         // when
         const payload = await defaultSdk().rest.getBulk(
             '/legacy/v1/beta/mobile/keyword/?view=simple',
@@ -39,30 +41,30 @@ describe('rest', function () {
         );
         // then
         assert.lengthOf(payload.entry, 9);
-        assert.lengthOf(mock.history.post, 1);
-        assert.lengthOf(mock.history.get, 1);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 1);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'get' }), 1);
         return;
     });
 
     it('GET: should return 5 journey items', async function () {
         //given
         const { journeysPage1 } = resources;
-        mock.onGet(journeysPage1.url).reply(journeysPage1.status, journeysPage1.response);
+        fetchMock.get(journeysPage1.url, () => makeResponse(journeysPage1));
         // when
         const payload = await defaultSdk().rest.get(
             'interaction/v1/interactions?$pageSize=5&$page=1'
         );
         // then
         assert.lengthOf(payload.items, 5);
-        assert.lengthOf(mock.history.post, 1);
-        assert.lengthOf(mock.history.get, 1);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 1);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'get' }), 1);
         return;
     });
 
     it('GETCOLLECTION: should return 2 identical payloads', async function () {
         //given
         const { journeysPage1 } = resources;
-        mock.onGet(journeysPage1.url).reply(journeysPage1.status, journeysPage1.response);
+        fetchMock.get(journeysPage1.url, () => makeResponse(journeysPage1));
         // when
         const payloads = await defaultSdk().rest.getCollection([
             'interaction/v1/interactions?$pageSize=5&$page=1',
@@ -71,15 +73,15 @@ describe('rest', function () {
         // then
         assert.lengthOf(payloads, 2);
         assert.deepEqual(payloads[0], payloads[1]);
-        assert.lengthOf(mock.history.post, 1);
-        assert.lengthOf(mock.history.get, 2);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 1);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'get' }), 2);
         return;
     });
 
     it('POST: should create Event Definition', async function () {
         //given
         const { eventcreate } = resources;
-        mock.onPost(eventcreate.url).reply(eventcreate.status, eventcreate.response);
+        fetchMock.post(eventcreate.url, () => makeResponse(eventcreate));
         // when
         const payload = await defaultSdk().rest.post('interaction/v1/EventDefinitions', {
             type: 'APIEvent',
@@ -106,31 +108,28 @@ describe('rest', function () {
         });
         // then
         assert.deepEqual(payload, eventcreate.response);
-        assert.lengthOf(mock.history.post, 2);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 2);
         return;
     });
 
     it('POST: should add an entry to a Data Extension', async function () {
         //given
         const { dataExtensionUpsert } = resources;
-        mock.onPost(dataExtensionUpsert.url).reply(
-            dataExtensionUpsert.status,
-            dataExtensionUpsert.response
-        );
+        fetchMock.post(dataExtensionUpsert.url, () => makeResponse(dataExtensionUpsert));
         // when
         const payload = await defaultSdk().rest.post('hub/v1/dataevents/key:key/rowset', [
             { keys: { primaryKey: 1 }, values: { name: 'test' } },
         ]);
         // then
         assert.deepEqual(payload, dataExtensionUpsert.response);
-        assert.lengthOf(mock.history.post, 2);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 2);
         return;
     });
 
     it('PUT: should update Event Definition', async function () {
         //given
         const { eventupdate } = resources;
-        mock.onPut(eventupdate.url).reply(eventupdate.status, eventupdate.response);
+        fetchMock.put(eventupdate.url, () => makeResponse(eventupdate));
         // when
         const payload = await defaultSdk().rest.put(
             'interaction/v1/eventdefinitions/6cb5ae19-8f0a-4f50-ad6e-0f9c9a32d5a5',
@@ -146,15 +145,15 @@ describe('rest', function () {
         );
         // then
         assert.deepEqual(payload, eventupdate.response);
-        assert.lengthOf(mock.history.post, 1);
-        assert.lengthOf(mock.history.put, 1);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 1);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'put' }), 1);
         return;
     });
 
     it('PATCH: should update Contact', async function () {
         //given
         const { contactPatch } = resources;
-        mock.onPatch(contactPatch.url).reply(contactPatch.status, contactPatch.response);
+        fetchMock.patch(contactPatch.url, () => makeResponse(contactPatch));
         // when
         const payload = await defaultSdk().rest.patch('contacts/v1/contacts', {
             contactKey: '0039E00000DcvwjQAB',
@@ -197,58 +196,57 @@ describe('rest', function () {
         });
         // then
         assert.deepEqual(payload, contactPatch.response);
-        assert.lengthOf(mock.history.post, 1);
-        assert.lengthOf(mock.history.patch, 1);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 1);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'patch' }), 1);
         return;
     });
 
     it('DELETE: should delete Campaign', async function () {
         //given
         const { campaignDelete } = resources;
-        mock.onDelete(campaignDelete.url).reply(campaignDelete.status, campaignDelete.response);
+        fetchMock.delete(campaignDelete.url, () => makeResponse(campaignDelete));
         // when
         const payload = await defaultSdk().rest.delete('hub/v1/campaigns/12656');
         // then
         assert.deepEqual(payload, campaignDelete.response);
-        assert.lengthOf(mock.history.post, 1);
-        assert.lengthOf(mock.history.delete, 1);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 1);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'delete' }), 1);
         return;
     });
 
     it('should retry auth one time on first failure then work', async function () {
         //given
-        mock.reset(); // needed to avoid before hook being used
-        mock.onPost(expired.url)
-            .replyOnce(expired.status, expired.response)
-            .onPost(success.url)
-            .replyOnce(success.status, success.response);
+        fetchMock.reset(); // needed to avoid before hook being used
+        fetchMock
+            .postOnce(expired.url, () => makeResponse(expired), { name: 'expired' })
+            .post(success.url, () => makeResponse(success), { name: 'success' });
 
         const { campaignDelete } = resources;
-        mock.onDelete(campaignDelete.url).reply(campaignDelete.status, campaignDelete.response);
+        fetchMock.delete(campaignDelete.url, () => makeResponse(campaignDelete));
         // when
         const payload = await defaultSdk().rest.delete('hub/v1/campaigns/12656');
         // then
         assert.deepEqual(payload, campaignDelete.response);
-        assert.lengthOf(mock.history.post, 2);
-        assert.lengthOf(mock.history.delete, 1);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 2);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'delete' }), 1);
         return;
     });
 
     it('should retry auth one time on first failure then fail', async function () {
         //given
-        mock.reset(); // needed to avoid before hook being used
-        mock.onPost(unauthorized.url).reply(unauthorized.status, unauthorized.response);
+        fetchMock.reset(); // needed to avoid before hook being used
+        fetchMock.post(unauthorized.url, () => makeResponse(unauthorized));
 
         const { campaignDelete } = resources;
-        mock.onDelete(campaignDelete.url).reply(campaignDelete.status, campaignDelete.response);
+        fetchMock.delete(campaignDelete.url, () => makeResponse(campaignDelete));
         try {
             // when
             await defaultSdk().rest.delete('hub/v1/campaigns/12656');
             assert.fail();
         } catch (error) {
-            assert.deepEqual(error.response.data, unauthorized.response);
-            assert.lengthOf(mock.history.post, 2);
-            assert.lengthOf(mock.history.delete, 0);
+            assert.deepEqual(error.json, unauthorized.response);
+            assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 2);
+            assert.lengthOf(fetchMock.calls(undefined, { method: 'delete' }), 0);
         }
         return;
     });
@@ -256,80 +254,60 @@ describe('rest', function () {
     it('should fail to delete campaign', async function () {
         //given
         const { campaignFailed } = resources;
-        mock.onDelete(campaignFailed.url).reply(campaignFailed.status, campaignFailed.response);
+        fetchMock.post(unauthorized.url, () => makeResponse(unauthorized), {
+            name: 'Unauthorized',
+        });
+        fetchMock.delete(campaignFailed.url, () => makeResponse(campaignFailed));
         // when
         try {
             await defaultSdk().rest.delete('hub/v1/campaigns/abc');
             assert.fail();
             // then
         } catch (error) {
-            // console.log(ex.response);
             assert.equal(error.response.status, campaignFailed.status);
-            assert.deepEqual(error.response.data, campaignFailed.response);
+            assert.deepEqual(error.json, campaignFailed.response);
         }
 
-        assert.lengthOf(mock.history.post, 1);
-        assert.lengthOf(mock.history.delete, 1);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 1);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'delete' }), 1);
         return;
     });
 
     it('RETRY: should return 5 journey items, after a connection error', async function () {
         //given
         const { journeysPage1 } = resources;
-        mock.onGet(journeysPage1.url)
-            .timeoutOnce()
-            .onGet(journeysPage1.url)
-            .reply(journeysPage1.status, journeysPage1.response);
+        fetchMock
+            .getOnce(journeysPage1.url, { throws: connectionError() }, { name: 'ConnectionIssue' })
+            .get(journeysPage1.url, () => makeResponse(journeysPage1));
         // when
         const payload = await defaultSdk().rest.get(
             'interaction/v1/interactions?$pageSize=5&$page=1'
         );
         // then
         assert.lengthOf(payload.items, 5);
-        assert.lengthOf(mock.history.post, 1);
-        assert.lengthOf(mock.history.get, 2);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 1);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'get' }), 2);
         return;
     });
 
-    it('FAILED RETRY: should return error, after 2 connection timeout errors', async function () {
+    it('FAILED RETRY: should return error, after 2 connection Connection Issue errors', async function () {
         //given
         const { journeysPage1 } = resources;
-        mock.onGet(journeysPage1.url).timeout();
+        fetchMock.get(
+            journeysPage1.url,
+            { throws: connectionError() },
+            { name: 'ConnectionIssue' }
+        );
         // when
         try {
             await defaultSdk().rest.get('interaction/v1/interactions?$pageSize=5&$page=1');
             assert.fail();
         } catch (error) {
             // then
-            assert.isTrue(isConnectionError(error.code));
+            assert.equal(error.code, 'ECONNRESET');
         }
-        assert.lengthOf(mock.history.post, 1);
-        assert.lengthOf(mock.history.get, 2);
-
-        return;
-    });
-
-    it('FAILED RETRY: should return error, after 2 ECONNRESET errors', async function () {
-        //given
-        const { journeysPage1 } = resources;
-
-        mock.onGet(journeysPage1.url).reply(() => {
-            // eslint-disable-next-line unicorn/error-message
-            const connectionError = new Error();
-            // @ts-expect-error
-            connectionError.code = 'ECONNRESET';
-            throw connectionError;
-        });
-        // when
-        try {
-            await defaultSdk().rest.get('interaction/v1/interactions?$pageSize=5&$page=1');
-            assert.fail();
-        } catch (error) {
-            // then
-            assert.isTrue(isConnectionError(error.code));
-        }
-        assert.lengthOf(mock.history.post, 1);
-        assert.lengthOf(mock.history.get, 2);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 1);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'get' }), 2);
 
         return;
     });
@@ -337,12 +315,14 @@ describe('rest', function () {
     it('LogRequest & Response: should run middleware for logging ', async function () {
         //given
         const { journeysPage1 } = resources;
-        mock.onGet(journeysPage1.url).reply(journeysPage1.status, journeysPage1.response);
+        fetchMock.get(journeysPage1.url, () => makeResponse(journeysPage1));
         // when
         /** @type {object} */
-        let expectedRequest;
+        let actualRequest;
+        /** @type {string} */
+        let actualUrl;
         /** @type {object} */
-        let expectedResponse;
+        let actualResponse;
         const sdk = new SDK(
             {
                 client_id: 'XXXXX',
@@ -352,12 +332,13 @@ describe('rest', function () {
             },
             {
                 eventHandlers: {
-                    logRequest: (requestObject) => {
-                        expectedRequest = requestObject;
+                    logRequest: (requestUrl, requestObject) => {
+                        actualUrl = requestUrl;
+                        actualRequest = requestObject;
                     },
 
                     logResponse: (responseObject) => {
-                        expectedResponse = responseObject;
+                        actualResponse = responseObject;
                     },
                     onConnectionError: () => {
                         return;
@@ -370,19 +351,20 @@ describe('rest', function () {
         // when
         await sdk.rest.get('interaction/v1/interactions?$pageSize=5&$page=1');
         // then
-        assert.deepEqual(
-            {
-                method: 'GET',
-                url: 'interaction/v1/interactions?$pageSize=5&$page=1',
-                baseURL: 'https://mct0l7nxfq2r988t1kxfy8sc47ma.rest.marketingcloudapis.com/',
-                headers: {
-                    Authorization: 'Bearer TESTTOKEN',
-                },
-            },
-            expectedRequest
+        assert.equal(
+            // @ts-ignore
+            actualUrl,
+            'https://mct0l7nxfq2r988t1kxfy8sc47ma.rest.marketingcloudapis.com/interaction/v1/interactions?$pageSize=5&$page=1'
         );
-        assert.equal(200, expectedResponse.status);
-        assert.equal(5, expectedResponse.data.items.length);
+        assert.deepEqual(actualRequest, {
+            method: 'GET',
+            headers: {
+                Authorization: 'Bearer TESTTOKEN',
+                'Content-Type': 'application/json',
+            },
+        });
+        assert.equal(actualResponse.status, 200);
+        assert.equal(actualResponse.data.items.length, 5);
         return;
     });
 });

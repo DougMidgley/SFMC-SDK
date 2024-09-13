@@ -3,5 +3,5 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "js/ts.implicitProjectConfig.checkJs": true,
     "javascript.validate.enable": true,
-    "eslint.useESLintClass": true
+    "prettier.enable": true
 }

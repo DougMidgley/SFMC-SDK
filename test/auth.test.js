@@ -1,9 +1,7 @@
 import { assert } from 'chai';
 import SDK from '../lib/index.js';
-import { defaultSdk, mock, makeResponse } from './utils.js';
+import { defaultSdk, makeResponse, connectionError } from './utils.js';
 import { success, unauthorized } from './resources/auth.js';
-import { isConnectionError } from '../lib/util.js';
-
 import fetchMock from 'fetch-mock';
 
 describe('auth', function () {
@@ -45,7 +43,6 @@ describe('auth', function () {
             await auth;
             assert.fail();
         } catch (error) {
-            console.log('UNAUTH', error);
             assert.equal(error.response.status, 401);
         }
 
@@ -176,11 +173,7 @@ describe('auth', function () {
 
     it('FAILED RETRY: should return an error, after multiple connection issues', async function () {
         //given
-        const errorToReturn = new TypeError('ECONNRESET');
-        errorToReturn.code = 'ECONNRESET';
-        errorToReturn.errno = '-4077';
-        errorToReturn.syscall = 'read';
-        fetchMock.mock(success.url, { throws: errorToReturn }, { name: 'ConnectionIssue' });
+        fetchMock.mock(success.url, { throws: connectionError() }, { name: 'ConnectionIssue' });
         //when
         try {
             await defaultSdk().auth.getAccessToken();

@@ -14,8 +14,6 @@ export default class Auth {
      * @param {object} options options for the SDK as a whole, for example collection of handler functions, or retry settings
      * @param {object} options.requestAttempts number of attempts which should be made before
      * @param {object} options.retryOnConnectionError if continued attempts should be made in case of connection issue
-     *
-     *
      */
     constructor(authObject: {
         client_id: string;

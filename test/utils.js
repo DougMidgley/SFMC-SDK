@@ -1,20 +1,42 @@
 //deprecate
-import MockAdapter from 'axios-mock-adapter';
-//deprecate
-import { axiosInstance } from '../lib/util.js';
 import SDK from '../lib/index.js';
-//deprecate
-export const mock = new MockAdapter(axiosInstance, { onNoMatch: 'throwException' });
+import { XMLValidator } from 'fast-xml-parser';
+import { badRequest } from './resources/soap.js';
 
-export const makeResponse = (mockData) => {
-    return new Response(JSON.stringify(mockData.response), {
-        status: mockData.status,
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    });
+export const makeResponse = (mockData, options) => {
+    if (options?.headers['Content-Type'] == 'text/xml') {
+        const soapHeaders = {
+            'Content-Type': 'application/soap+xml; charset=utf-8',
+        };
+        return XMLValidator.validate(options?.body)
+            ? new Response(mockData.response, {
+                  status: mockData.status,
+                  headers: soapHeaders,
+              })
+            : new Response(badRequest.response, {
+                  status: badRequest.status,
+                  headers: soapHeaders,
+                  statusText: badRequest.response,
+              });
+    } else {
+        return new Response(JSON.stringify(mockData.response), {
+            status: mockData.status,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+    }
 };
-
+export const connectionError = () => {
+    const errorToReturn = new TypeError('ECONNRESET');
+    // @ts-ignore
+    errorToReturn.code = 'ECONNRESET';
+    // @ts-ignore
+    errorToReturn.errno = '-4077';
+    // @ts-ignore
+    errorToReturn.syscall = 'read';
+    return errorToReturn;
+};
 export const defaultSdk = () => {
     return new SDK(
         {

@@ -103,10 +103,9 @@ export default class Soap {
     /**
      * Method that makes the api request
      *
-     * @param {object} options configuration for the request including body
-     * @param {number} remainingAttempts number of times this request should be reattempted in case of error
+     * @param {object} requestOptions configuration for the request including body
      * @returns {Promise.<object>} Results from the SOAP request in Object format
      */
-    _apiRequest(options: object, remainingAttempts: number): Promise<object>;
+    _apiRequest(requestOptions: object): Promise<object>;
 }
 //# sourceMappingURL=soap.d.ts.map
