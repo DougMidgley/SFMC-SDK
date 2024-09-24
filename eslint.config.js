@@ -46,6 +46,7 @@ export default [
             'jsdoc/tag-lines': ['warn', 'any', { startLines: 1 }],
             'jsdoc/no-undefined-types': 'error',
             'no-console': 'error',
+            'jsdoc/valid-types': 'off',
         },
 
         settings: {

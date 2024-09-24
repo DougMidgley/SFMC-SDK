@@ -1,6 +1,6 @@
 {
     "name": "sfmc-sdk",
-    "version": "2.1.0",
+    "version": "2.1.1",
     "description": "Libarary to simplify SFMC requests with updated dependencies and less overhead",
     "main": "./lib/index.js",
     "exports": {
@@ -17,8 +17,8 @@
         "test": "c8 --reporter=text mocha",
         "lint": "eslint ./lib ./test",
         "lint:fix": "eslint ./lib ./test --fix",
-        "prepare": "husky || true",
-        "declarations": "tsc"
+        "lint-ts": "tsc -p tsconfig.precommit.json",
+        "prepare": "husky || true"
     },
     "repository": {
         "type": "git",
@@ -42,17 +42,19 @@
         "sdk"
     ],
     "devDependencies": {
-        "@types/node": "22.5.4",
+        "@types/node": "22.6.1",
+        "@eslint/js": "9.11.1",
+        "@types/mocha": "10.0.8",
         "assert": "2.1.0",
         "c8": "10.1.2",
         "chai": "5.1.1",
-        "eslint": "9.10.0",
+        "eslint": "9.11.1",
         "eslint-config-prettier": "9.1.0",
-        "eslint-plugin-jsdoc": "50.2.3",
+        "eslint-plugin-jsdoc": "50.2.4",
         "eslint-plugin-mocha": "10.5.0",
         "eslint-plugin-prettier": "5.2.1",
         "eslint-plugin-unicorn": "55.0.0",
-        "fetch-mock": "11.1.3",
+        "fetch-mock": "11.1.4",
         "husky": "9.1.6",
         "mocha": "10.7.3",
         "prettier": "3.3.3",
@@ -62,7 +64,7 @@
     },
     "engines": {
         "npm": ">=9",
-        "node": ">=18"
+        "node": ">=18.20.4"
     },
     "type": "module"
 }

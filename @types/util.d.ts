@@ -27,11 +27,11 @@ export function isConnectionError(code: string): boolean;
  */
 export function isJSONResponse(apiResponse: object): boolean;
 /**
- * @typedef {object} EnhancedRestError - Error object
- * @augments {Error}
+ * @typedef {object} EnhancedRestErrorHelper - Error object
  * @property {object} response -
  * @property {string} code -
  * @property {string} endpoint -
+ * @typedef {Error & EnhancedRestErrorHelper} EnhancedRestError - Error object
  */
 /**
  * CustomError type for handling REST (including Auth) based errors
@@ -60,11 +60,11 @@ export class RestError extends Error {
 export class NetworkError extends Error {
     /**
      * @param {Error} ex Error object
-     * @param {string} url url of request, if available
+     * @param {URL} url url of request, if available
      */
-    constructor(ex: Error, url: string);
+    constructor(ex: Error, url: URL);
     code: any;
-    endpoint: string;
+    endpoint: URL;
 }
 /**
  * CustomError type for handling SOAP based errors
@@ -87,5 +87,22 @@ export class SOAPError extends Error {
 /**
  * - Error object
  */
-export type EnhancedRestError = object;
+export type EnhancedRestErrorHelper = {
+    /**
+     * -
+     */
+    response: object;
+    /**
+     * -
+     */
+    code: string;
+    /**
+     * -
+     */
+    endpoint: string;
+};
+/**
+ * - Error object
+ */
+export type EnhancedRestError = Error & EnhancedRestErrorHelper;
 //# sourceMappingURL=util.d.ts.map

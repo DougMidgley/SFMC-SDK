@@ -1,4 +1,3 @@
-//deprecate
 import SDK from '../lib/index.js';
 import { XMLValidator } from 'fast-xml-parser';
 import { badRequest } from './resources/soap.js';
