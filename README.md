@@ -28,7 +28,7 @@ The SDK will automatically request a new token if none is valid.
 the second parameter in the constructor is to allow for specific options such as events to execute a function. See the below example for supported events. This reduces the number of requests for token therefore increasing speed between executions (when testing was 2.5 seconds down to 1.5 seconds for one rest and one soap request)
 
 ```javascript
-const SDK = require('sfmc-sdk');
+import SDK from 'sfmc-sdk';
 const sfmc = new SDK(
     {
         client_id: 'XXXXX',
@@ -42,11 +42,10 @@ const sfmc = new SDK(
             onRefresh: (options) => console.log('RefreshingToken.', Options),
             logRequest: (req) => console.log(req),
             logResponse: (res) => console.log(res),
-            onConnectionError: (ex, remainingAttempts) => console.log(ex.code, remainingAttempts)
-
+            onConnectionError: (ex, remainingAttempts) => console.log(ex.code, remainingAttempts),
         },
-        requestAttempts : 1
-        retryOnConnectionError: true
+        requestAttempts: 1,
+        retryOnConnectionError: true,
     }
 );
 ```

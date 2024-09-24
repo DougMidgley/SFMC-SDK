@@ -1,47 +1,36 @@
 import { assert } from 'chai';
-import { defaultSdk, mock } from './utils.js';
+import { defaultSdk, makeResponse, connectionError } from './utils.js';
 import * as resources from './resources/soap.js';
 import { success } from './resources/auth.js';
-import { XMLValidator } from 'fast-xml-parser';
-import { isConnectionError } from '../lib/util.js';
+import fetchMock from 'fetch-mock';
 
-const addHandler = (metadata) => {
-    mock.onPost(
-        '/Service.asmx',
+const addHandler = (resourceName, handlerType = 'post') => {
+    const metadata = resources[resourceName];
+    fetchMock[handlerType](
         {
-            asymmetricMatch: XMLValidator.validate,
-        },
-        {
-            /**
-             * matcher based on headers
-             *
-             * @param {object} headers which should be passed for matching
-             * @returns {boolean} if value matches
-             */
-            asymmetricMatch(headers) {
-                return (
-                    headers['SOAPAction'] === metadata.action &&
-                    headers['Content-Type'] === 'text/xml'
-                );
+            url: resources.soapUrl,
+            headers: {
+                SOAPAction: metadata.action,
+                'Content-Type': 'text/xml',
             },
-        }
-    ).reply(metadata.status, metadata.response, {
-        'Content-Type': 'application/soap+xml; charset=utf-8',
-    });
+        },
+        (_, options) => makeResponse(metadata, options),
+        { name: resourceName }
+    );
 };
 
 describe('soap', function () {
     beforeEach(function () {
-        mock.onPost(success.url).reply(success.status, success.response);
+        fetchMock.post(success.url, () => makeResponse(success));
     });
 
     afterEach(function () {
-        mock.reset();
+        fetchMock.reset();
     });
 
     it('retrieve: should return 1 data extension', async function () {
         //given
-        addHandler(resources.retrieveDataExtension);
+        addHandler('retrieveDataExtension');
         // when
         const payload = await defaultSdk().soap.retrieve('DataExtension', ['CustomerKey'], {
             filter: {
@@ -62,66 +51,14 @@ describe('soap', function () {
         // then
         assert.lengthOf(payload.Results, 1);
         assert.deepEqual(payload, resources.retrieveDataExtension.parsed);
-        assert.lengthOf(mock.history.post, 2);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 2);
         return;
     });
 
     it('retrieveBulk: should return 2 data extensions', async function () {
         //given
-        mock.onPost(
-            '/Service.asmx',
-            {
-                asymmetricMatch: XMLValidator.validate,
-            },
-            {
-                /**
-                 * matcher based on headers
-                 *
-                 * @param {object} headers which should be passed for matching
-                 * @returns {boolean} if value matches
-                 */
-                asymmetricMatch(headers) {
-                    return (
-                        headers['SOAPAction'] === resources.retrieveBulkDataExtension.action &&
-                        headers['Content-Type'] === 'text/xml'
-                    );
-                },
-            }
-        )
-            .replyOnce(
-                resources.retrieveBulkDataExtension.status,
-                resources.retrieveBulkDataExtension.response,
-                {
-                    'Content-Type': 'application/soap+xml; charset=utf-8',
-                }
-            )
-            .onPost(
-                '/Service.asmx',
-                {
-                    asymmetricMatch: XMLValidator.validate,
-                },
-                {
-                    /**
-                     * matcher based on headers
-                     *
-                     * @param {object} headers which should be passed for matching
-                     * @returns {boolean} if value matches
-                     */
-                    asymmetricMatch(headers) {
-                        return (
-                            headers['SOAPAction'] === resources.retrieveDataExtension.action &&
-                            headers['Content-Type'] === 'text/xml'
-                        );
-                    },
-                }
-            )
-            .replyOnce(
-                resources.retrieveDataExtension.status,
-                resources.retrieveDataExtension.response,
-                {
-                    'Content-Type': 'application/soap+xml; charset=utf-8',
-                }
-            );
+        addHandler('retrieveBulkDataExtension', 'postOnce');
+        addHandler('retrieveDataExtension', 'postOnce');
         // when
         const payload = await defaultSdk().soap.retrieveBulk('DataExtension', ['CustomerKey'], {
             filter: {
@@ -133,13 +70,13 @@ describe('soap', function () {
         });
         // then
         assert.lengthOf(payload.Results, 2);
-        assert.lengthOf(mock.history.post, 3);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 3);
         return;
     });
 
     it('failed: should fail to create 1 subscriber', async function () {
         //given
-        addHandler(resources.subscriberFailed);
+        addHandler('subscriberFailed');
         // when
         try {
             await defaultSdk().soap.create(
@@ -158,7 +95,7 @@ describe('soap', function () {
             assert.fail();
         } catch (error) {
             assert.deepEqual(error.json, resources.subscriberFailed.parsed);
-            assert.lengthOf(mock.history.post, 2);
+            assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 2);
         }
 
         return;
@@ -166,7 +103,7 @@ describe('soap', function () {
 
     it('create: should create 1 subscriber', async function () {
         //given
-        addHandler(resources.subscriberCreated);
+        addHandler('subscriberCreated');
         // when
 
         const response = await defaultSdk().soap.create(
@@ -183,14 +120,14 @@ describe('soap', function () {
         );
         // then
         assert.deepEqual(response, resources.subscriberCreated.parsed);
-        assert.lengthOf(mock.history.post, 2);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 2);
 
         return;
     });
 
     it('update: should update 1 subscriber', async function () {
         //given
-        addHandler(resources.subscriberUpdated);
+        addHandler('subscriberUpdated');
         // when
 
         const response = await defaultSdk().soap.update(
@@ -207,14 +144,14 @@ describe('soap', function () {
         );
         // then
         assert.deepEqual(response, resources.subscriberUpdated.parsed);
-        assert.lengthOf(mock.history.post, 2);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 2);
 
         return;
     });
 
     it('expired: should return an error of expired token', async function () {
         //given
-        addHandler(resources.expiredToken);
+        addHandler('expiredToken');
         // when
         try {
             await defaultSdk().soap.create('Subscriber', {
@@ -224,7 +161,7 @@ describe('soap', function () {
         } catch (error) {
             // then
             assert.equal(error.message, 'Token Expired');
-            assert.lengthOf(mock.history.post, 4);
+            assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 4);
 
             return;
         }
@@ -233,7 +170,7 @@ describe('soap', function () {
 
     it('no handler: should return an error stating the object type is not supported', async function () {
         //given
-        addHandler(resources.noObjectHandlerFound);
+        addHandler('noObjectHandlerFound');
         // when
         try {
             await defaultSdk().soap.retrieve('DeliveryProfile', ['CustomerKey']);
@@ -243,7 +180,7 @@ describe('soap', function () {
                 error.message,
                 'Unable to find a handler for object type: DeliveryProfile. Object types are case-sensitive, check spelling.'
             );
-            assert.lengthOf(mock.history.post, 2);
+            assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 2);
 
             return;
         }
@@ -252,7 +189,7 @@ describe('soap', function () {
 
     it('bad Request: should return an error of bad request', async function () {
         //given
-        addHandler(resources.badRequest);
+        addHandler('badRequest');
         // when
         try {
             await defaultSdk().soap.create('Subscriber', {
@@ -260,8 +197,8 @@ describe('soap', function () {
             });
         } catch (error) {
             // then
-            assert.equal(error.response.data, 'Bad Request');
-            assert.lengthOf(mock.history.post, 2);
+            assert.equal(error.json, 'Bad Request');
+            assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 2);
             return;
         }
         assert.fail();
@@ -269,31 +206,31 @@ describe('soap', function () {
 
     it('Delete: should delete a subscriber', async function () {
         //given
-        addHandler(resources.subscriberDeleted);
+        addHandler('subscriberDeleted');
         // when
         const response = await defaultSdk().soap.delete('Subscriber', {
             SubscriberKey: '1234512345',
         });
         // then
         assert.deepEqual(resources.subscriberDeleted.parsed, response);
-        assert.lengthOf(mock.history.post, 2);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 2);
         return;
     });
 
     it('Describe: should describe the subscriber type', async function () {
         //given
-        addHandler(resources.subscriberDescribed);
+        addHandler('subscriberDescribed');
         // when
         const response = await defaultSdk().soap.describe('Subscriber');
         // then
         assert.deepEqual(resources.subscriberDescribed.parsed, response);
-        assert.lengthOf(mock.history.post, 2);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 2);
         return;
     });
 
     it('Execute: should unsubscribe subscriber', async function () {
         //given
-        addHandler(resources.subscribeUnsub);
+        addHandler('subscribeUnsub');
         // when
         const response = await defaultSdk().soap.execute('LogUnsubEvent', {
             Name: 'SubscriberKey',
@@ -301,26 +238,26 @@ describe('soap', function () {
         });
         // then
         assert.deepEqual(resources.subscribeUnsub.parsed, response);
-        assert.lengthOf(mock.history.post, 2);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 2);
         return;
     });
 
     it('Perform: should unsubscribe subscriber', async function () {
         //given
-        addHandler(resources.queryPerform);
+        addHandler('queryPerform');
         // when
         const response = await defaultSdk().soap.perform('QueryDefinition', 'Start', {
             ObjectID: 'a077064d-bcc9-4a8f-8bef-4df950193824',
         });
         // then
         assert.deepEqual(resources.queryPerform.parsed, response);
-        assert.lengthOf(mock.history.post, 2);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 2);
         return;
     });
 
     it('Configure: should assign a business unit to a user', async function () {
         //given
-        addHandler(resources.accountUserConfigure);
+        addHandler('accountUserConfigure');
         // when
         const response = await defaultSdk().soap.configure('AccountUser', [
             {
@@ -342,13 +279,13 @@ describe('soap', function () {
         ]);
         // then
         assert.deepEqual(resources.accountUserConfigure.parsed, response);
-        assert.lengthOf(mock.history.post, 2);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 2);
         return;
     });
 
     it('Schedule: should schedule an Automation', async function () {
         //given
-        addHandler(resources.automationSchedule);
+        addHandler('automationSchedule');
         // when
         const response = await defaultSdk().soap.schedule(
             'Automation',
@@ -368,42 +305,18 @@ describe('soap', function () {
         );
         // then
         assert.deepEqual(resources.automationSchedule.parsed, response);
-        assert.lengthOf(mock.history.post, 2);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 2);
         return;
     });
 
     it('RETRY: should return 1 data extension, after a connection error', async function () {
         //given
-
-        mock.onPost('/Service.asmx')
-            .timeoutOnce()
-            .onPost(
-                '/Service.asmx',
-                {
-                    asymmetricMatch: XMLValidator.validate,
-                },
-                {
-                    /**
-                     * matcher based on headers
-                     *
-                     * @param {object} headers which should be passed for matching
-                     * @returns {boolean} if value matches
-                     */
-                    asymmetricMatch(headers) {
-                        return (
-                            headers['SOAPAction'] === resources.retrieveDataExtension.action &&
-                            headers['Content-Type'] === 'text/xml'
-                        );
-                    },
-                }
-            )
-            .reply(
-                resources.retrieveDataExtension.status,
-                resources.retrieveDataExtension.response,
-                {
-                    'Content-Type': 'application/soap+xml; charset=utf-8',
-                }
-            );
+        fetchMock.postOnce(
+            resources.soapUrl,
+            { throws: connectionError() },
+            { name: 'ConnectionIssue' }
+        );
+        addHandler('retrieveDataExtension');
         // when
         const payload = await defaultSdk().soap.retrieve('DataExtension', ['CustomerKey'], {
             filter: {
@@ -424,14 +337,17 @@ describe('soap', function () {
         // then
         assert.lengthOf(payload.Results, 1);
         assert.deepEqual(payload, resources.retrieveDataExtension.parsed);
-        assert.lengthOf(mock.history.post, 3);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 3);
         return;
     });
 
     it('FAILED RETRY: should return error, after multiple connection error', async function () {
         //given
-
-        mock.onPost('/Service.asmx').timeout();
+        fetchMock.post(
+            resources.soapUrl,
+            { throws: connectionError() },
+            { name: 'ConnectionIssue' }
+        );
         // when
         try {
             await defaultSdk().soap.retrieve('DataExtension', ['CustomerKey'], {
@@ -453,9 +369,9 @@ describe('soap', function () {
             assert.fail();
         } catch (error) {
             // then
-            assert.isTrue(isConnectionError(error.code));
+            assert.equal(error.code, 'ECONNRESET');
         }
-        assert.lengthOf(mock.history.post, 3);
+        assert.lengthOf(fetchMock.calls(undefined, { method: 'post' }), 3);
         return;
     });
 });

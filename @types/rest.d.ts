@@ -6,12 +6,12 @@ export default class Rest {
      * Constuctor of Rest object
      *
      * @function Object() { [native code] }
-     * @param {object} authObject Auth object used for initializing
-     * @param {object} options options for the SDK as a whole, for example collection of handler functions, or retry settings
+     * @param {Auth} authObject Auth object used for initializing
+     * @param {import('./index.js').SDKOptions} options options for the SDK as a whole, for example collection of handler functions, or retry settings
      */
-    constructor(authObject: object, options: object);
-    auth: any;
-    options: any;
+    constructor(authObject: Auth, options: import("./index.js").SDKOptions);
+    auth: Auth;
+    options: import("./index.js").SDKOptions;
     transactionalApis: string[];
     /**
      * Method that makes the GET API request
@@ -91,10 +91,9 @@ export default class Rest {
      * Method that makes the api request
      *
      * @param {object} requestOptions configuration for the request including body
-     * @param {number} remainingAttempts number of times this request should be reattempted in case of error
-     * @param {object} [headers] optional headers to include in the request; note that Authorization-header is always overwritten
      * @returns {Promise.<any>} Results from the Rest request in Object format
      */
-    _apiRequest(requestOptions: object, remainingAttempts: number, headers?: object): Promise<any>;
+    _apiRequest(requestOptions: object): Promise<any>;
 }
+import Auth from './auth.js';
 //# sourceMappingURL=rest.d.ts.map

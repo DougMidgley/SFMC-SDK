@@ -6,12 +6,12 @@ export default class Soap {
      * Constuctor of Soap object
      *
      * @function Object() { [native code] }
-     * @param {object} auth Auth object used for initializing
-     * @param {object} options options for the SDK as a whole, for example collection of handler functions, or retry settings
+     * @param {Auth} auth Auth object used for initializing
+     * @param {import('./index.js').SDKOptions} options options for the SDK as a whole, for example collection of handler functions, or retry settings
      */
-    constructor(auth: object, options: object);
-    auth: any;
-    options: any;
+    constructor(auth: Auth, options: import("./index.js").SDKOptions);
+    auth: Auth;
+    options: import("./index.js").SDKOptions;
     /**
      * Method used to retrieve data via SOAP API
      *
@@ -103,10 +103,10 @@ export default class Soap {
     /**
      * Method that makes the api request
      *
-     * @param {object} options configuration for the request including body
-     * @param {number} remainingAttempts number of times this request should be reattempted in case of error
+     * @param {object} requestOptions configuration for the request including body
      * @returns {Promise.<any>} Results from the SOAP request in Object format
      */
-    _apiRequest(options: object, remainingAttempts: number): Promise<any>;
+    _apiRequest(requestOptions: object): Promise<any>;
 }
+import Auth from './auth.js';
 //# sourceMappingURL=soap.d.ts.map
