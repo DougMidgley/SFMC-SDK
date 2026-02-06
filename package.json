@@ -18,7 +18,14 @@
         "lint": "eslint ./lib ./test",
         "lint:fix": "eslint ./lib ./test --fix",
         "lint-ts": "tsc -p tsconfig.precommit.json",
-        "prepare": "husky || true"
+        "lint-ts-prep": "tsc -p tsconfig.npmScripts.json",
+        "prepare": "husky || true",
+        "prepare-release:audit-fix": "npm audit fix",
+        "prepare-release:git": "node prepare-release.js",
+        "prepare-release": "run-s prepare-release:audit-fix lint-ts-prep lint:fix prepare-release:git",
+        "version:major": "npm version --no-commit-hooks major",
+        "version:minor": "npm version --no-commit-hooks minor",
+        "version:patch": "npm version --no-commit-hooks patch"
     },
     "repository": {
         "type": "git",
@@ -58,6 +65,7 @@
         "eslint-plugin-unicorn": "62.0.0",
         "husky": "9.1.7",
         "mocha": "11.7.5",
+        "npm-run-all": "4.1.5",
         "prettier": "3.3.2",
         "prettier-eslint": "16.3.0",
         "sinon": "18.0.0",
