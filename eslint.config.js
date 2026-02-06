@@ -28,6 +28,12 @@ export default [
         ignores: ['/node_modules/**'],
         rules: {
             'unicorn/prefer-module': 'off',
+            'unicorn/prevent-abbreviations': [
+                'error',
+                {
+                    checkFilenames: false,
+                },
+            ],
             'unicorn/numeric-separators-style': 'off',
             'jsdoc/check-line-alignment': 2,
             'jsdoc/require-jsdoc': [
