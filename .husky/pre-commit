@@ -1,3 +1,4 @@
 # update typescript type declarations
-npx tsc -p tsconfig.precommit.json
+echo "[PRE-COMMIT] Run typescript validation and create/update d.ts files"
+tsc -p tsconfig.precommit.json
 git add @types
