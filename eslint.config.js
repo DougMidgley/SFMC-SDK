@@ -7,7 +7,7 @@ import js from '@eslint/js';
 
 export default [
     js.configs.recommended,
-    mochaPlugin.configs.flat.recommended,
+    mochaPlugin.configs.recommended,
     jsdoc.configs['flat/recommended'],
     eslintPluginUnicorn.configs['flat/recommended'],
     {
