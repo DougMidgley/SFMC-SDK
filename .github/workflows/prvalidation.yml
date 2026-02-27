@@ -16,6 +16,7 @@ jobs:
     test:
         runs-on: ubuntu-latest
         strategy:
+            fail-fast: false
             matrix:
                 node: ["20.19", 22, 24, 25]
         name: Run Tests with node ${{ matrix.node }}
