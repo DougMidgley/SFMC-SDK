@@ -21,7 +21,7 @@ jobs:
                 node: ["20.19", 22, 24, 25]
         name: Run Tests with node ${{ matrix.node }}
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
             - name: Setup node
               uses: actions/setup-node@v4
               with:
