@@ -9,8 +9,15 @@ updates:
       directory: '/' # Location of package manifests
       schedule:
           interval: 'daily'
-      ignore:
-          - dependency-name: 'p-limit' #v4 only supports ESM so keeping on v3
-      target-branch: 'develop'
+      target-branch: 'main'
       labels:
           - 'chore'
+          - 'dependencies'
+    - package-ecosystem: 'github-actions'
+      directory: '/'
+      schedule:
+          interval: 'weekly'
+      target-branch: 'main'
+      labels:
+          - 'dependencies'
+          - 'github-action'
