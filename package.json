@@ -1,6 +1,6 @@
 {
     "name": "sfmc-sdk",
-    "version": "3.0.2",
+    "version": "3.0.3",
     "description": "Libarary to simplify SFMC requests with updated dependencies and less overhead",
     "main": "./lib/index.js",
     "exports": {
@@ -35,7 +35,7 @@
     "license": "BSD-3-Clause",
     "dependencies": {
         "axios": "^1.7.2",
-        "fast-xml-parser": "5.5.7",
+        "fast-xml-parser": "5.5.9",
         "p-limit": "5.0.0"
     },
     "keywords": [
@@ -57,7 +57,7 @@
         "axios-mock-adapter": "2.1.0",
         "c8": "11.0.0",
         "chai": "6.2.2",
-        "eslint": "10.0.3",
+        "eslint": "10.1.0",
         "eslint-config-prettier": "10.1.8",
         "eslint-plugin-jsdoc": "62.8.0",
         "eslint-plugin-mocha": "11.2.0",
