@@ -71,6 +71,31 @@ const sfmc = new SDK(
 
 `context` is omitted for **transactional message definition** endpoints (`/messaging/v1/.../definitions`), where the `count` field does not represent the full dataset (see comment in `lib/rest.js`). For those URLs, keep using the two-argument form.
 
+### Large result sets (`getBulkPages`)
+
+`rest.getBulk(url, …)` merges every page into one in-memory array. For very large collections, use **`rest.getBulkPages(url, pageSize?, iteratorField?)`** instead: it is an **async generator** that yields one batch per HTTP response. The SDK does **not** retain prior pages in a merged array when using this method (it only tracks a running row count for pagination). Each yield includes:
+
+| Field | Meaning |
+| --- | --- |
+| `pageItems` | Rows for this page only (same shape as one `getBulk` response slice). |
+| `page` | Current page index (legacy APIs use 0-based `skip` semantics). |
+| `totalPages` | Only on normal REST pagination: `Math.ceil(count / pageSize)` (SDK-derived). |
+| `totalCount` | Raw `count` / `totalResults` from the batch when applicable. |
+| `responseBatch` | Full API JSON for the page. |
+
+`eventHandlers.onLoop` is **not** called for `getBulkPages`; use the yield fields for progress. Do not keep references to old `pageItems` arrays if you want to stay memory-bounded.
+
+```javascript
+for await (const { pageItems, page, totalPages } of sfmc.rest.getBulkPages(
+    '/data/v1/…/rowset',
+    2500,
+)) {
+    for (const row of pageItems) {
+        // stream to disk, etc.
+    }
+}
+```
+
 Additionally, a list of supported scopes can be retrieved by using the auth.getSupportedScopes method.
 
 ```javascript

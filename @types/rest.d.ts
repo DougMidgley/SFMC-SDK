@@ -37,6 +37,27 @@ export default class Rest {
      */
     private _isLegacyApi;
     /**
+     * Shared pagination loop for {@link this.getBulk} and {@link this.getBulkPages}.
+     * Yields once per HTTP response. When `accumulate` is true, merges into `collector` (getBulk).
+     * When false, only tracks a running row count so the SDK does not retain all pages in memory (getBulkPages).
+     *
+     * @param {string} url
+     * @param {number} pageSize
+     * @param {string} [iteratorField]
+     * @param {boolean} emitOnLoop - when true, fires `eventHandlers.onLoop` (getBulk path only)
+     * @param {boolean} accumulate - when false, do not merge pages into one array
+     * @yields {{ iteratorField: string, pageItems: any[], page: number, totalPages?: number, totalCount?: number, responseBatch: object, collector?: object }}
+     */
+    _iterateBulkPages(url: string, pageSize?: number, iteratorField?: string, emitOnLoop?: boolean, accumulate?: boolean): AsyncGenerator<{
+        iteratorField: string;
+        pageItems: any;
+        page: number;
+        totalPages: number;
+        totalCount: number;
+        responseBatch: any;
+        collector: any;
+    }, void, unknown>;
+    /**
      * Method that makes paginated GET API Requests using $pageSize and $page parameters
      *
      * When another page is needed, `options.eventHandlers.onLoop` may receive a third
@@ -50,6 +71,24 @@ export default class Rest {
      * @returns {Promise.<any>} API response combined items
      */
     getBulk(url: string, pageSize?: number, iteratorField?: string): Promise<any>;
+    /**
+     * Paginated GET requests without retaining all pages in one merged array on the SDK side
+     * for consumers that stream results. Yields one object per HTTP response; each `pageItems`
+     * array is only the current page. Does not fire `eventHandlers.onLoop` (use yield fields instead).
+     *
+     * @param {string} url of the resource to retrieve
+     * @param {number} [pageSize] of the response, defaults to 50
+     * @param {string} [iteratorField] attribute of the response to iterate over (only required if it's not 'items'|'definitions'|'entry')
+     * @returns {AsyncGenerator<{ iteratorField: string, pageItems: any[], page: number, totalPages?: number, totalCount?: number, responseBatch: object }>}
+     */
+    getBulkPages(url: string, pageSize?: number, iteratorField?: string): AsyncGenerator<{
+        iteratorField: string;
+        pageItems: any[];
+        page: number;
+        totalPages?: number;
+        totalCount?: number;
+        responseBatch: object;
+    }>;
     /**
      * Method that makes a GET API request for each URL (including rate limiting)
      *

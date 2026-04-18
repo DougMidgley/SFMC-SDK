@@ -62,6 +62,51 @@ describe('rest', function () {
         assert.equal(contexts[0].accumulatedCount, 5);
     });
 
+    it('GET BulkPages: concatenated pageItems matches getBulk items', async function () {
+        const { journeysPage1, journeysPage2 } = resources;
+        mock.onGet(journeysPage1.url).reply(journeysPage1.status, journeysPage1.response);
+        mock.onGet(journeysPage2.url).reply(journeysPage2.status, journeysPage2.response);
+        const sdk = defaultSdk();
+        const bulk = await sdk.rest.getBulk('interaction/v1/interactions', 5);
+        const fromPages = [];
+        for await (const step of sdk.rest.getBulkPages('interaction/v1/interactions', 5)) {
+            fromPages.push(...step.pageItems);
+        }
+        assert.lengthOf(fromPages, bulk.items.length);
+        assert.deepEqual(
+            fromPages.map((i) => i.id),
+            bulk.items.map((i) => i.id),
+        );
+    });
+
+    it('GET BulkPages: each yield has pageItems length at most pageSize when more pages may follow', async function () {
+        const { journeysPage1, journeysPage2 } = resources;
+        mock.onGet(journeysPage1.url).reply(journeysPage1.status, journeysPage1.response);
+        mock.onGet(journeysPage2.url).reply(journeysPage2.status, journeysPage2.response);
+        const sdk = defaultSdk();
+        const yields = [];
+        for await (const step of sdk.rest.getBulkPages('interaction/v1/interactions', 5)) {
+            yields.push(step);
+        }
+        assert.lengthOf(yields, 2);
+        assert.lengthOf(yields[0].pageItems, 5);
+        assert.isAtMost(yields[0].pageItems.length, 5);
+        assert.equal(yields[0].totalPages, 2);
+        assert.equal(yields[0].page, 1);
+    });
+
+    it('GET BulkPages: break after first page does not request page 2', async function () {
+        const { journeysPage1, journeysPage2 } = resources;
+        mock.onGet(journeysPage1.url).reply(journeysPage1.status, journeysPage1.response);
+        mock.onGet(journeysPage2.url).reply(journeysPage2.status, journeysPage2.response);
+        const sdk = defaultSdk();
+        for await (const step of sdk.rest.getBulkPages('interaction/v1/interactions', 5)) {
+            assert.lengthOf(step.pageItems, 5);
+            break;
+        }
+        assert.lengthOf(mock.history.get, 1);
+    });
+
     it('GET Bulk: should return 9 keyword items', async function () {
         //given
         const { keywordPage1 } = resources;
