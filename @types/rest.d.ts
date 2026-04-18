@@ -39,6 +39,11 @@ export default class Rest {
     /**
      * Method that makes paginated GET API Requests using $pageSize and $page parameters
      *
+     * When another page is needed, `options.eventHandlers.onLoop` may receive a third
+     * argument `context` (normal REST pagination only). `context.totalPages` is computed by the
+     * SDK as `Math.ceil(response[count or totalResults] / pageSize)`; it is not a field returned
+     * directly by the API.
+     *
      * @param {string} url of the resource to retrieve
      * @param {number} [pageSize] of the response, defaults to 50
      * @param {string} [iteratorField] attribute of the response to iterate over (only required if it's not 'items'|'definitions'|'entry')

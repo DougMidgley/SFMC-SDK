@@ -38,18 +38,38 @@ const sfmc = new SDK(
     },
     {
         eventHandlers: {
-            onLoop: (type, accumulator) => console.log('Looping', type, accumlator.length),
-            onRefresh: (options) => console.log('RefreshingToken.', Options),
+            onLoop: (type, accumulator, context) => {
+                if (context?.totalPages) {
+                    // context.totalPages is computed by the SDK as:
+                    // Math.ceil(apiResponse.count / pageSize)  (or totalResults on legacy APIs)
+                    console.log(
+                        `Batch ${context.nextPage} of ${context.totalPages} (${context.accumulatedCount} rows so far)`,
+                    );
+                } else {
+                    // Transactional message definitions APIs: `count` is not a reliable total; no context object.
+                    console.log('Looping', type, accumulator.length);
+                }
+            },
+            onRefresh: (options) => console.log('RefreshingToken.', options),
             logRequest: (req) => console.log(req),
             logResponse: (res) => console.log(res),
-            onConnectionError: (ex, remainingAttempts) => console.log(ex.code, remainingAttempts)
-
+            onConnectionError: (ex, remainingAttempts) => console.log(ex.code, remainingAttempts),
         },
-        requestAttempts : 1
-        retryOnConnectionError: true
-    }
+        requestAttempts: 1,
+        retryOnConnectionError: true,
+    },
 );
 ```
+
+**`onLoop` (REST `getBulk` pagination):** The handler is called when another page must be fetched. The first argument is always `undefined` (reserved). The second argument is the accumulated array for the iterator field (`items`, `definitions`, or `entry`). The optional **third argument** is a `context` object (TypeScript: `OnLoopContext`) with:
+
+| Field | Meaning |
+| --- | --- |
+| `nextPage` | 1-based index of the page about to be requested. |
+| `totalPages` | **Computed by this SDK** as `Math.ceil(totalRowCount / pageSize)`, where `totalRowCount` comes from the API response (`count`, or `totalResults` on legacy endpoints). The SFMC API returns total rows, not a page count; this SDK derives how many pages that implies. |
+| `accumulatedCount` | Number of rows merged from completed batches so far. |
+
+`context` is omitted for **transactional message definition** endpoints (`/messaging/v1/.../definitions`), where the `count` field does not represent the full dataset (see comment in `lib/rest.js`). For those URLs, keep using the two-argument form.
 
 Additionally, a list of supported scopes can be retrieved by using the auth.getSupportedScopes method.
 
@@ -118,7 +138,7 @@ const restResponse = await sfmc.rest.get('/interaction/v1/interactions');
 const restResponse = await sfmc.rest.post('/interaction/v1/interactions', jsonPayload);
 const restResponse = await sfmc.rest.patch('/interaction/v1/interactions/IDHERE', jsonPayload); // PUT ALSO
 const restResponse = await sfmc.rest.delete('/interaction/v1/interactions/IDHERE');
-const restResponse = await sfmc.rest.getBulk('/interaction/v1/interactions'); // auto-paginate based on $pageSize
+const restResponse = await sfmc.rest.getBulk('/interaction/v1/interactions'); // auto-paginate based on $pageSize; optional onLoop context for batch progress — see Authorization / onLoop above
 const restResponse = await sfmc.rest.getCollection(
     ['/interaction/v1/interactions/213', '/interaction/v1/interactions/123'],
     3

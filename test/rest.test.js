@@ -28,6 +28,40 @@ describe('rest', function () {
         return;
     });
 
+    it('GET Bulk: onLoop receives pagination context before the next page', async function () {
+        const { journeysPage1, journeysPage2 } = resources;
+        mock.onGet(journeysPage1.url).reply(journeysPage1.status, journeysPage1.response);
+        mock.onGet(journeysPage2.url).reply(journeysPage2.status, journeysPage2.response);
+        const contexts = [];
+        const sdk = new SDK(
+            {
+                client_id: 'XXXXX',
+                client_secret: 'YYYYYY',
+                auth_url: 'https://mct0l7nxfq2r988t1kxfy8sc47ma.auth.marketingcloudapis.com/',
+                account_id: 1111111,
+            },
+            {
+                eventHandlers: {
+                    onLoop: (_type, _accumulator, context) => {
+                        if (context) {
+                            contexts.push(context);
+                        }
+                    },
+                    onConnectionError: () => {
+                        return;
+                    },
+                },
+                retryOnConnectionError: true,
+                requestAttempts: 2,
+            }
+        );
+        await sdk.rest.getBulk('interaction/v1/interactions', 5);
+        assert.lengthOf(contexts, 1);
+        assert.equal(contexts[0].nextPage, 2);
+        assert.equal(contexts[0].totalPages, 2);
+        assert.equal(contexts[0].accumulatedCount, 5);
+    });
+
     it('GET Bulk: should return 9 keyword items', async function () {
         //given
         const { keywordPage1 } = resources;
