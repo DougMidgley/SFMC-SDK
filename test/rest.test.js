@@ -74,8 +74,8 @@ describe('rest', function () {
         }
         assert.lengthOf(fromPages, bulk.items.length);
         assert.deepEqual(
-            fromPages.map((i) => i.id),
-            bulk.items.map((i) => i.id),
+            fromPages.map((item) => item.id),
+            bulk.items.map((item) => item.id),
         );
     });
 
@@ -411,6 +411,30 @@ describe('rest', function () {
         assert.lengthOf(mock.history.get, 2);
 
         return;
+    });
+
+    it('REST: should not loop Rest-level retries when getAccessToken throws ENOTFOUND', async function () {
+        mock.reset();
+        mock.onPost(success.url).reply(success.status, success.response);
+        const sdk = defaultSdk();
+        let getAccessTokenCalls = 0;
+        sdk.rest.auth.getAccessToken = async () => {
+            getAccessTokenCalls++;
+            const connectionError = new Error('simulated ENOTFOUND');
+            connectionError.code = 'ENOTFOUND';
+            throw connectionError;
+        };
+        try {
+            await sdk.rest.get('interaction/v1/interactions?$pageSize=5&$page=1');
+            assert.fail('expected throw');
+        } catch (error) {
+            assert.isTrue(isConnectionError(error.code));
+        }
+        assert.equal(
+            getAccessTokenCalls,
+            1,
+            'Rest must not recurse _apiRequest when auth throws; previously exhausted attempts never decremented'
+        );
     });
 
     it('LogRequest & Response: should run middleware for logging ', async function () {

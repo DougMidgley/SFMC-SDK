@@ -1,11 +1,22 @@
 /**
+ * One page yielded by {@link Rest._iterateBulkPages} (and exposed by {@link Rest.getBulkPages}).
+ *
+ * @typedef {object} RestBulkPageYield
+ * @property {string} iteratorField Response property name used as the row array.
+ * @property {Array} pageItems Rows for this HTTP response only.
+ * @property {number} page Current page index (`$page` / legacy `$skip` index).
+ * @property {number} [totalPages] Estimated total pages when total count is numeric (normal REST only).
+ * @property {number} [totalCount] Total row count from the API when available.
+ * @property {object} responseBatch Raw JSON body for this page.
+ * @property {object} [collector] Accumulated object for {@link Rest.getBulk}; omitted when not accumulating.
+ */
+/**
  * Class which handles rest endpoints
  */
 export default class Rest {
     /**
-     * Constuctor of Rest object
+     * Constructor of Rest object
      *
-     * @function Object() { [native code] }
      * @param {object} authObject Auth object used for initializing
      * @param {object} options options for the SDK as a whole, for example collection of handler functions, or retry settings
      */
@@ -41,12 +52,12 @@ export default class Rest {
      * Yields once per HTTP response. When `accumulate` is true, merges into `collector` (getBulk).
      * When false, only tracks a running row count so the SDK does not retain all pages in memory (getBulkPages).
      *
-     * @param {string} url
-     * @param {number} pageSize
-     * @param {string} [iteratorField]
+     * @param {string} url Resource path (and optional query); pagination keys are applied by the SDK.
+     * @param {number} pageSize Page size (`$pageSize` / legacy `$top`).
+     * @param {string} [iteratorField] Response property holding the row array when not `items`/`definitions`/`entry`.
      * @param {boolean} emitOnLoop - when true, fires `eventHandlers.onLoop` (getBulk path only)
      * @param {boolean} accumulate - when false, do not merge pages into one array
-     * @yields {{ iteratorField: string, pageItems: any[], page: number, totalPages?: number, totalCount?: number, responseBatch: object, collector?: object }}
+     * @yields {RestBulkPageYield}
      */
     _iterateBulkPages(url: string, pageSize?: number, iteratorField?: string, emitOnLoop?: boolean, accumulate?: boolean): AsyncGenerator<{
         iteratorField: string;
@@ -79,16 +90,10 @@ export default class Rest {
      * @param {string} url of the resource to retrieve
      * @param {number} [pageSize] of the response, defaults to 50
      * @param {string} [iteratorField] attribute of the response to iterate over (only required if it's not 'items'|'definitions'|'entry')
-     * @returns {AsyncGenerator<{ iteratorField: string, pageItems: any[], page: number, totalPages?: number, totalCount?: number, responseBatch: object }>}
+     * @yields {RestBulkPageYield}
+     * @returns {object} Async generator yielding one {@link RestBulkPageYield} per HTTP response.
      */
-    getBulkPages(url: string, pageSize?: number, iteratorField?: string): AsyncGenerator<{
-        iteratorField: string;
-        pageItems: any[];
-        page: number;
-        totalPages?: number;
-        totalCount?: number;
-        responseBatch: object;
-    }>;
+    getBulkPages(url: string, pageSize?: number, iteratorField?: string): object;
     /**
      * Method that makes a GET API request for each URL (including rate limiting)
      *
@@ -141,4 +146,37 @@ export default class Rest {
      */
     _apiRequest(requestOptions: object, remainingAttempts: number, headers?: object): Promise<any>;
 }
+/**
+ * One page yielded by {@link Rest._iterateBulkPages} (and exposed by {@link Rest.getBulkPages}).
+ */
+export type RestBulkPageYield = {
+    /**
+     * Response property name used as the row array.
+     */
+    iteratorField: string;
+    /**
+     * Rows for this HTTP response only.
+     */
+    pageItems: any[];
+    /**
+     * Current page index (`$page` / legacy `$skip` index).
+     */
+    page: number;
+    /**
+     * Estimated total pages when total count is numeric (normal REST only).
+     */
+    totalPages?: number;
+    /**
+     * Total row count from the API when available.
+     */
+    totalCount?: number;
+    /**
+     * Raw JSON body for this page.
+     */
+    responseBatch: object;
+    /**
+     * Accumulated object for {@link Rest.getBulk}; omitted when not accumulating.
+     */
+    collector?: object;
+};
 //# sourceMappingURL=rest.d.ts.map
