@@ -28,6 +28,85 @@ describe('rest', function () {
         return;
     });
 
+    it('GET Bulk: onLoop receives pagination context before the next page', async function () {
+        const { journeysPage1, journeysPage2 } = resources;
+        mock.onGet(journeysPage1.url).reply(journeysPage1.status, journeysPage1.response);
+        mock.onGet(journeysPage2.url).reply(journeysPage2.status, journeysPage2.response);
+        const contexts = [];
+        const sdk = new SDK(
+            {
+                client_id: 'XXXXX',
+                client_secret: 'YYYYYY',
+                auth_url: 'https://mct0l7nxfq2r988t1kxfy8sc47ma.auth.marketingcloudapis.com/',
+                account_id: 1111111,
+            },
+            {
+                eventHandlers: {
+                    onLoop: (_type, _accumulator, context) => {
+                        if (context) {
+                            contexts.push(context);
+                        }
+                    },
+                    onConnectionError: () => {
+                        return;
+                    },
+                },
+                retryOnConnectionError: true,
+                requestAttempts: 2,
+            }
+        );
+        await sdk.rest.getBulk('interaction/v1/interactions', 5);
+        assert.lengthOf(contexts, 1);
+        assert.equal(contexts[0].nextPage, 2);
+        assert.equal(contexts[0].totalPages, 2);
+        assert.equal(contexts[0].accumulatedCount, 5);
+    });
+
+    it('GET BulkPages: concatenated pageItems matches getBulk items', async function () {
+        const { journeysPage1, journeysPage2 } = resources;
+        mock.onGet(journeysPage1.url).reply(journeysPage1.status, journeysPage1.response);
+        mock.onGet(journeysPage2.url).reply(journeysPage2.status, journeysPage2.response);
+        const sdk = defaultSdk();
+        const bulk = await sdk.rest.getBulk('interaction/v1/interactions', 5);
+        const fromPages = [];
+        for await (const step of sdk.rest.getBulkPages('interaction/v1/interactions', 5)) {
+            fromPages.push(...step.pageItems);
+        }
+        assert.lengthOf(fromPages, bulk.items.length);
+        assert.deepEqual(
+            fromPages.map((item) => item.id),
+            bulk.items.map((item) => item.id),
+        );
+    });
+
+    it('GET BulkPages: each yield has pageItems length at most pageSize when more pages may follow', async function () {
+        const { journeysPage1, journeysPage2 } = resources;
+        mock.onGet(journeysPage1.url).reply(journeysPage1.status, journeysPage1.response);
+        mock.onGet(journeysPage2.url).reply(journeysPage2.status, journeysPage2.response);
+        const sdk = defaultSdk();
+        const yields = [];
+        for await (const step of sdk.rest.getBulkPages('interaction/v1/interactions', 5)) {
+            yields.push(step);
+        }
+        assert.lengthOf(yields, 2);
+        assert.lengthOf(yields[0].pageItems, 5);
+        assert.isAtMost(yields[0].pageItems.length, 5);
+        assert.equal(yields[0].totalPages, 2);
+        assert.equal(yields[0].page, 1);
+    });
+
+    it('GET BulkPages: break after first page does not request page 2', async function () {
+        const { journeysPage1, journeysPage2 } = resources;
+        mock.onGet(journeysPage1.url).reply(journeysPage1.status, journeysPage1.response);
+        mock.onGet(journeysPage2.url).reply(journeysPage2.status, journeysPage2.response);
+        const sdk = defaultSdk();
+        for await (const step of sdk.rest.getBulkPages('interaction/v1/interactions', 5)) {
+            assert.lengthOf(step.pageItems, 5);
+            break;
+        }
+        assert.lengthOf(mock.history.get, 1);
+    });
+
     it('GET Bulk: should return 9 keyword items', async function () {
         //given
         const { keywordPage1 } = resources;
@@ -332,6 +411,30 @@ describe('rest', function () {
         assert.lengthOf(mock.history.get, 2);
 
         return;
+    });
+
+    it('REST: should not loop Rest-level retries when getAccessToken throws ENOTFOUND', async function () {
+        mock.reset();
+        mock.onPost(success.url).reply(success.status, success.response);
+        const sdk = defaultSdk();
+        let getAccessTokenCalls = 0;
+        sdk.rest.auth.getAccessToken = async () => {
+            getAccessTokenCalls++;
+            const connectionError = new Error('simulated ENOTFOUND');
+            connectionError.code = 'ENOTFOUND';
+            throw connectionError;
+        };
+        try {
+            await sdk.rest.get('interaction/v1/interactions?$pageSize=5&$page=1');
+            assert.fail('expected throw');
+        } catch (error) {
+            assert.isTrue(isConnectionError(error.code));
+        }
+        assert.equal(
+            getAccessTokenCalls,
+            1,
+            'Rest must not recurse _apiRequest when auth throws; previously exhausted attempts never decremented'
+        );
     });
 
     it('LogRequest & Response: should run middleware for logging ', async function () {
