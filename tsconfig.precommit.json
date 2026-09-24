@@ -4,6 +4,8 @@
         "module": "nodenext",
         "moduleResolution": "nodenext",
         "target": "es2023",
+        "rootDir": "lib",
+        "types": ["node"],
         "checkJs": true,
         "skipLibCheck": true,
         "allowJs": true,

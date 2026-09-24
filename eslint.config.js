@@ -28,7 +28,7 @@ export default [
         ignores: ['/node_modules/**'],
         rules: {
             'unicorn/prefer-module': 'off',
-            'unicorn/prevent-abbreviations': [
+            'unicorn/name-replacements': [
                 'error',
                 {
                     checkFilenames: false,
@@ -36,6 +36,7 @@ export default [
             ],
             'unicorn/numeric-separators-style': 'off',
             'jsdoc/check-line-alignment': 2,
+            'jsdoc/reject-any-type': 'off',
             'jsdoc/require-jsdoc': [
                 'warn',
                 {

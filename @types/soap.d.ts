@@ -6,68 +6,98 @@ export default class Soap {
      * Constuctor of Soap object
      *
      * @function Object() { [native code] }
-     * @param {object} auth Auth object used for initializing
-     * @param {object} options options for the SDK as a whole, for example collection of handler functions, or retry settings
+     * @param {Object.<string, any>} auth Auth object used for initializing
+     * @param {Object.<string, any>} options options for the SDK as a whole, for example collection of handler functions, or retry settings
      */
-    constructor(auth: object, options: object);
+    constructor(auth: {
+        [x: string]: any;
+    }, options: {
+        [x: string]: any;
+    });
+    /**
+    @type {any}
+     */
     auth: any;
+    /**
+    @type {any}
+     */
     options: any;
     /**
      * Method used to retrieve data via SOAP API
      *
      * @param {string} type - SOAP Object type
      * @param {string[]} propertiesList - Properties which should be retrieved
-     * @param {object} [requestParameters] - additional RetrieveRequest parameters, for example filter or options
+     * @param {Object.<string, any>} [requestParameters] - additional RetrieveRequest parameters, for example filter or options
      * @returns {Promise.<any>} SOAP object converted from XML
      */
-    retrieve(type: string, propertiesList: string[], requestParameters?: object): Promise<any>;
+    retrieve(type: string, propertiesList: string[], requestParameters?: {
+        [x: string]: any;
+    }): Promise<any>;
     /**
      * Method used to retrieve all data via SOAP API
      *
      * @param {string} type - SOAP Object type
      * @param {string[]} propertiesList - Properties which should be retrieved
-     * @param {object} [requestParameters] - additional RetrieveRequest parameters, for example filter or options
+     * @param {Object.<string, any>} [requestParameters] - additional RetrieveRequest parameters, for example filter or options
      * @returns {Promise.<any>} SOAP object converted from XML
      */
-    retrieveBulk(type: string, propertiesList: string[], requestParameters?: object): Promise<any>;
+    retrieveBulk(type: string, propertiesList: string[], requestParameters?: {
+        [x: string]: any;
+    }): Promise<any>;
     /**
      * Method used to create data via SOAP API
      *
      * @param {string} type - SOAP Object type
-     * @param {object} properties - Properties with values which should be created
-     * @param {object} [requestParameters] - additional RetrieveRequest parameters, for example filter or options
+     * @param {Object.<string, any>} properties - Properties with values which should be created
+     * @param {Object.<string, any>} [requestParameters] - additional RetrieveRequest parameters, for example filter or options
      * @returns {Promise.<any>} SOAP object converted from XML
      */
-    create(type: string, properties: object, requestParameters?: object): Promise<any>;
+    create(type: string, properties: {
+        [x: string]: any;
+    }, requestParameters?: {
+        [x: string]: any;
+    }): Promise<any>;
     /**
      * Method used to update data via SOAP API
      *
      * @param {string} type - SOAP Object type
-     * @param {object} properties - Properties with values which should be updated
-     * @param {object} [requestParameters] - additional RetrieveRequest parameters, for example filter or options
+     * @param {Object.<string, any>} properties - Properties with values which should be updated
+     * @param {Object.<string, any>} [requestParameters] - additional RetrieveRequest parameters, for example filter or options
      * @returns {Promise.<any>} SOAP object converted from XML
      */
-    update(type: string, properties: object, requestParameters?: object): Promise<any>;
+    update(type: string, properties: {
+        [x: string]: any;
+    }, requestParameters?: {
+        [x: string]: any;
+    }): Promise<any>;
     /**
      * Method used to delete data via SOAP API
      *
      * @param {string} type - SOAP Object type
-     * @param {object} properties - Properties with values
-     * @param {object} [requestParameters] - additional RetrieveRequest parameters, for example filter or options
+     * @param {Object.<string, any>} properties - Properties with values
+     * @param {Object.<string, any>} [requestParameters] - additional RetrieveRequest parameters, for example filter or options
      * @returns {Promise.<any>} SOAP object converted from XML
      */
-    delete(type: string, properties: object, requestParameters?: object): Promise<any>;
+    delete(type: string, properties: {
+        [x: string]: any;
+    }, requestParameters?: {
+        [x: string]: any;
+    }): Promise<any>;
     /**
      * Method used to schedule data via SOAP API
      *
      * @param {string} type - SOAP Object type
-     * @param {object} schedule - object for what the schedule should be
-     * @param {Array | object} interactions - Object or array of interactions
+     * @param {Object.<string, any>} schedule - object for what the schedule should be
+     * @param {any[] | object} interactions - Object or array of interactions
      * @param {string} action - type of schedule
-     * @param {object} [options] - additional options for the request
+     * @param {Object.<string, any>} [options] - additional options for the request
      * @returns {Promise.<any>} SOAP object converted from XML
      */
-    schedule(type: string, schedule: object, interactions: any[] | object, action: string, options?: object): Promise<any>;
+    schedule(type: string, schedule: {
+        [x: string]: any;
+    }, interactions: any[] | object, action: string, options?: {
+        [x: string]: any;
+    }): Promise<any>;
     /**
      * Method used to describe metadata via SOAP API
      *
@@ -79,19 +109,23 @@ export default class Soap {
      * Method used to execute data via SOAP API
      *
      * @param {string} type - SOAP Object type
-     * @param {object} properties - Properties with values
+     * @param {Object.<string, any>} properties - Properties with values
      * @returns {Promise.<any>} SOAP object converted from XML
      */
-    execute(type: string, properties: object): Promise<any>;
+    execute(type: string, properties: {
+        [x: string]: any;
+    }): Promise<any>;
     /**
      * Method used to execute data via SOAP API
      *
      * @param {string} type - SOAP Object type
      * @param {string} action - type of action, for example 'Start'
-     * @param {object} payload - relevant payload to perform, for example query Definition
+     * @param {Object.<string, any>} payload - relevant payload to perform, for example query Definition
      * @returns {Promise.<any>} SOAP object converted from XML
      */
-    perform(type: string, action: string, payload: object): Promise<any>;
+    perform(type: string, action: string, payload: {
+        [x: string]: any;
+    }): Promise<any>;
     /**
      * Method used to configure data via SOAP API
      *
@@ -103,10 +137,12 @@ export default class Soap {
     /**
      * Method that makes the api request
      *
-     * @param {object} options configuration for the request including body
+     * @param {Object.<string, any>} options configuration for the request including body
      * @param {number} remainingAttempts number of times this request should be reattempted in case of error
      * @returns {Promise.<any>} Results from the SOAP request in Object format
      */
-    _apiRequest(options: object, remainingAttempts: number): Promise<any>;
+    _apiRequest(options: {
+        [x: string]: any;
+    }, remainingAttempts: number): Promise<any>;
 }
 //# sourceMappingURL=soap.d.ts.map

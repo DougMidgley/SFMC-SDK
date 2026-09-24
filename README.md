@@ -2,6 +2,8 @@
 
 Modern library to handle various API tasks with Salesforce Marketing Cloud.
 
+Requires Node.js 22.22.2 or newer on the Node.js 22 release line, or Node.js 24.15.0 or newer. Node.js 20 and 23 are not supported.
+
 ## Background
 
 This library is based on the work in https://github.com/salesforce-marketingcloud/FuelSDK-Node which has not been updated for 2 years.

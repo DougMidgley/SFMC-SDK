@@ -3,9 +3,16 @@ import { defaultSdk, mock } from './utils.js';
 import SDK from '../lib/index.js';
 import * as resources from './resources/rest.js';
 import { success, expired, unauthorized } from './resources/auth.js';
-import { isConnectionError } from '../lib/util.js';
+import { isConnectionError, RestError } from '../lib/util.js';
 
 describe('rest', function () {
+    it('only exposes RestError.endpoint when supplied', function () {
+        const withoutEndpoint = new RestError(new Error('failed'));
+        const withEndpoint = new RestError(Object.assign(new Error('failed'), { endpoint: '/items' }));
+
+        assert.isFalse(Object.hasOwn(withoutEndpoint, 'endpoint'));
+        assert.equal(withEndpoint.endpoint, '/items');
+    });
     beforeEach(function () {
         mock.onPost(success.url).reply(success.status, success.response);
     });
@@ -84,10 +91,7 @@ describe('rest', function () {
         mock.onGet(journeysPage1.url).reply(journeysPage1.status, journeysPage1.response);
         mock.onGet(journeysPage2.url).reply(journeysPage2.status, journeysPage2.response);
         const sdk = defaultSdk();
-        const yields = [];
-        for await (const step of sdk.rest.getBulkPages('interaction/v1/interactions', 5)) {
-            yields.push(step);
-        }
+        const yields = await Array.fromAsync(sdk.rest.getBulkPages('interaction/v1/interactions', 5));
         assert.lengthOf(yields, 2);
         assert.lengthOf(yields[0].pageItems, 5);
         assert.isAtMost(yields[0].pageItems.length, 5);
@@ -442,9 +446,13 @@ describe('rest', function () {
         const { journeysPage1 } = resources;
         mock.onGet(journeysPage1.url).reply(journeysPage1.status, journeysPage1.response);
         // when
-        /** @type {object} */
+        /**
+        @type {object}
+         */
         let expectedRequest;
-        /** @type {object} */
+        /**
+        @type {object}
+         */
         let expectedResponse;
         const sdk = new SDK(
             {

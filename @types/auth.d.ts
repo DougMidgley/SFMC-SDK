@@ -16,10 +16,15 @@ export default class Auth {
      * Creates an instance of Auth.
      *
      * @param {AuthObject} authObject Auth Payload
-     * @param {object} options options for the SDK as a whole, for example collection of handler functions, or retry settings
+     * @param {Object.<string, any>} options options for the SDK as a whole, for example collection of handler functions, or retry settings
      */
-    constructor(authObject: AuthObject, options: object);
+    constructor(authObject: AuthObject, options: {
+        [x: string]: any;
+    });
     authObject: AuthObject;
+    /**
+    @type {any}
+     */
     options: any;
     /**
      *
@@ -43,7 +48,7 @@ export type AuthObject = {
     /**
      * - expiration time of token
      */
-    expiration?: number;
+    expiration?: number | undefined;
     /**
      * - access token
      */
@@ -67,6 +72,6 @@ export type AuthObject = {
     /**
      * - array of scopes for the request
      */
-    scope?: string[];
+    scope?: string[] | undefined;
 };
 //# sourceMappingURL=auth.d.ts.map

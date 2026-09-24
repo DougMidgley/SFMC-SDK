@@ -33,6 +33,17 @@ const addHandler = (metadata) => {
 };
 
 describe('soap', function () {
+    it('preserves SOAP protocol namespace URI values', async function () {
+        addHandler(resources.retrieveDataExtension);
+        await defaultSdk().soap.retrieve('DataExtension', ['CustomerKey']);
+        const requestBody = mock.history.post.at(-1).data;
+        assert.include(requestBody, 'xmlns="http://schemas.xmlsoap.org/soap/envelope/"');
+        assert.include(requestBody, 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"');
+        assert.include(requestBody, '<fueloauth xmlns="http://exacttarget.com">');
+        assert.notInclude(requestBody, '<fueloauth xmlns="https://exacttarget.com">');
+        assert.include(requestBody, 'RetrieveRequestMsg xmlns="http://exacttarget.com/wsdl/partnerAPI"');
+    });
+
     beforeEach(function () {
         mock.onPost(success.url).reply(success.status, success.response);
     });

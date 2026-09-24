@@ -5,6 +5,7 @@
         "module": "nodenext",
         "moduleResolution": "nodenext",
         "target": "es2023",
+        "types": ["node"],
         "checkJs": true,
         "skipLibCheck": true,
         "noEmit": true

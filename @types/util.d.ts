@@ -1,27 +1,31 @@
 /**
  * Method to check if Object passed is a simple object
  *
- * @param {object} object Object to check
+ * @param {Object.<string, any>} object Object to check
  * @returns {boolean} true if is simple Object
  */
-export function isObject(object: object): boolean;
+export function isObject(object: {
+    [x: string]: any;
+}): boolean;
 /**
  * Method to check if Object passed is a valid payload for API calls
  *
- * @param {object} object Object to check
+ * @param {Object.<string, any>} object Object to check
  * @returns {boolean} true if is a valid payload
  */
-export function isPayload(object: object): boolean;
+export function isPayload(object: {
+    [x: string]: any;
+}): boolean;
 /**
  * Method to check if it is a connection error
  *
  * @param {string} code returned code from exception
- * @returns {boolean} true if a connection error
+ * @returns {boolean|string} true if a connection error, otherwise the original empty code or false
  */
-export function isConnectionError(code: string): boolean;
+export function isConnectionError(code: string): boolean | string;
 /**
  * @typedef {object} EnhancedRestErrorHelper - Error object
- * @property {object} response -
+ * @property {Object.<string, any>} response -
  * @property {string} code -
  * @property {string} endpoint -
  * @typedef {Error & EnhancedRestErrorHelper} EnhancedRestError - Error object
@@ -39,12 +43,15 @@ export class RestError extends Error {
      */
     constructor(ex: EnhancedRestError);
     code: any;
-    endpoint: string;
+    endpoint: string | undefined;
+    /**
+    @type {any}
+     */
     response: any;
 }
 /**
  * @typedef {object} EnhancedSoapErrorHelper  - Error object
- * @property {object} response -
+ * @property {Object.<string, any>} response -
  * @property {string} code -
  * @property {string} endpoint -
  * @typedef {Error & EnhancedSoapErrorHelper } EnhancedSoapError - Error object
@@ -58,13 +65,23 @@ export class RestError extends Error {
 export class SOAPError extends Error {
     /**
      *
-     * @param {EnhancedSoapError} ex Error object
-     * @param {object} response api respone
-     * @param {object} soapBody soap body
+     * @param {EnhancedSoapError | undefined} ex Error object
+     * @param {Object.<string, any> | undefined} response api respone
+     * @param {Object.<string, any> | undefined} soapBody soap body
      */
-    constructor(ex: EnhancedSoapError, response: object, soapBody: object);
+    constructor(ex: EnhancedSoapError | undefined, response: {
+        [x: string]: any;
+    } | undefined, soapBody: {
+        [x: string]: any;
+    } | undefined);
     code: any;
+    /**
+    @type {any}
+     */
     response: any;
+    /**
+    @type {any}
+     */
     json: any;
 }
 export const axiosInstance: import("axios").AxiosInstance;
@@ -75,7 +92,9 @@ export type EnhancedRestErrorHelper = {
     /**
      * -
      */
-    response: object;
+    response: {
+        [x: string]: any;
+    };
     /**
      * -
      */
@@ -96,7 +115,9 @@ export type EnhancedSoapErrorHelper = {
     /**
      * -
      */
-    response: object;
+    response: {
+        [x: string]: any;
+    };
     /**
      * -
      */

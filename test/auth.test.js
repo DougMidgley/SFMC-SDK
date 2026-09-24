@@ -71,6 +71,17 @@ describe('auth', function () {
         return;
     });
 
+    it('accepts an unsafe integer account_id as before', function () {
+        const sdk = new SDK({
+            client_id: 'XXXXX',
+            client_secret: 'YYYYYY',
+            auth_url: 'https://mct0l7nxfq2r988t1kxfy8sc47ma.auth.marketingcloudapis.com/',
+            account_id: Number.MAX_SAFE_INTEGER + 1,
+        });
+
+        assert.equal(sdk.auth.authObject.account_id, Number.MAX_SAFE_INTEGER + 1);
+    });
+
     it('should return an incorrect auth_url error', async function () {
         try {
             //given
