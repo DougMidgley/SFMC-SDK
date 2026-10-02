@@ -203,4 +203,51 @@ describe('auth', function () {
         assert.lengthOf(mock.history.post, 2);
         return;
     });
+
+    it('shares one token request across concurrent callers', async function () {
+        mock.reset();
+        const {promise: tokenGate, resolve: releaseToken} = Promise.withResolvers();
+        mock.onPost(success.url).reply(async () => {
+            await tokenGate;
+            return [success.status, success.response];
+        });
+        let refreshEvents = 0;
+        const sdk = defaultSdk();
+        sdk.auth.options.eventHandlers.onRefresh = () => {
+            refreshEvents++;
+        };
+
+        const requests = Array.from({ length: 8 }, () => sdk.auth.getAccessToken());
+        releaseToken();
+        const results = await Promise.all(requests);
+
+        assert.lengthOf(mock.history.post, 1);
+        assert.equal(refreshEvents, 1);
+        const authState = await sdk.auth.getAccessTokenState();
+        assert.equal(authState.generation, 1);
+        assert.isTrue(results.every((result) => result.access_token === success.response.access_token));
+    });
+
+    it('clears a failed shared refresh so a later request can succeed', async function () {
+        mock.reset();
+        mock.onPost(success.url)
+            .replyOnce(unauthorized.status, unauthorized.response)
+            .onPost(success.url)
+            .replyOnce(success.status, success.response);
+        const sdk = defaultSdk();
+
+        const failures = await Promise.allSettled([
+            sdk.auth.getAccessToken(),
+            sdk.auth.getAccessToken(),
+            sdk.auth.getAccessToken(),
+        ]);
+        assert.isTrue(failures.every((result) => result.status === 'rejected'));
+        assert.lengthOf(mock.history.post, 1);
+
+        const auth = await sdk.auth.getAccessToken();
+        assert.equal(auth.access_token, success.response.access_token);
+        assert.lengthOf(mock.history.post, 2);
+        const authState = await sdk.auth.getAccessTokenState();
+        assert.equal(authState.generation, 1);
+    });
 });

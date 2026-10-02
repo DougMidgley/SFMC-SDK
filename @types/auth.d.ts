@@ -35,11 +35,31 @@ export default class Auth {
      */
     getAccessToken(forceRefresh?: boolean, remainingAttempts?: number): Promise<any>;
     /**
+     * Captures the current authenticated session and its generation atomically.
+     *
+     * @returns {Promise.<{authObject: AuthObject, generation: number}>} current auth state
+     */
+    getAccessTokenState(): Promise<{
+        authObject: AuthObject;
+        generation: number;
+    }>;
+    /**
+     * Refreshes only when the supplied generation is still current, then returns current state.
+     *
+     * @param {number} generation generation used by the failed request
+     * @returns {Promise.<{authObject: AuthObject, generation: number}>} current auth state
+     */
+    refreshAccessTokenIfGeneration(generation: number): Promise<{
+        authObject: AuthObject;
+        generation: number;
+    }>;
+    /**
      * Helper to get back list of scopes supported by SDK
      *
      * @returns {string[]} array of potential scopes
      */
     getSupportedScopes(): string[];
+    #private;
 }
 /**
  * - Auth object

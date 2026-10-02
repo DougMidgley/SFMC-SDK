@@ -336,6 +336,44 @@ describe('rest', function () {
         return;
     });
 
+    it('coalesces overlapping and delayed stale REST 401 responses', async function () {
+        mock.reset();
+        const refreshed = { ...success.response, access_token: 'NEW_TOKEN' };
+        const { promise: refreshCompleted, resolve: releaseStaleResponse } =
+            Promise.withResolvers();
+        mock.onPost(success.url)
+            .replyOnce(success.status, success.response)
+            .onPost(success.url)
+            .replyOnce(() => {
+                releaseStaleResponse();
+                return [success.status, refreshed];
+            });
+        const { journeysPage1 } = resources;
+        let oldTokenRequests = 0;
+        mock.onGet(journeysPage1.url).reply(async (config) => {
+            if (config.headers.Authorization === 'Bearer NEW_TOKEN') {
+                return [journeysPage1.status, journeysPage1.response];
+            }
+            oldTokenRequests++;
+            if (oldTokenRequests === 2) {
+                await refreshCompleted;
+            }
+            return [401, { message: 'expired' }];
+        });
+        const sdk = defaultSdk();
+
+        const responses = await Promise.all([
+            sdk.rest.get('interaction/v1/interactions?$pageSize=5&$page=1'),
+            sdk.rest.get('interaction/v1/interactions?$pageSize=5&$page=1'),
+        ]);
+
+        assert.isTrue(responses.every((response) => response.items.length === 5));
+        assert.lengthOf(mock.history.post, 2);
+        assert.lengthOf(mock.history.get, 4);
+        const authState = await sdk.auth.getAccessTokenState();
+        assert.equal(authState.generation, 2);
+    });
+
     it('should fail to delete campaign', async function () {
         //given
         const { campaignFailed } = resources;
