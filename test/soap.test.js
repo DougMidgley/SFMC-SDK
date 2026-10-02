@@ -248,6 +248,104 @@ describe('soap', function () {
         assert.fail();
     });
 
+    it('coalesces overlapping and delayed stale SOAP token faults', async function () {
+        mock.reset();
+        const refreshed = { ...success.response, access_token: 'NEW_TOKEN' };
+        const { promise: refreshCompleted, resolve: releaseStaleResponse } =
+            Promise.withResolvers();
+        mock.onPost(success.url)
+            .replyOnce(success.status, success.response)
+            .onPost(success.url)
+            .replyOnce(() => {
+                releaseStaleResponse();
+                return [success.status, refreshed];
+            });
+        let oldTokenRequests = 0;
+        mock.onPost('/Service.asmx').reply(async (config) => {
+            if (config.data.includes('NEW_TOKEN')) {
+                return [
+                    resources.subscriberCreated.status,
+                    resources.subscriberCreated.response,
+                    { 'Content-Type': 'application/soap+xml; charset=utf-8' },
+                ];
+            }
+            oldTokenRequests++;
+            if (oldTokenRequests === 2) {
+                await refreshCompleted;
+            }
+            return [
+                resources.expiredToken.status,
+                resources.expiredToken.response,
+                { 'Content-Type': 'application/soap+xml; charset=utf-8' },
+            ];
+        });
+        const sdk = defaultSdk();
+        const subscriber = {
+            SubscriberKey: '1234512345',
+            EmailAddress: 'douglas@accenture.com',
+        };
+
+        const responses = await Promise.all([
+            sdk.soap.create('Subscriber', { ...subscriber }),
+            sdk.soap.create('Subscriber', { ...subscriber }),
+        ]);
+
+        assert.isTrue(responses.every((response) => response.OverallStatus === 'OK'));
+        assert.lengthOf(mock.history.post, 6);
+        const authState = await sdk.auth.getAccessTokenState();
+        assert.equal(authState.generation, 2);
+    });
+
+    it('coalesces a mixed REST and SOAP expiry race', async function () {
+        mock.reset();
+        const refreshed = { ...success.response, access_token: 'NEW_TOKEN' };
+        const { promise: refreshCompleted, resolve: releaseStaleResponse } =
+            Promise.withResolvers();
+        mock.onPost(success.url)
+            .replyOnce(success.status, success.response)
+            .onPost(success.url)
+            .replyOnce(() => {
+                releaseStaleResponse();
+                return [success.status, refreshed];
+            });
+        const { journeysPage1 } = await import('./resources/rest.js');
+        mock.onGet(journeysPage1.url).reply((config) => {
+            return config.headers.Authorization === 'Bearer NEW_TOKEN'
+                ? [journeysPage1.status, journeysPage1.response]
+                : [401, { message: 'expired' }];
+        });
+        mock.onPost('/Service.asmx').reply(async (config) => {
+            if (config.data.includes('NEW_TOKEN')) {
+                return [
+                    resources.subscriberCreated.status,
+                    resources.subscriberCreated.response,
+                    { 'Content-Type': 'application/soap+xml; charset=utf-8' },
+                ];
+            }
+            await refreshCompleted;
+            return [
+                resources.expiredToken.status,
+                resources.expiredToken.response,
+                { 'Content-Type': 'application/soap+xml; charset=utf-8' },
+            ];
+        });
+        const sdk = defaultSdk();
+
+        const [restResponse, soapResponse] = await Promise.all([
+            sdk.rest.get('interaction/v1/interactions?$pageSize=5&$page=1'),
+            sdk.soap.create('Subscriber', {
+                SubscriberKey: '1234512345',
+                EmailAddress: 'douglas@accenture.com',
+            }),
+        ]);
+
+        assert.lengthOf(restResponse.items, 5);
+        assert.equal(soapResponse.OverallStatus, 'OK');
+        assert.lengthOf(mock.history.post, 4);
+        const authState = await sdk.auth.getAccessTokenState();
+        assert.equal(authState.generation, 2);
+    });
+
     it('no handler: should return an error stating the object type is not supported', async function () {
         //given
         addHandler(resources.noObjectHandlerFound);
