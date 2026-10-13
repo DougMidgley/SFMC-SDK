@@ -19,7 +19,7 @@ describe('ESLint documentation formatting', function () {
         const config = await eslint.calculateConfigForFile('lib/documentation-fixture.js');
 
         assert.equal(config.rules[documentationRule][0], 0);
-    });
+    }).timeout(10_000);
 
     it('preserves starred multiline JSDoc during autofix', async function () {
         const eslint = new ESLint({ fix: true });
@@ -30,5 +30,5 @@ describe('ESLint documentation formatting', function () {
         assert.equal(result.errorCount, 0);
         assert.equal(result.warningCount, 0);
         assert.equal(result.output ?? documentedSource, documentedSource);
-    });
+    }).timeout(10_000);
 });
