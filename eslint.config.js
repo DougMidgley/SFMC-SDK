@@ -28,6 +28,12 @@ export default [
         ignores: ['/node_modules/**'],
         rules: {
             'unicorn/no-asterisk-prefix-in-documentation-comments': 'off',
+            // Approved exception: preserve escaped ASCII in fixed SOAP protocol identifiers.
+            'unicorn/prefer-literal-ascii': 'off',
+            // Approved exception: SOAP namespace URIs are identities, not transport URLs.
+            'unicorn/prefer-https': 'off',
+            // Approved exception: defaults do not preserve the existing falsy-value fallback.
+            'unicorn/prefer-default-parameters': 'off',
             'unicorn/prefer-module': 'off',
             'unicorn/name-replacements': [
                 'error',

@@ -6,6 +6,13 @@ import { success, expired, unauthorized } from './resources/auth.js';
 import { isConnectionError, RestError } from '../lib/util.js';
 
 describe('rest', function () {
+    it('GETCOLLECTION: retains default concurrency for falsy limits', async function () {
+        const sdk = defaultSdk();
+        for (const concurrentLimit of [undefined, JSON.parse('null'), 0, false, '', NaN]) {
+            assert.deepEqual(await sdk.rest.getCollection([], concurrentLimit), []);
+        }
+    });
+
     it('only exposes RestError.endpoint when supplied', function () {
         const withoutEndpoint = new RestError(new Error('failed'));
         const withEndpoint = new RestError(Object.assign(new Error('failed'), { endpoint: '/items' }));
