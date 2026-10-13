@@ -13,9 +13,10 @@ describe('prepare-release orchestrator', function () {
         assert.equal(npmExecutable('win32'), process.env.ComSpec ?? 'cmd.exe');
     });
 
-    it('executes a harmless npm child script', async function () {
-        assert.equal(await runNpmScript('test:prepare-release-child'), 0);
-    });
+    it('executes a harmless npm child script to successful completion', async function () {
+        const exitCode = await runNpmScript('test:prepare-release-child');
+        assert.equal(exitCode, 0);
+    }).timeout(10_000);
 
     it('runs every task in fixed order', async function () {
         const calls = [];
