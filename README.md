@@ -98,7 +98,7 @@ for await (const { pageItems, page, totalPages } of sfmc.rest.getBulkPages(
 }
 ```
 
-Additionally, a list of supported scopes can be retrieved by using the auth.getSupportedScopes method.
+Additionally, an informational catalog of known scopes can be retrieved using `auth.getSupportedScopes()`. This catalog is not authoritative or exhaustive: scope names absent from it are accepted without an error or warning. Supply requested scopes as an array; the authentication server determines which permissions are granted.
 
 ```javascript
 const scopes = sfmc.auth.getSupportedScopes();

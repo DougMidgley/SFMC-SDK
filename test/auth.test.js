@@ -136,22 +136,57 @@ describe('auth', function () {
         return;
     });
 
-    it('should return an invalid scope error', async function () {
+    it('accepts unknown-only and mixed scopes without warnings', function () {
+        const originalWarn = console.warn;
+        const originalEmitWarning = process.emitWarning;
+        const warnings = [];
+        console.warn = (...arguments_) => {
+            warnings.push(arguments_);
+        };
+        process.emitWarning = (...arguments_) => {
+            warnings.push(arguments_);
+        };
         try {
-            //given
-            new SDK({
-                client_id: 'XXXXX',
-                client_secret: 'YYYYYY',
-                auth_url: 'https://mct0l7nxfq2r988t1kxfy8sc47ma.auth.marketingcloudapis.com/',
-                account_id: '1111111',
-                scope: ['somethingwrong'],
-            });
-            //then
-            assert.fail();
-        } catch (error) {
-            assert.equal(error.message, '"somethingwrong" is/are invalid scope(s)');
+            for (const scope of [['future_permission_read'], ['email_read', 'future_permission_read']]) {
+                const sdk = new SDK({ ...defaultSdk().auth.authObject, scope });
+                assert.deepEqual(sdk.auth.authObject.scope, scope);
+                assert.include(sdk.auth.getSupportedScopes(), 'email_read');
+                assert.notInclude(sdk.auth.getSupportedScopes(), 'future_permission_read');
+            }
+            assert.isEmpty(warnings);
+        } finally {
+            console.warn = originalWarn;
+            process.emitWarning = originalEmitWarning;
         }
-        return;
+    });
+
+    it('preserves unknown-only and mixed scopes in token requests', async function () {
+        mock.onPost(success.url).reply(success.status, success.response);
+        const scopes = [['future_permission_read'], ['email_read', 'future_permission_read']];
+        for (const scope of scopes) {
+            const sdk = new SDK({ ...defaultSdk().auth.authObject, scope });
+            await sdk.auth.getAccessToken();
+        }
+        assert.lengthOf(mock.history.post, scopes.length);
+        for (const [index, request] of mock.history.post.entries()) {
+            assert.equal(JSON.parse(request.data).scope, scopes[index].join(' '));
+        }
+    });
+
+    it('reuses cached tokens after converting unknown server grants to an array', async function () {
+        const grantedScope = 'email_read future_permission_read';
+        mock.onPost(success.url).reply(success.status, { ...success.response, scope: grantedScope });
+        const auth = await defaultSdk().auth.getAccessToken();
+        assert.equal(auth.scope, grantedScope);
+        assert.lengthOf(mock.history.post, 1);
+
+        mock.reset();
+        const sdk = new SDK({ ...auth, scope: auth.scope.split(' ') });
+        const cachedAuth = await sdk.auth.getAccessToken();
+        assert.deepEqual(cachedAuth.scope, ['email_read', 'future_permission_read']);
+        assert.equal(cachedAuth.access_token, auth.access_token);
+        assert.equal(cachedAuth.expiration, auth.expiration);
+        assert.lengthOf(mock.history.post, 0);
     });
 
     it('should return an invalid scope type error', async function () {
