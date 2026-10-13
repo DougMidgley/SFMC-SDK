@@ -27,6 +27,7 @@ export default [
         },
         ignores: ['/node_modules/**'],
         rules: {
+            'unicorn/no-asterisk-prefix-in-documentation-comments': 'off',
             'unicorn/prefer-module': 'off',
             'unicorn/name-replacements': [
                 'error',
